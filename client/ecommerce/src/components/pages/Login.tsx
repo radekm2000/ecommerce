@@ -66,7 +66,9 @@ export const Login = () => {
           sx={{ mt: "32px" }}
           fullWidth
           label="Username"
+          value={username}
           variant="filled"
+          onChange={(e) => setUsername(e.target.value)}
           InputProps={{
             startAdornment: (
               <InputAdornment position="start">
@@ -79,6 +81,8 @@ export const Login = () => {
         <FormControl sx={{ mt: "32px" }} fullWidth variant="filled">
           <InputLabel htmlFor="filled-adornment-password">Password</InputLabel>
           <FilledInput
+            onChange={(e) => setPassword(e.target.value)}
+            value={password}
             id="filled-adornment-password"
             type={showPassword ? "text" : "password"}
             endAdornment={

@@ -4,3 +4,8 @@ export type RegisterInput = {
   password: string;
   confirmPassword: string;
 };
+
+export type LoginInput = {
+  username: string;
+  password: string;
+};

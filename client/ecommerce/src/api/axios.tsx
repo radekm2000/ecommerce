@@ -1,5 +1,5 @@
 import axios from "axios";
-import { RegisterInput } from "../types/types";
+import { LoginInput, RegisterInput } from "../types/types";
 
 const BASE_URL = "http://localhost:3000";
 
@@ -18,6 +18,14 @@ export const registerUser = async ({
     username,
     confirmPassword,
     email,
+    password,
+  });
+  return response.data;
+};
+
+export const signInUser = async ({ username, password }: LoginInput) => {
+  const response = await axiosApi.post("loginendpoint", {
+    username,
     password,
   });
   return response.data;

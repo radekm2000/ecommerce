@@ -15,6 +15,9 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
+import { useMutation } from "@tanstack/react-query";
+import { signInUser } from "../../api/axios";
+import toast from "react-hot-toast";
 export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -27,6 +30,23 @@ export const Login = () => {
   ) => {
     event.preventDefault();
   };
+
+  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
+    e.preventDefault();
+    mutate({ username, password });
+  };
+
+  const loginMutation = useMutation({
+    mutationFn: signInUser,
+    mutationKey: ["login"],
+    onSuccess: () => {
+      toast.success("User logged in", { style: { color: "black" } });
+    },
+    onError: (error) => {
+      toast.error(error.message);
+    },
+  });
+  const { mutate } = loginMutation;
   return (
     <Box
       sx={{
@@ -104,7 +124,13 @@ export const Login = () => {
             }
           />
         </FormControl>
-        <Button variant="contained" size="medium" sx={{ mt: "32px" }} fullWidth>
+        <Button
+          onClick={(e) => handleSubmit(e)}
+          variant="contained"
+          size="medium"
+          sx={{ mt: "32px" }}
+          fullWidth
+        >
           Sign in
         </Button>
         <Grid
@@ -117,8 +143,8 @@ export const Login = () => {
           <Link sx={{ cursor: "pointer" }} variant="body2">
             Forgot password?
           </Link>
-          <Link sx={{ cursor: "pointer" }} variant="body2">
-            Sign in
+          <Link href="/register" sx={{ cursor: "pointer" }} variant="body2">
+            Sign up
           </Link>
         </Grid>
       </Box>

@@ -42,7 +42,6 @@ export const Register = () => {
       toast.success("User registered sucesfully");
     },
     onError: (error) => {
-      console.log(error);
       toast.error(error.message, { style: { color: "black" } });
     },
   });

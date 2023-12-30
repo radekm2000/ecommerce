@@ -1,4 +1,6 @@
+import { User } from 'src/utils/entities/user.entity';
 import { PostgresConnectionOptions } from 'typeorm/driver/postgres/PostgresConnectionOptions';
+import 'dotenv/config';
 
 export let config: PostgresConnectionOptions;
 if (process.env.IS_PRODUCTION === 'true') {
@@ -11,7 +13,7 @@ if (process.env.IS_PRODUCTION === 'true') {
     port: 5432,
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
-    entities: [],
+    entities: [User],
     synchronize: true,
   };
 }

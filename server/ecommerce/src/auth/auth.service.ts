@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 import { UsersService } from 'src/users/users.service';
 import { LoginUserDto, RegisterUserDto } from 'src/utils/dtos/user.dto';
 import * as bcrypt from 'bcrypt';
@@ -25,13 +25,13 @@ export class AuthService {
     }
     const payload = { sub: user.id, username: user.username };
     const accessToken = await this.jwtService.signAsync(payload, {
-      expiresIn: '15m',
+      expiresIn: '10s',
     });
     const refreshToken = await this.jwtService.signAsync(payload, {
       expiresIn: '24h',
       secret: jwtConstants.secret,
     });
-    res.cookie('jwt', refreshToken, {
+    res.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 1000,
     });
@@ -40,5 +40,22 @@ export class AuthService {
 
   async register(dto: RegisterUserDto) {
     return await this.usersService.register(dto);
+  }
+
+  async handleRefreshToken(req: Request) {
+    const { refreshToken } = req.cookies;
+
+    if (!refreshToken) {
+      throw new HttpException('Unauthorized', HttpStatus.UNAUTHORIZED);
+    }
+
+    const payload = await this.jwtService.verifyAsync(refreshToken, {
+      secret: jwtConstants.secret,
+    });
+    const accessToken = await this.jwtService.signAsync(
+      { username: payload.username, sub: payload.sub },
+      { secret: jwtConstants.secret, expiresIn: '15m' },
+    );
+    return { accessToken, username: payload.username };
   }
 }

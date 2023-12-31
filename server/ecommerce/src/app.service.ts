@@ -4,11 +4,10 @@ import { Request } from 'express';
 @Injectable()
 export class AppService {
   getHello(req: Request): string {
-    const { jwt } = req.cookies;
-    if (!jwt) {
+    const { refreshToken } = req.cookies;
+    if (!refreshToken) {
       return 'no cookie';
     }
-    console.log(jwt);
     return 'Hello World!';
   }
 }

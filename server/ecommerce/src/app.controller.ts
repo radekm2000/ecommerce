@@ -3,7 +3,7 @@ import { AppService } from './app.service';
 import { AuthGuard } from './auth/auth.guard';
 import { Request } from 'express';
 
-@Controller()
+@Controller('main')
 export class AppController {
   constructor(private readonly appService: AppService) {}
 

@@ -7,6 +7,7 @@ import {
   IconButton,
   InputAdornment,
   InputLabel,
+  Link,
   TextField,
   Typography,
 } from "@mui/material";
@@ -110,10 +111,10 @@ export const Register = () => {
           }}
         ></TextField>
         <TextField
-          error={username.length > 1 && username.length < 6 ? true : false}
+          error={username.length > 1 && username.length < 5 ? true : false}
           helperText={
-            username.length > 1 && username.length < 6
-              ? "Username must be at least 6 characters long"
+            username.length > 1 && username.length < 5
+              ? "Username must be at least 5 characters long"
               : ""
           }
           onChange={(e) => setUsername(e.target.value)}
@@ -191,9 +192,7 @@ export const Register = () => {
             }
           />
           <FormHelperText id="confirm-password-error-text">
-            {password !== confirmPassword
-              ? "Confirm password must match password"
-              : ""}
+            {password !== confirmPassword ? "Passwords must match" : ""}
           </FormHelperText>
         </FormControl>
         <Button
@@ -205,6 +204,13 @@ export const Register = () => {
         >
           Sign up
         </Button>
+        <Link
+          href="/login"
+          sx={{ cursor: "pointer", display: "flex", marginLeft: "auto" }}
+          variant="body2"
+        >
+          Already have an account? Sign in
+        </Link>
       </Box>
     </Box>
   );

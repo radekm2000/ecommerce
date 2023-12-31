@@ -18,9 +18,11 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useMutation } from "@tanstack/react-query";
 import { signInUser } from "../../api/axios";
 import toast from "react-hot-toast";
+import { Redirect } from "wouter";
 export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [redirect, setRedirect] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -39,14 +41,19 @@ export const Login = () => {
   const loginMutation = useMutation({
     mutationFn: signInUser,
     mutationKey: ["login"],
-    onSuccess: () => {
-      toast.success("User logged in", { style: { color: "black" } });
+    onSuccess: (data: string) => {
+      toast.success("User logged in");
+      localStorage.setItem("accessToken", data);
+      setRedirect(true);
     },
     onError: (error) => {
       toast.error(error.message);
     },
   });
   const { mutate } = loginMutation;
+  if (redirect) {
+    return <Redirect to="/" />;
+  }
   return (
     <Box
       sx={{

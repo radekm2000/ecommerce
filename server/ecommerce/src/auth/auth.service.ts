@@ -7,6 +7,7 @@ import 'dotenv/config';
 
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
+import { Profile } from 'passport-google-oauth20';
 @Injectable()
 export class AuthService {
   constructor(
@@ -57,5 +58,13 @@ export class AuthService {
       { secret: jwtConstants.secret, expiresIn: '15m' },
     );
     return { accessToken, username: payload.username };
+  }
+
+  async createOrGetUser(
+    profile: Profile,
+    googleAccessToken: string,
+    googleRefreshToken: string,
+  ) {
+    const user = await this.usersService.findByEmail(profile.emails[0].value);
   }
 }

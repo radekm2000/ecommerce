@@ -50,4 +50,20 @@ export class UsersService {
     const newUser = this.usersRepository.create(dto);
     return await this.usersRepository.save(newUser);
   }
+
+  async findByEmail(email: string): Promise<User> {
+    const user = await this.usersRepository.findOne({
+      where: {
+        email: email,
+      },
+    });
+    if (!user) {
+      
+    } else {
+      throw new HttpException(
+        'That email is already taken',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+  }
 }

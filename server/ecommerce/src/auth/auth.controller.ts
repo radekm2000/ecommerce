@@ -5,6 +5,7 @@ import {
   Post,
   Req,
   Res,
+  UseGuards,
   UsePipes,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
@@ -16,6 +17,7 @@ import {
   RegisterUserDtoSchema,
 } from 'src/utils/dtos/user.dto';
 import { Request, Response } from 'express';
+import { GoogleAuthGuard } from './utils/GoogleGuard';
 
 @Controller('auth')
 export class AuthController {
@@ -39,5 +41,17 @@ export class AuthController {
   @Get('refresh')
   async refresh(@Req() request: Request) {
     return await this.authService.handleRefreshToken(request);
+  }
+
+  @UseGuards(GoogleAuthGuard)
+  @Get('google/login')
+  handleLogin() {
+    return { msg: 'google authentication' };
+  }
+
+  @UseGuards(GoogleAuthGuard)
+  @Get('google/redirect')
+  handleRedirect() {
+    return { msg: 'redirect' };
   }
 }

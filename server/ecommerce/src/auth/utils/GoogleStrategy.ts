@@ -5,10 +5,9 @@ import { Injectable } from '@nestjs/common';
 import { AuthService } from '../auth.service';
 
 type VerifyCallback = (err?: Error | null, user?: Express.User) => void;
-type UserProfileCallback = (err?: Error | null, profile?: any) => void;
 
 @Injectable()
-export class GoogleStrategy extends PassportStrategy(Strategy) {
+export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
   constructor(private readonly authService: AuthService) {
     super({
       clientID: process.env.CLIENT_ID,
@@ -24,17 +23,16 @@ export class GoogleStrategy extends PassportStrategy(Strategy) {
     profile: Profile,
     done: VerifyCallback,
   ) {
-    return;
-    // try {
-    //   const user = await this.authService.createOrGetUser(
-    //     profile,
-    //     accessToken,
-    //     refreshToken,
-    //   );
-    //   return done(null, user);
-    // } catch (error: any) {
-    //   return done(error);
-    // }
-    // console.log(profile.emails[0].value);
+    try {
+      console.log(profile);
+      const user = await this.authService.createOrGetUser(
+        profile,
+        accessToken,
+        refreshToken,
+      );
+      return done(null, user);
+    } catch (error: any) {
+      return done(error);
+    }
   }
 }

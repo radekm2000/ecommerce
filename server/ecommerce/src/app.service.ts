@@ -8,6 +8,6 @@ export class AppService {
     if (!refreshToken) {
       return 'no cookie';
     }
-    return 'Hello World!';
+    return `Hello world`;
   }
 }

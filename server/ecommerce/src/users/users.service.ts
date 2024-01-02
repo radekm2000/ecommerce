@@ -1,5 +1,6 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { Profile } from 'passport-google-oauth20';
 import { RegisterUserDto } from 'src/utils/dtos/user.dto';
 import { User } from 'src/utils/entities/user.entity';
 import { Repository } from 'typeorm';
@@ -51,18 +52,43 @@ export class UsersService {
     return await this.usersRepository.save(newUser);
   }
 
-  async findByEmail(email: string): Promise<User> {
+  async findByEmailAndGetOrCreate(
+    email: string,
+    profile: Profile,
+  ): Promise<User> {
     const user = await this.usersRepository.findOne({
       where: {
         email: email,
       },
     });
     if (!user) {
-      
+      const newUser = this.usersRepository.create({
+        email: email,
+        username: profile.displayName,
+        googleId: profile.id,
+      });
+      await this.usersRepository.save(newUser);
+      return newUser;
     } else {
+      user.googleId = profile.id;
+      if (profile?._json.picture) {
+        user.avatar = profile._json?.picture;
+      }
+      await this.usersRepository.save(user);
+      return user;
+    }
+  }
+
+  async findUserById(userId: number) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+    if (!user) {
       throw new HttpException(
-        'That email is already taken',
-        HttpStatus.UNPROCESSABLE_ENTITY,
+        'User with given id not found',
+        HttpStatus.NOT_FOUND,
       );
     }
   }

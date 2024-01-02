@@ -18,6 +18,7 @@ import {
 } from 'src/utils/dtos/user.dto';
 import { Request, Response } from 'express';
 import { GoogleAuthGuard } from './utils/GoogleGuard';
+import { User } from 'src/utils/entities/user.entity';
 
 @Controller('auth')
 export class AuthController {
@@ -45,13 +46,21 @@ export class AuthController {
 
   @UseGuards(GoogleAuthGuard)
   @Get('google/login')
-  handleLogin() {
-    return { msg: 'google authentication' };
+  handleGoogleLogin() {
+    //empty method, passport takes care of login
   }
 
   @UseGuards(GoogleAuthGuard)
   @Get('google/redirect')
-  handleRedirect() {
-    return { msg: 'redirect' };
+  async googleAuthRedirect(@Req() request: Request, @Res() response: Response) {
+    const user = request.user as User;
+    const refreshToken = await this.authService.generateRefreshTokenFor(
+      user.id,
+    );
+    response.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000,
+    });
+    response.redirect('http://localhost:5173');
   }
 }

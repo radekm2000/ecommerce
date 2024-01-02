@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { Request, Response } from 'express';
 import { UsersService } from 'src/users/users.service';
@@ -65,6 +66,18 @@ export class AuthService {
     googleAccessToken: string,
     googleRefreshToken: string,
   ) {
-    const user = await this.usersService.findByEmail(profile.emails[0].value);
+    const user = await this.usersService.findByEmailAndGetOrCreate(
+      profile.emails[0].value,
+      profile,
+    );
+    return user;
+  }
+
+  async generateRefreshTokenFor(userId: number) {
+    const refreshToken = await this.jwtService.signAsync(
+      { sub: userId },
+      { secret: jwtConstants.secret, expiresIn: '24h' },
+    );
+    return refreshToken;
   }
 }

@@ -3,7 +3,6 @@ import { Login } from "./components/pages/Login";
 import { Register } from "./components/pages/Register";
 import { Redirect, Route, Switch } from "wouter";
 import { MainPage } from "./components/pages/MainPage";
-import { useEffect } from "react";
 function App() {
   return (
     <>

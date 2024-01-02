@@ -16,9 +16,11 @@ import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useMutation } from "@tanstack/react-query";
-import { signInUser } from "../../api/axios";
+import { handleGoogleLogin, signInUser } from "../../api/axios";
 import toast from "react-hot-toast";
 import { Redirect } from "wouter";
+import GoogleButton from "react-google-button";
+
 export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -154,6 +156,12 @@ export const Login = () => {
             Sign up
           </Link>
         </Grid>
+        <Typography sx={{ mb: "5px" }}>or</Typography>
+        <Box>
+          <Link href={`http://localhost:3000/auth/google/login`}>
+            <GoogleButton />
+          </Link>
+        </Box>
       </Box>
     </Box>
   );

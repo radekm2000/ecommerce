@@ -4,7 +4,7 @@ import { axiosApi } from "../../api/axios";
 
 export const MainPage = () => {
   const { data, isLoading } = useQuery({
-    queryKey: ["page"],
+    queryKey: ["mainPage"],
     queryFn: async () => {
       const response = await axiosApi.get("main");
       return response.data;
@@ -16,6 +16,7 @@ export const MainPage = () => {
   console.log(data);
   return (
     <>
+
       <Navbar />
       <h1>{data}</h1>
     </>

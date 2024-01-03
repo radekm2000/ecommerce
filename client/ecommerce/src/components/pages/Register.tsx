@@ -20,6 +20,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../../api/axios";
+import { AxiosError } from "axios";
 
 export const Register = () => {
   const [email, setEmail] = useState("");
@@ -42,8 +43,10 @@ export const Register = () => {
     onSuccess: () => {
       toast.success("User registered sucesfully");
     },
-    onError: (error) => {
-      toast.error(error.message, { style: { color: "black" } });
+    onError: (err) => {
+      const error = err as AxiosError<Error>;
+      const message = error.response?.data?.message || "Something went wrong";
+      toast.error(message);
     },
   });
   const { mutate } = registerMutation;

@@ -16,16 +16,19 @@ import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useMutation } from "@tanstack/react-query";
-import { handleGoogleLogin, signInUser } from "../../api/axios";
+import { signInUser } from "../../api/axios";
 import toast from "react-hot-toast";
 import { Redirect } from "wouter";
 import GoogleButton from "react-google-button";
-
+import { AxiosError } from "axios";
+import { LoginInput, LoginResponseData } from "../../types/types";
+import { useUserContext } from "../../contexts/UserContext";
 export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const { setUser } = useUserContext();
 
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -40,16 +43,19 @@ export const Login = () => {
     mutate({ username, password });
   };
 
-  const loginMutation = useMutation({
+  const loginMutation = useMutation<LoginResponseData, Error, LoginInput>({
     mutationFn: signInUser,
     mutationKey: ["login"],
-    onSuccess: (data: string) => {
+    onSuccess: (data) => {
       toast.success("User logged in");
-      localStorage.setItem("accessToken", data);
+      localStorage.setItem("accessToken", data.accessToken);
+      setUser(data.user);
       setRedirect(true);
     },
-    onError: (error) => {
-      toast.error(error.message);
+    onError: (err) => {
+      const error = err as AxiosError<Error>;
+      const message = error.response?.data?.message || "Something went wrong";
+      toast.error(message);
     },
   });
   const { mutate } = loginMutation;

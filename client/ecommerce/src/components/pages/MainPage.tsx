@@ -1,24 +1,29 @@
-import { useQuery } from "@tanstack/react-query";
 import { Navbar } from "../Navbar";
-import { axiosApi } from "../../api/axios";
+import { useUserContext } from "../../contexts/UserContext";
+import { useEffect } from "react";
+import { useProfileInfo } from "../../hooks/useProfileInfo";
 
 export const MainPage = () => {
-  const { data, isLoading } = useQuery({
-    queryKey: ["mainPage"],
-    queryFn: async () => {
-      const response = await axiosApi.get("main");
-      return response.data;
-    },
-  });
-  if (isLoading) {
-    return "isLoading...";
+  const { setUser } = useUserContext();
+  const {
+    data: userProfileInfo,
+    isLoading: isUserProfileInfoLoading,
+    isSuccess,
+  } = useProfileInfo();
+
+  useEffect(() => {
+    if (isSuccess) {
+      setUser(userProfileInfo);
+    }
+  }, [isSuccess, setUser, userProfileInfo]);
+
+  if (isUserProfileInfoLoading) {
+    return "userProfileInfo loading...";
   }
-  console.log(data);
+
   return (
     <>
-
-      <Navbar />
-      <h1>{data}</h1>
+      <div>haahah main page</div>
     </>
   );
 };

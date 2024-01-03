@@ -21,6 +21,10 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Box from "@mui/material/Box";
 import { useState } from "react";
+import { useUserContext } from "../contexts/UserContext";
+import { Avatar, Button } from "@mui/material";
+import { useMediaQuery } from "../hooks/useMediaQuery";
+import { Link, Redirect } from "wouter";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -44,14 +48,6 @@ const SearchIconWrapper = styled("div")(({ theme }) => ({
   alignItems: "center",
   justifyContent: "center",
 }));
-const greyBase = "#757575";
-// const theme = createTheme({
-//   palette: {
-//     primary: {
-//       main: "#757575",
-//     },
-//   },
-// });
 
 export const theme = createTheme({
   palette: {
@@ -78,15 +74,29 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export const Navbar = () => {
+  const below500 = useMediaQuery(500)
+  const below800 = useMediaQuery(800);
+  const { user } = useUserContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
 
+  const [drawerAnchorEl, setDrawerAnchorEl] = useState<null | HTMLElement>(
+    null
+  );
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
+  const isDrawerOpen = Boolean(drawerAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+
+  const handleDrawerOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setDrawerAnchorEl(event.currentTarget);
+  };
+
+  const handleDrawerClose = () => {
+    setDrawerAnchorEl(null);
   };
 
   const handleMobileMenuClose = () => {
@@ -98,11 +108,29 @@ export const Navbar = () => {
     handleMobileMenuClose();
   };
 
+  const handleSellButtonClick = () => {
+    return <Redirect to="products/new" />;
+  };
+
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
   const menuId = "primary-search-account-menu";
+
+  const drawerMenu = (
+    <Menu
+      anchorEl={drawerAnchorEl}
+      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
+      id="drawer-menu"
+      keepMounted
+      open={isDrawerOpen}
+      onClose={handleDrawerClose}
+    >
+      <MenuItem onClick={handleDrawerClose}>Men</MenuItem>
+      <MenuItem onClick={handleDrawerClose}>Women</MenuItem>
+    </Menu>
+  );
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -169,7 +197,7 @@ export const Navbar = () => {
           aria-haspopup="true"
           color="inherit"
         >
-          <AccountCircle />
+          {user.avatar ? <Avatar src={user.avatar} /> : <AccountCircle />}
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -190,6 +218,7 @@ export const Navbar = () => {
               }}
             >
               <IconButton
+                onClick={(e) => handleDrawerOpen(e)}
                 size="large"
                 edge="start"
                 aria-label="open drawer"
@@ -201,36 +230,61 @@ export const Navbar = () => {
               >
                 <MenuIcon />
               </IconButton>
-              <Typography
-                color="#26a69a"
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{
-                  display: {
-                    xs: "none",
-                    sm: "block",
-                    fontFamily: "Maison Neue",
-                    fontWeight: "800",
-                    fontSize: "24px",
-                    marginRight: 15,
-                    marginLeft: 'auto',
-                  },
-                }}
-              >
-                Vetted
-              </Typography>
+              <Link href="/">
+                <Typography
+                  color="#26a69a"
+                  variant="h6"
+                  noWrap
+                  component="div"
+                  sx={{
+                    cursor: "pointer",
+                    display: {
+                      xs: "none",
+                      sm: "block",
+                      fontFamily: "Maison Neue",
+                      fontWeight: "800",
+                      fontSize: "24px",
+                      marginRight: 15,
+                      marginLeft: "auto",
+                    },
+                  }}
+                >
+                  Vetted
+                </Typography>
+              </Link>
               <Search>
                 <SearchIconWrapper>
                   <SearchIcon color="primary" />
                 </SearchIconWrapper>
                 <StyledInputBase
-                  sx={{ width: "400px" }}
+                  sx={{ width: "100%" }}
                   placeholder="Search…"
                   inputProps={{ "aria-label": "search" }}
                 />
               </Search>
               <Box sx={{ flexGrow: 1 }} />
+              <Button
+                sx={{
+                  borderRadius: "6px",
+                  background: "#007782",
+                  width: "90px",
+                  height: "38px",
+                  "&:hover": {
+                    background: "#007782",
+                  },
+                  display: below800 ? "none" : null,
+                }}
+              >
+                <Link href="/products/new">
+                  <Typography
+                    color="white"
+                    fontFamily="Maison Neue"
+                    fontSize="14px"
+                  >
+                    Sell now
+                  </Typography>
+                </Link>
+              </Button>
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 <IconButton
                   size="large"
@@ -259,7 +313,11 @@ export const Navbar = () => {
                   onClick={handleProfileMenuOpen}
                   color="primary"
                 >
-                  <AccountCircle />
+                  {user.avatar ? (
+                    <Avatar src={user.avatar} />
+                  ) : (
+                    <AccountCircle />
+                  )}
                 </IconButton>
               </Box>
 
@@ -279,14 +337,8 @@ export const Navbar = () => {
           </AppBar>
           {renderMobileMenu}
           {renderMenu}
+          {drawerMenu}
         </Box>
-        <Box
-          sx={{
-            width: "400px",
-            height: "400px",
-            backgroundColor: "custom.light",
-          }}
-        ></Box>
       </ThemeProvider>
     </>
   );

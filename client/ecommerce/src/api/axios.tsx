@@ -1,5 +1,10 @@
 import axios from "axios";
-import { LoginInput, RegisterInput } from "../types/types";
+import {
+  LoginInput,
+  LoginResponseData,
+  RegisterInput,
+  User,
+} from "../types/types";
 import { RequestAccessTokenInterceptor } from "./request-access-token.interceptor";
 import { ResponseOAuthInterceptor } from "./response-auth.interceptor";
 
@@ -17,7 +22,7 @@ export const registerUser = async ({
   email,
   password,
 }: RegisterInput) => {
-  const response = await axiosApi.post("blabla", {
+  const response = await axiosApi.post("auth/register", {
     username,
     confirmPassword,
     email,
@@ -29,10 +34,15 @@ export const registerUser = async ({
 export const signInUser = async ({
   username,
   password,
-}: LoginInput): Promise<string> => {
+}: LoginInput): Promise<LoginResponseData> => {
   const response = await axiosApi.post("auth/login", {
     username,
     password,
   });
   return response.data;
+};
+
+export const getUserProfileInfo = async (): Promise<User> => {
+  const response = await axiosApi.get("users/profile");
+  return response.data as User;
 };

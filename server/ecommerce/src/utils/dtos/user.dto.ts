@@ -1,8 +1,12 @@
 import { z } from 'zod';
 
 export const LoginUserDtoSchema = z.object({
-  username: z.string(),
-  password: z.string(),
+  username: z.string({
+    required_error: 'Username is required',
+  }),
+  password: z.string({
+    required_error: 'Password is required',
+  }),
 });
 
 export type LoginUserDto = z.infer<typeof LoginUserDtoSchema>;

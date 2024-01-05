@@ -2,13 +2,20 @@
 import {
   Box,
   Button,
+  CardMedia,
+  Input,
   InputAdornment,
   MenuItem,
   TextField,
   Typography,
 } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
+import { axiosApi } from "../../api/axios";
+
+//important note --------------
+// change button component prop to label if you want to upload files
 
 const categories = ["Men", "Women", "Unisex"] as const;
 const brands = [
@@ -32,6 +39,17 @@ type Category = (typeof categories)[number];
 type Brand = (typeof brands)[number];
 
 export const AddProduct = () => {
+  const [selectedFile, setSelectedFile] = useState<File | "">("");
+  const formDataToBackend = new FormData();
+  const handlePhotoInputChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const uploadedFiles = e.target.files;
+    if (!uploadedFiles) {
+      return;
+    }
+    const file = uploadedFiles[0];
+    setSelectedFile(file);
+    setFormErrors({ ...formErrors, photoError: false });
+  };
   const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
@@ -45,15 +63,18 @@ export const AddProduct = () => {
     brandError: false,
     categoryError: false,
     priceError: false,
+    photoError: false,
   });
 
-  const handleChange = (e) => {
+  const handleFormChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
     setFormErrors({ ...formErrors, [`${name}Error`]: false });
   };
 
-  const handleProductUpload = () => {
+  const handleProductUpload = async () => {
     let hasErrors = false;
     const errors = { ...formErrors };
     if (!formData.title) {
@@ -76,9 +97,31 @@ export const AddProduct = () => {
       errors.priceError = true;
       hasErrors = true;
     }
+    if (!selectedFile) {
+      errors.photoError = true;
+      hasErrors = true;
+    }
+
     if (hasErrors) {
       setFormErrors(errors);
       return;
+    }
+    formDataToBackend.append("file", selectedFile);
+    formDataToBackend.append("data", JSON.stringify(formData));
+
+    try {
+      const response = await axiosApi.post(
+        "products/upload",
+        formDataToBackend,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
     }
   };
   const below700 = useMediaQuery(700);
@@ -120,6 +163,83 @@ export const AddProduct = () => {
         </Box>
         <Box
           sx={{
+            padding: "24px",
+            display: "flex",
+            flexDirection: "column",
+            borderBottom: "24px solid rgba(37,44,51,0.08)",
+            minHeight: "170px",
+          }}
+        >
+          <Typography
+            color={"grey"}
+            sx={{
+              fontSize: "14px",
+            }}
+          >
+            Add one photo
+          </Typography>
+
+          <Box
+            sx={{
+              border: "1px dashed rgba(37,44,51,0.1)",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              minHeight: "170px",
+            }}
+          >
+            <Box sx={{ marginRight: selectedFile ? "auto" : "" }}>
+              <CardMedia
+                component="img"
+                height="150px"
+                image={selectedFile ? URL.createObjectURL(selectedFile) : ""}
+              />
+            </Box>
+            <Button
+              component="label"
+              disableElevation
+              startIcon={!selectedFile ? <AddIcon /> : ""}
+              disableRipple
+              sx={{
+                justifyContent: "center",
+                alignItems: "center",
+                padding: "14px",
+                textTransform: "none",
+                fontSize: "14px",
+                color: "#007782",
+                border: "1px solid #007782",
+              }}
+            >
+              <Typography sx={{ fontSize: "16px" }}>
+                {selectedFile ? <AddIcon /> : "Upload photo"}
+              </Typography>
+              <Input
+                id="upload-photo"
+                name="upload-photo"
+                type="file"
+                style={{ display: "none" }}
+                onChange={(e) => handlePhotoInputChange(e)}
+              />
+            </Button>
+            {/* <label htmlFor="upload-photo">
+                <input
+                  name="upload-photo"
+                  id="upload-photo"
+                  type="file"
+                  style={{ display: "none" }}
+                />
+              </label> */}
+          </Box>
+          {formErrors.photoError ? (
+            <Typography color="error" fontSize={"14px"}>
+              Please upload a photo
+            </Typography>
+          ) : (
+            ""
+          )}
+        </Box>
+        <Box
+          sx={{
             display: "flex",
             flexDirection: "column",
             borderBottom: "1px solid rgba(37,44,51,0.08)",
@@ -152,7 +272,7 @@ export const AddProduct = () => {
             <TextField
               name="title"
               value={formData.title}
-              onChange={(e) => handleChange(e)}
+              onChange={(e) => handleFormChange(e)}
               fullWidth={below700 ? true : false}
               error={formErrors.titleError}
               helperText={
@@ -193,7 +313,7 @@ export const AddProduct = () => {
           <TextField
             name="description"
             value={formData.description}
-            onChange={handleChange}
+            onChange={handleFormChange}
             multiline={true}
             error={formErrors.descriptionError}
             helperText={
@@ -237,7 +357,7 @@ export const AddProduct = () => {
                 }
                 defaultValue={""}
                 label={formData.category ? "" : "Select a category"}
-                onChange={handleChange}
+                onChange={handleFormChange}
                 variant="standard"
                 fullWidth
               >
@@ -262,7 +382,7 @@ export const AddProduct = () => {
                 defaultValue={""}
                 label={formData.category ? "" : "Select a category"}
                 variant="standard"
-                onChange={handleChange}
+                onChange={handleFormChange}
                 sx={{ width: "50%" }}
               >
                 {categories.map((category) => (
@@ -303,7 +423,7 @@ export const AddProduct = () => {
                 helperText={formErrors.brandError ? "Fill in brand" : null}
                 defaultValue={""}
                 label={formData.brand ? "" : "Select a brand"}
-                onChange={handleChange}
+                onChange={handleFormChange}
                 variant="standard"
                 fullWidth
               >
@@ -326,7 +446,7 @@ export const AddProduct = () => {
                 defaultValue={""}
                 label={formData.brand ? "" : "Select a brand"}
                 variant="standard"
-                onChange={handleChange}
+                onChange={handleFormChange}
                 sx={{ width: "50%" }}
               >
                 {brands.map((brand) => (
@@ -373,7 +493,7 @@ export const AddProduct = () => {
               name="price"
               error={formErrors.priceError}
               helperText={formErrors.priceError ? "Fill in price" : null}
-              onChange={(e) => handleChange(e)}
+              onChange={(e) => handleFormChange(e)}
               fullWidth={below700 ? true : false}
               sx={{ padding: "4px", width: below700 ? "100%" : "50%" }}
               placeholder="Please enter a price"

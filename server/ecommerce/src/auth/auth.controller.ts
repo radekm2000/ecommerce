@@ -5,6 +5,7 @@ import {
   Post,
   Req,
   Res,
+  UseFilters,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
@@ -47,7 +48,7 @@ export class AuthController {
   @UseGuards(GoogleAuthGuard)
   @Get('google/login')
   handleGoogleLogin() {
-    //empty method, passport takes care of login
+    //empty method, passport takes care of google flow
   }
 
   @UseGuards(GoogleAuthGuard)

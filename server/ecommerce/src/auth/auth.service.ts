@@ -37,7 +37,7 @@ export class AuthService {
       httpOnly: true,
       maxAge: 60 * 60 * 1000,
     });
-    return accessToken;
+    return { accessToken, user };
   }
 
   async register(dto: RegisterUserDto) {

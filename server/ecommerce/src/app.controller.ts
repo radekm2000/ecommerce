@@ -9,7 +9,7 @@ export class AppController {
 
   @Get()
   @UseGuards(AuthGuard)
-  getHello(@Req() req: Request): string {
-    return this.appService.getHello(req);
+  getHello(@Req() req: Request) {
+    return;
   }
 }

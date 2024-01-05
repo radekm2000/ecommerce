@@ -9,12 +9,12 @@ export class ZodExceptionFilter extends BaseExceptionFilter {
     if (!this.isZodError(exception)) {
       return super.catch(exception, host);
     }
-
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    return response.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
+    console.log(exception.issues);
+    response.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
       type: 'validation',
-      message: exception.issues[0]?.message || 'Unknown error',
+      message: exception.issues[0]?.message ?? 'Unknown error',
     });
   }
 

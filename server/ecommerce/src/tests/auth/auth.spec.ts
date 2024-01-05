@@ -29,7 +29,7 @@ describe('Auth login method', () => {
       expect(error.response).toEqual('Invalid credentials');
     }
   });
-  it('should return access token', async () => {
+  it('should return access token and user', async () => {
     const user = {
       username: 'usermock',
       id: 1,
@@ -58,7 +58,7 @@ describe('Auth login method', () => {
     try {
       const result = await authService.login(dto, responseMock);
       expect(jwtService.signAsync).toHaveBeenCalledTimes(2);
-      expect(result).toEqual(accessToken);
+      expect(result).toHaveProperty('accessToken', 'user');
     } catch (error) {}
   });
 });

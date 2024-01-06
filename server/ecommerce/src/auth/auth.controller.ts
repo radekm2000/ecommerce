@@ -5,7 +5,6 @@ import {
   Post,
   Req,
   Res,
-  UseFilters,
   UseGuards,
   UsePipes,
 } from '@nestjs/common';

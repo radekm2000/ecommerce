@@ -66,14 +66,11 @@ export class UsersService {
         email: email,
         username: profile.displayName,
         googleId: profile.id,
+        avatar: profile.photos[0].value,
       });
       await this.usersRepository.save(newUser);
       return newUser;
     } else {
-      user.googleId = profile.id;
-      if (profile?._json.picture) {
-        user.avatar = profile._json?.picture;
-      }
       await this.usersRepository.save(user);
       return user;
     }

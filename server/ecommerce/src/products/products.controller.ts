@@ -1,6 +1,9 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
+  ParseIntPipe,
   Post,
   UploadedFile,
   UseGuards,
@@ -8,6 +11,7 @@ import {
 } from '@nestjs/common';
 import 'dotenv/config';
 import * as sharp from 'sharp';
+
 import { FileInterceptor } from '@nestjs/platform-express';
 import { randomUUID } from 'crypto';
 import { createProductFromJson } from 'src/utils/dtos/product.dto';
@@ -20,13 +24,27 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/utils/entities/product.entity';
 import { Repository } from 'typeorm';
 import { Image } from 'src/utils/entities/image.entity';
+import { ProductsService } from './products.service';
 @Controller('products')
 export class ProductsController {
   constructor(
     private usersService: UsersService,
     @InjectRepository(Product) private productRepository: Repository<Product>,
     @InjectRepository(Image) private imageRepository: Repository<Image>,
+    private productsService: ProductsService,
   ) {}
+
+  @Get()
+  async getProducts() {
+    return await this.productRepository.find({});
+  }
+
+  @Get(':userId')
+  async getUserProducts(@Param('userId', ParseIntPipe) userId: number) {
+    const products = await this.productsService.getUserProducts(userId);
+    return products;
+  }
+
   @Post('upload')
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
@@ -57,6 +75,7 @@ export class ProductsController {
     const paramsToS3 = {
       Bucket: process.env.BUCKET_NAME,
       Key: productImageName,
+      Body: buffer,
       ContentType: file.mimetype,
     } as PutObjectCommandInput;
 

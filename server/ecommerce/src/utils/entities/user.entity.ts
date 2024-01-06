@@ -2,11 +2,14 @@ import {
   BeforeInsert,
   Column,
   Entity,
+  JoinColumn,
   OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { Product } from './product.entity';
+import { Profile } from './profile.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -23,6 +26,10 @@ export class User {
 
   @Column({ nullable: true })
   password: string;
+
+  @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
+  @JoinColumn()
+  profile: Profile;
 
   @Column({ default: 'user' })
   role: 'admin' | 'user';

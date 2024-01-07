@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import {
   styled,
   alpha,
@@ -74,7 +75,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export const Navbar = () => {
-  const below500 = useMediaQuery(500)
   const below800 = useMediaQuery(800);
   const { user } = useUserContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -106,10 +106,7 @@ export const Navbar = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-  };
-
-  const handleSellButtonClick = () => {
-    return <Redirect to="products/new" />;
+    return <Redirect to="/profile" />;
   };
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -147,8 +144,11 @@ export const Navbar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>Profile</MenuItem>
-      <MenuItem onClick={handleMenuClose}>My account</MenuItem>
+      <MenuItem onClick={handleMenuClose}>
+        <Link href={`/members/${user.id}`}>
+          <Typography>Profile</Typography>
+        </Link>
+      </MenuItem>
     </Menu>
   );
 

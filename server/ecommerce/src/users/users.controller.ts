@@ -1,4 +1,11 @@
-import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Param,
+  ParseIntPipe,
+  Req,
+  UseGuards,
+} from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
@@ -12,5 +19,10 @@ export class UsersController {
   @UseGuards(AuthGuard)
   async getUser(@Req() request: Request, @AuthUser() authUser: AuthUser) {
     return await this.usersService.findUserById(authUser.sub);
+  }
+
+  @Get(':id')
+  async getUserInfo(@Param('id', ParseIntPipe) userId: number) {
+    return await this.usersService.getUserInfo(userId);
   }
 }

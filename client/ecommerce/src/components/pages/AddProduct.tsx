@@ -12,7 +12,11 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { ChangeEvent, useState } from "react";
-import { axiosApi } from "../../api/axios";
+import { addProduct } from "../../api/axios";
+import { useMutation } from "@tanstack/react-query";
+import toast from "react-hot-toast";
+import { Redirect } from "wouter";
+import { useUserContext } from "../../contexts/UserContext";
 
 //important note --------------
 // change button component prop to label if you want to upload files
@@ -41,8 +45,26 @@ type Brand = (typeof brands)[number];
 export const AddProduct = () => {
   const [selectedFile, setSelectedFile] = useState<File | "">("");
   const formDataToBackend = new FormData();
-  const handlePhotoInputChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const uploadedFiles = e.target.files;
+  const [success, setSuccess] = useState(false);
+  const { user } = useUserContext();
+  console.log(user);
+  const productMutation = useMutation({
+    mutationFn: addProduct,
+    mutationKey: ["products/upload"],
+    onSuccess: () => {
+      setSuccess(true);
+      toast.success("Product added");
+    },
+    onError: () => {
+      toast.error("Try again");
+    },
+  });
+
+  const { mutate } = productMutation;
+  const handlePhotoInputChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const uploadedFiles = (e.target as HTMLInputElement).files;
     if (!uploadedFiles) {
       return;
     }
@@ -109,22 +131,12 @@ export const AddProduct = () => {
     formDataToBackend.append("file", selectedFile);
     formDataToBackend.append("data", JSON.stringify(formData));
 
-    try {
-      const response = await axiosApi.post(
-        "products/upload",
-        formDataToBackend,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
-      return response.data;
-    } catch (error) {
-      console.log(error);
-    }
+    mutate(formDataToBackend);
   };
   const below700 = useMediaQuery(700);
+  if (success) {
+    return <Redirect to="/" />;
+  }
   return (
     <Box
       sx={{

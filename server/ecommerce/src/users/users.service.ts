@@ -90,4 +90,20 @@ export class UsersService {
     }
     return user;
   }
+
+  public async getUserInfo(userId: number) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: userId,
+      },
+      relations: ['products', 'profile'],
+    });
+    if (!user) {
+      throw new HttpException(
+        'User not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    return user;
+  }
 }

@@ -33,3 +33,32 @@ export type LoginResponseData = {
   accessToken: string;
   user: User;
 };
+
+export type Image = {
+  id: number;
+  imageName: string;
+  imageUrl: string;
+};
+
+export type ProductWithImage = {
+  id: number;
+  brand: string;
+  category: "men" | "women";
+  title: string;
+  description: string;
+  price: number;
+  images: Image[];
+};
+
+type UserWithoutProductsRelation = Omit<User, 'products'>
+
+export type ProductWithImageAndUser = {
+  id: number;
+  brand: string;
+  category: "men" | "women";
+  title: string;
+  description: string;
+  price: number;
+  images: Image[];
+  user: UserWithoutProductsRelation
+}

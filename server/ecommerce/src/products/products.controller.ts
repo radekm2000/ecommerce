@@ -36,7 +36,7 @@ export class ProductsController {
 
   @Get()
   async getProducts() {
-    return await this.productRepository.find({});
+    return await this.productsService.getAllProducts();
   }
 
   @Get(':userId')
@@ -56,8 +56,8 @@ export class ProductsController {
     const productBody = createProductFromJson(body.data);
     const buffer = await sharp(file.buffer)
       .resize({
-        height: 150,
-        width: 150,
+        height: 260,
+        width: 340,
         fit: 'contain',
       })
       .toBuffer();

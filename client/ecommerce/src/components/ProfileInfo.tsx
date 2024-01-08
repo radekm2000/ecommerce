@@ -160,6 +160,7 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                       </Typography>
                     </Button>
                     <Button
+                      variant="contained"
                       disableElevation
                       disableRipple
                       sx={{
@@ -167,6 +168,9 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                         textTransform: "none",
                         justifyContent: "center",
                         alignItems: "center",
+                        "&:hover": {
+                          background: "#007782",
+                        },
                         border: "1px #007782",
                       }}
                     >
@@ -175,7 +179,12 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                           color="white"
                           fontFamily="Arial"
                           fontSize="14px"
-                          sx={{ fontWeight: "500" }}
+                          sx={{
+                            fontWeight: "500",
+                            "&:hover": {
+                              background: "#007782",
+                            },
+                          }}
                         >
                           Follow
                         </Typography>
@@ -227,10 +236,14 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                     </Typography>
                   </Button>
                   <Button
+                    variant="contained"
                     disableElevation
                     disableRipple
                     sx={{
                       background: "#007782",
+                      "&:hover": {
+                        background: "#007782",
+                      },
                       textTransform: "none",
                       justifyContent: "center",
                       alignItems: "center",

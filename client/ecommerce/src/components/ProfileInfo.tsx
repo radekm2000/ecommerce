@@ -7,7 +7,7 @@ import { useMediaQuery } from "../hooks/useMediaQuery";
 import { User } from "../types/types";
 import { useUserContext } from "../contexts/UserContext";
 import { Link } from "wouter";
-
+import RssFeedIcon from "@mui/icons-material/RssFeed";
 export const ProfileInfo = ({ user }: { user: User }) => {
   const below750 = useMediaQuery(750);
   const below900 = useMediaQuery(900);
@@ -99,7 +99,7 @@ export const ProfileInfo = ({ user }: { user: User }) => {
               sx={{
                 display: "flex",
                 justifyContent: "space-between",
-                padding: "16px",
+                padding: "16px 0px",
               }}
             >
               <Box sx={{ display: "flex", flexDirection: "column" }}>
@@ -107,12 +107,89 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                   {user.username}
                 </Typography>
                 <Typography color={"#4D4D4D"}>No reviews yet</Typography>
+                {user.id === meUser.id && below900 ? (
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                      display: "flex",
+                      paddingTop: "8px",
+                    }}
+                  >
+                    <Button
+                      disableElevation
+                      disableRipple
+                      sx={{
+                        textTransform: "none",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        border: "1px solid grey",
+                        color: "grey",
+                      }}
+                      startIcon={<CreateOutlinedIcon />}
+                    >
+                      Edit profile
+                    </Button>
+                  </Box>
+                ) : null}
+                {user.id !== meUser.id && below900 ? (
+                  <Box
+                    sx={{
+                      alignItems: "center",
+                      justifyContent: "center",
+                      display: "flex",
+                      paddingTop: "8px",
+                    }}
+                  >
+                    <Button
+                      variant="outlined"
+                      disableElevation
+                      disableRipple
+                      sx={{
+                        borderRadius: "6px",
+                        borderColor: "#007782",
+                        textTransform: "none",
+                        maxWidth: "82px",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        marginRight: "10px",
+                      }}
+                    >
+                      <Typography sx={{ color: "#007782", fontSize: "14px" }}>
+                        Message
+                      </Typography>
+                    </Button>
+                    <Button
+                      disableElevation
+                      disableRipple
+                      sx={{
+                        background: "#007782",
+                        textTransform: "none",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        border: "1px #007782",
+                      }}
+                    >
+                      <Link href="/products/new">
+                        <Typography
+                          color="white"
+                          fontFamily="Arial"
+                          fontSize="14px"
+                          sx={{ fontWeight: "500" }}
+                        >
+                          Follow
+                        </Typography>
+                      </Link>
+                    </Button>
+                  </Box>
+                ) : null}
               </Box>
               {user.id === meUser.id ? (
                 <Button
                   disableElevation
                   disableRipple
                   sx={{
+                    display: below900 ? "none" : "inline-flex",
                     textTransform: "none",
                     justifyContent: "center",
                     alignItems: "center",
@@ -123,9 +200,7 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                 >
                   Edit profile
                 </Button>
-              ) : below900 ? (<Box>
-                <Typography>hello world</Typography>
-              </Box>) : (
+              ) : below900 ? null : (
                 <Box
                   sx={{
                     alignItems: "center",
@@ -141,12 +216,15 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                       borderRadius: "6px",
                       borderColor: "#007782",
                       textTransform: "none",
+                      maxWidth: "82px",
                       justifyContent: "center",
                       alignItems: "center",
                       marginRight: "10px",
                     }}
                   >
-                    <Typography sx={{ color: "#007782" }}>Message</Typography>
+                    <Typography sx={{ color: "#007782", fontSize: "14px" }}>
+                      Message
+                    </Typography>
                   </Button>
                   <Button
                     disableElevation
@@ -195,7 +273,7 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                   sx={{
                     display: "flex",
                     alignItems: "center",
-                    justifyContent: "center",
+                    justifyContent: "flex-start",
                     gap: "5px",
                   }}
                 >
@@ -206,11 +284,16 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                 </Box>
                 <Box
                   sx={{
-                    width: "160px",
+                    display: "flex",
+                    gap: "5px",
+                    width: "200px",
                     alignItems: "center",
-                    justifyContent: "center",
+                    justifyContent: "flex-start",
                   }}
                 >
+                  <RssFeedIcon
+                    sx={{ width: "16px", height: "16px", color: "grey" }}
+                  />
                   <Typography color={"#4D4D4D"}>
                     0 followers 0 following
                   </Typography>

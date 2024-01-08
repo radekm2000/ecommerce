@@ -1,14 +1,10 @@
-/* eslint-disable react-refresh/only-export-components */
-import {
-  styled,
-  alpha,
-  ThemeProvider,
-  createTheme,
-} from "@mui/material/styles";
+import Box from "@mui/material/Box";
+import { styled, alpha, ThemeProvider } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
+import createTheme from "@mui/material/styles/createTheme";
 
 import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
@@ -20,7 +16,6 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import Box from "@mui/material/Box";
 import { useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
 import { Avatar, Button } from "@mui/material";

@@ -21,8 +21,10 @@ import { useState } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { registerUser } from "../../api/axios";
 import { AxiosError } from "axios";
+import { Redirect } from "wouter";
 
 export const Register = () => {
+  const [success, setSuccess] = useState(false);
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -36,12 +38,12 @@ export const Register = () => {
   ) => {
     event.preventDefault();
   };
-
   const registerMutation = useMutation({
     mutationFn: registerUser,
     mutationKey: ["register"],
     onSuccess: () => {
       toast.success("User registered sucesfully");
+      setSuccess(true);
     },
     onError: (err) => {
       const error = err as AxiosError<Error>;
@@ -50,6 +52,9 @@ export const Register = () => {
     },
   });
   const { mutate } = registerMutation;
+  if (success) {
+    return <Redirect to="/login" />;
+  }
 
   const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();

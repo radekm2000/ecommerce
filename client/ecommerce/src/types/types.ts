@@ -9,6 +9,16 @@ export type LoginInput = {
   username: string;
   password: string;
 };
+type Followers = {
+  id: number;
+  follower: User;
+  following: User;
+};
+type Folllowings = {
+  id: number;
+  following: User;
+  follower: User;
+};
 
 export type User = {
   id: number;
@@ -50,7 +60,7 @@ export type ProductWithImage = {
   images: Image[];
 };
 
-type UserWithoutProductsRelation = Omit<User, 'products'>
+type UserWithoutProductsRelation = Omit<User, "products">;
 
 export type ProductWithImageAndUser = {
   id: number;
@@ -60,5 +70,10 @@ export type ProductWithImageAndUser = {
   description: string;
   price: number;
   images: Image[];
-  user: UserWithoutProductsRelation
-}
+  user: UserWithoutProductsRelation;
+};
+
+export type UserWithFollows = User & {
+  followers?: Followers[]
+  followings?: Folllowings[]
+};

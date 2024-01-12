@@ -4,14 +4,35 @@ import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutli
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import { useMediaQuery } from "../hooks/useMediaQuery";
-import { User } from "../types/types";
+import { User, UserWithFollows } from "../types/types";
 import { useUserContext } from "../contexts/UserContext";
-import { Link } from "wouter";
 import RssFeedIcon from "@mui/icons-material/RssFeed";
-export const ProfileInfo = ({ user }: { user: User }) => {
+import { useState } from "react";
+import { useFollowUser } from "../utils/followUser";
+import { Link } from "wouter";
+export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
+  const [followButonClicked, setFollowButtonClicked] = useState(false);
   const below750 = useMediaQuery(750);
   const below900 = useMediaQuery(900);
   const { user: meUser } = useUserContext();
+  const mutation = useFollowUser(user.id);
+  const { mutate } = mutation;
+  console.log(user);
+  const handleFollowButtonClick = (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    setFollowButtonClicked(!followButonClicked);
+    mutate(user.id);
+  };
+
+  const isFollowed = (member: UserWithFollows) => {
+    if (member.followings) {
+      return member.followings.some((following) => {
+        return following.follower.id === meUser.id;
+      });
+    }
+  };
   return (
     <Box
       sx={{
@@ -160,6 +181,7 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                       </Typography>
                     </Button>
                     <Button
+                      onClick={(e) => handleFollowButtonClick(e)}
                       variant="contained"
                       disableElevation
                       disableRipple
@@ -174,21 +196,19 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                         border: "1px #007782",
                       }}
                     >
-                      <Link href="/products/new">
-                        <Typography
-                          color="white"
-                          fontFamily="Arial"
-                          fontSize="14px"
-                          sx={{
-                            fontWeight: "500",
-                            "&:hover": {
-                              background: "#007782",
-                            },
-                          }}
-                        >
-                          Follow
-                        </Typography>
-                      </Link>
+                      <Typography
+                        color="white"
+                        fontFamily="Arial"
+                        fontSize="14px"
+                        sx={{
+                          fontWeight: "500",
+                          "&:hover": {
+                            background: "#007782",
+                          },
+                        }}
+                      >
+                        {isFollowed(user) ? "Following" : "Follow"}
+                      </Typography>
                     </Button>
                   </Box>
                 ) : null}
@@ -236,6 +256,7 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                     </Typography>
                   </Button>
                   <Button
+                    onClick={(e) => handleFollowButtonClick(e)}
                     variant="contained"
                     disableElevation
                     disableRipple
@@ -250,16 +271,14 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                       border: "1px #007782",
                     }}
                   >
-                    <Link href="/products/new">
-                      <Typography
-                        color="white"
-                        fontFamily="Arial"
-                        fontSize="14px"
-                        sx={{ fontWeight: "500" }}
-                      >
-                        Follow
-                      </Typography>
-                    </Link>
+                    <Typography
+                      color="white"
+                      fontFamily="Arial"
+                      fontSize="14px"
+                      sx={{ fontWeight: "500" }}
+                    >
+                      {isFollowed(user) ? "Following" : "Follow"}
+                    </Typography>
                   </Button>
                 </Box>
               )}
@@ -308,7 +327,14 @@ export const ProfileInfo = ({ user }: { user: User }) => {
                     sx={{ width: "16px", height: "16px", color: "grey" }}
                   />
                   <Typography color={"#4D4D4D"}>
-                    0 followers 0 following
+                    <Link style={{ color: "#007782" }} to="/followers">
+                      {user?.followers?.length || 0}
+                    </Link>{" "}
+                    followers{" "}
+                    <Link style={{ color: "#007782" }} to="/followers">
+                      {user?.followings?.length || 0}
+                    </Link>{" "}
+                    followings
                   </Typography>
                 </Box>
                 <Box

@@ -4,6 +4,7 @@ import 'dotenv/config';
 import { Product } from 'src/utils/entities/product.entity';
 import { Image } from 'src/utils/entities/image.entity';
 import { Profile } from 'src/utils/entities/profile.entity';
+import { Follow } from 'src/utils/entities/followers.entity';
 
 export let config: PostgresConnectionOptions;
 if (process.env.IS_PRODUCTION === 'true') {
@@ -16,7 +17,7 @@ if (process.env.IS_PRODUCTION === 'true') {
     port: 5432,
     username: process.env.POSTGRES_USER,
     password: process.env.POSTGRES_PASSWORD,
-    entities: [User, Product, Image, Profile],
+    entities: [User, Product, Image, Profile, Follow],
     synchronize: true,
   };
 }

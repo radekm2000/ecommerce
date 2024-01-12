@@ -10,6 +10,7 @@ import {
 import * as bcrypt from 'bcrypt';
 import { Product } from './product.entity';
 import { Profile } from './profile.entity';
+import { Follow } from './followers.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -36,6 +37,12 @@ export class User {
 
   @Column({ nullable: true })
   avatar: string;
+
+  @OneToMany(() => Follow, (follow) => follow.follower)
+  followers: Follow[];
+
+  @OneToMany(() => Follow, (follow) => follow.following)
+  followings: Follow[];
 
   @OneToMany(() => Product, (product) => product.user)
   products: Product[];

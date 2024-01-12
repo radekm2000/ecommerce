@@ -79,3 +79,8 @@ export const getUserData = async (userId: number): Promise<User> => {
   const response = await axiosApi.get(`users/${userId}`);
   return response.data;
 };
+
+export const followUser = async (userId: number) => {
+  const response = await axiosApi.post(`followers/follow/${userId}`);
+  return response.data;
+};

@@ -8,10 +8,11 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/utils/entities/user.entity';
 import { UsersService } from 'src/users/users.service';
 import { GoogleStrategy } from './utils/GoogleStrategy';
+import { Follow } from 'src/utils/entities/followers.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([User]),
+    TypeOrmModule.forFeature([User, Follow]),
     UsersModule,
     JwtModule.register({
       global: true,

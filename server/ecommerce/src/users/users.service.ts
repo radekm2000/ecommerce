@@ -2,12 +2,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Profile } from 'passport-google-oauth20';
 import { RegisterUserDto } from 'src/utils/dtos/user.dto';
+import { Follow } from 'src/utils/entities/followers.entity';
 import { User } from 'src/utils/entities/user.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
 export class UsersService {
   constructor(
+    @InjectRepository(Follow) private followsRepository: Repository<Follow>,
     @InjectRepository(User) private usersRepository: Repository<User>,
   ) {}
 
@@ -96,7 +98,12 @@ export class UsersService {
       where: {
         id: userId,
       },
-      relations: ['products', 'profile'],
+      relations: {
+        products: true,
+        profile: true,
+        followers: true,
+        followings: true,
+      },
     });
     if (!user) {
       throw new HttpException(
@@ -104,6 +111,47 @@ export class UsersService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    return user;
+    const followers = user.followers;
+    const followings = user.followings;
+    const detailedFollowings = [];
+    const detailedFollowers = [];
+
+    if (followings) {
+      for (const following of followings) {
+        const detailedFollowing = await this.followsRepository.findOne({
+          where: {
+            id: following.id,
+          },
+          relations: ['following', 'follower'],
+        });
+
+        if (detailedFollowing) {
+          detailedFollowings.push(detailedFollowing);
+        }
+      }
+    }
+
+    if (followers) {
+      for (const follower of followers) {
+        const detailedFollower = await this.followsRepository.findOne({
+          where: {
+            id: follower.id,
+          },
+          relations: ['follower', 'following'],
+        });
+
+        if (detailedFollower) {
+          detailedFollowers.push(detailedFollower);
+        }
+      }
+    }
+
+    const updatedUser = {
+      ...user,
+      followings: detailedFollowings,
+      followers: detailedFollowers,
+    };
+
+    return updatedUser;
   }
 }

@@ -41,7 +41,6 @@ export const MainPage = () => {
   if (!products) {
     return "No products to display";
   }
-  console.log(products);
   return (
     <Box
       sx={{

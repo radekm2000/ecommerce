@@ -20,7 +20,7 @@ export const Member = () => {
   const { data: user, isLoading: isUserLoading } = useUserInfo(
     parseInt(userId!)
   );
-
+  console.log(user);
   const { data: products, isLoading: isProductsDataLoading } = useAllProducts();
   if (isUserLoading) {
     return "isLoading...";
@@ -43,7 +43,6 @@ export const Member = () => {
   if (!products) {
     return "No products to display";
   }
-
   return (
     <Box
       sx={{
@@ -80,7 +79,7 @@ export const Member = () => {
         }}
       >
         <Grid container>
-          {products.map((product, index) => (
+          {memberProducts.map((product, index) => (
             <Grid
               item
               key={index}

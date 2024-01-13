@@ -7,14 +7,33 @@ import { useMediaQuery } from "../hooks/useMediaQuery";
 import { User, UserWithFollows } from "../types/types";
 import { useUserContext } from "../contexts/UserContext";
 import RssFeedIcon from "@mui/icons-material/RssFeed";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useFollowUser } from "../utils/followUser";
 import { Link } from "wouter";
+import { QueryClient } from "@tanstack/react-query";
 export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
+  const { user: meUser } = useUserContext();
+  // const isFollowed = (member: UserWithFollows) => {
+  //   if (member.followings) {
+  //     return member.followings.some((following) => {
+  //       return following.follower.id === meUser.id;
+  //     });
+  //   } else {
+  //     return false;
+  //   }
+  // };
+  const isFollowed = (member: UserWithFollows) => {
+    return (member.followings ?? []).some((following) => {
+      return following.follower.id === meUser.id;
+    });
+  };
   const [followButonClicked, setFollowButtonClicked] = useState(false);
+  
+  useEffect(() => {
+    setFollowButtonClicked(isFollowed(user));
+  }, [user]);
   const below750 = useMediaQuery(750);
   const below900 = useMediaQuery(900);
-  const { user: meUser } = useUserContext();
   const mutation = useFollowUser(user.id);
   const { mutate } = mutation;
   console.log(user);
@@ -26,13 +45,6 @@ export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
     mutate(user.id);
   };
 
-  const isFollowed = (member: UserWithFollows) => {
-    if (member.followings) {
-      return member.followings.some((following) => {
-        return following.follower.id === meUser.id;
-      });
-    }
-  };
   return (
     <Box
       sx={{
@@ -207,7 +219,7 @@ export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
                           },
                         }}
                       >
-                        {isFollowed(user) ? "Following" : "Follow"}
+                        {followButonClicked ? "Following" : "Follow"}
                       </Typography>
                     </Button>
                   </Box>
@@ -277,7 +289,7 @@ export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
                       fontSize="14px"
                       sx={{ fontWeight: "500" }}
                     >
-                      {isFollowed(user) ? "Following" : "Follow"}
+                      {followButonClicked ? "Following" : "Follow"}
                     </Typography>
                   </Button>
                 </Box>
@@ -327,11 +339,17 @@ export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
                     sx={{ width: "16px", height: "16px", color: "grey" }}
                   />
                   <Typography color={"#4D4D4D"}>
-                    <Link style={{ color: "#007782" }} to="/followers">
+                    <Link
+                      style={{ color: "#007782" }}
+                      to={`/members/${user.id}/followers`}
+                    >
                       {user?.followers?.length || 0}
                     </Link>{" "}
                     followers{" "}
-                    <Link style={{ color: "#007782" }} to="/followers">
+                    <Link
+                      style={{ color: "#007782" }}
+                      to={`/members/${user.id}/followings`}
+                    >
                       {user?.followings?.length || 0}
                     </Link>{" "}
                     followings

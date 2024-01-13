@@ -8,6 +8,8 @@ import { AddProduct } from "./components/pages/AddProduct";
 import { Navbar } from "./components/Navbar";
 import { Product } from "./components/pages/Product";
 import { Member } from "./components/pages/Member";
+import { Followers } from "./components/pages/Followers";
+import { Followings } from "./components/pages/Followings";
 function App() {
   return (
     <>
@@ -24,12 +26,20 @@ function App() {
             <Product />
           </Route>
           <Route path="/members/:userId">
-            <Navbar/>
-            <Member/>
+            <Navbar />
+            <Member />
           </Route>
           <Route path="/products/new">
             <Navbar />
             <AddProduct />
+          </Route>
+          <Route path="/members/:userId/followers">
+            <Navbar />
+            <Followers />
+          </Route>
+          <Route path="/members/:userId/followings">
+            <Navbar />
+            <Followings />
           </Route>
           <Route path="/:rest*">{() => <Redirect to="/" />}</Route>
         </Switch>

@@ -5,6 +5,7 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Query,
   UploadedFile,
   UseGuards,
   UseInterceptors,
@@ -25,6 +26,7 @@ import { Product } from 'src/utils/entities/product.entity';
 import { Repository } from 'typeorm';
 import { Image } from 'src/utils/entities/image.entity';
 import { ProductsService } from './products.service';
+import { QueryParams } from 'src/utils/dtos/types';
 @Controller('products')
 export class ProductsController {
   constructor(
@@ -37,6 +39,14 @@ export class ProductsController {
   @Get()
   async getProducts() {
     return await this.productsService.getAllProducts();
+  }
+
+  @Get('/men')
+  async getMenProducts(@Query() queryParams: QueryParams) {
+    console.log(queryParams);
+    const products =
+      await this.productsService.getMenFilteredProducts(queryParams);
+    return products;
   }
 
   @Get(':userId')

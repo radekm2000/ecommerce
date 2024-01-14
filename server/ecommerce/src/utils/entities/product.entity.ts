@@ -17,7 +17,7 @@ export class Product {
   brand: string;
 
   @Column()
-  category: 'men' | 'women' | string;
+  category: 'Men' | 'Women' | string;
 
   @Column()
   title: string;

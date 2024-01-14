@@ -13,22 +13,14 @@ import { Link } from "wouter";
 import { QueryClient } from "@tanstack/react-query";
 export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
   const { user: meUser } = useUserContext();
-  // const isFollowed = (member: UserWithFollows) => {
-  //   if (member.followings) {
-  //     return member.followings.some((following) => {
-  //       return following.follower.id === meUser.id;
-  //     });
-  //   } else {
-  //     return false;
-  //   }
-  // };
+
   const isFollowed = (member: UserWithFollows) => {
     return (member.followings ?? []).some((following) => {
       return following.follower.id === meUser.id;
     });
   };
   const [followButonClicked, setFollowButtonClicked] = useState(false);
-  
+
   useEffect(() => {
     setFollowButtonClicked(isFollowed(user));
   }, [user]);

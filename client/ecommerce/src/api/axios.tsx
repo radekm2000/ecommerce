@@ -6,6 +6,7 @@ import {
   ProductWithImageAndUser,
   RegisterInput,
   User,
+  UserWithFollows,
 } from "../types/types";
 import { RequestAccessTokenInterceptor } from "./request-access-token.interceptor";
 import { ResponseOAuthInterceptor } from "./response-auth.interceptor";
@@ -75,7 +76,7 @@ export const getProducts = async (): Promise<ProductWithImageAndUser[]> => {
   return response.data;
 };
 
-export const getUserData = async (userId: number): Promise<User> => {
+export const getUserData = async (userId: number): Promise<UserWithFollows> => {
   const response = await axiosApi.get(`users/${userId}`);
   return response.data;
 };

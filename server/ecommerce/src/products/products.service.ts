@@ -6,6 +6,7 @@ import 'dotenv/config';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3 } from 'src/main';
+import { Brand, Order, QueryParams } from 'src/utils/dtos/types';
 
 @Injectable()
 export class ProductsService {
@@ -56,5 +57,76 @@ export class ProductsService {
       }
     }
     return products;
+  }
+
+  async getMenProducts() {
+    return await this.productRepository.find({
+      where: {
+        category: 'Men',
+      },
+    });
+  }
+
+  async getMenFilteredProducts(queryParams: QueryParams) {
+    const products = await this.productRepository.find({
+      where: {
+        category: 'Men',
+      },
+    });
+    if (
+      (queryParams.brand && !this.isValidBrand(queryParams.brand)) ||
+      (queryParams.order && !this.isValidOrder(queryParams.order))
+    ) {
+      return products;
+    }
+    if (queryParams.brand && queryParams.order) {
+      const sortedByPrice = await this.sortByPrice(queryParams.order, products);
+      return await this.sortByBrand(sortedByPrice, queryParams.brand);
+    } else if (queryParams.brand) {
+      return await this.sortByBrand(products, queryParams.brand);
+    } else if (queryParams.order) {
+      const products123 = await this.sortByPrice(queryParams.order, products);
+      console.log(products123);
+      return products123;
+    }
+    return products;
+  }
+
+  async sortByPrice(order: Order, products: Product[]) {
+    const sortedProducts = [...products];
+    console.log(order);
+
+    if (order === 'price_high_to_low') {
+      sortedProducts.sort((a, b) => b.price - a.price);
+    } else if (order === 'price_low_to_high') {
+      sortedProducts.sort((a, b) => a.price - b.price);
+    } else {
+      return;
+    }
+    return sortedProducts;
+  }
+
+  async sortByBrand(products: Product[], brand: Brand) {
+    return products.filter((product) => product.brand === brand);
+  }
+
+  private isValidBrand(brand: any): boolean {
+    const validBrands: Brand[] = [
+      'Zara',
+      'Reserved',
+      'Nike',
+      'House',
+      'Adidas',
+      '4F',
+      'Calvin Klein',
+      'unknown',
+    ];
+    return validBrands.includes(brand);
+  }
+
+  private isValidOrder(order: string): boolean {
+    console.log(order);
+    const validOrders: Order[] = ['price_high_to_low', 'price_low_to_high'];
+    return validOrders.includes(order as Order);
   }
 }

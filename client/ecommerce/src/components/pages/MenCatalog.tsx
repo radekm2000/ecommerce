@@ -5,10 +5,13 @@ import { axiosApi } from "../../api/axios";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { useQuery } from "@tanstack/react-query";
+import { useUserContext } from "../../contexts/UserContext";
 export const MenCatalog = () => {
   const [anchorEl, setAnchorEl] = useState(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [order, setOrder] = useState("");
+  const { user } = useUserContext();
+  console.log(user);
   console.log(order);
   const { data, isLoading } = useQuery({
     queryKey: ["products", order],

@@ -79,6 +79,7 @@ function LinkTab(props: LinkTabProps) {
   return (
     <Tab
       sx={{
+        cursor: "pointer",
         fontSize: "14px",
         textTransform: "none",
         "&:hover": {
@@ -117,6 +118,7 @@ export const Navbar = () => {
           event as React.MouseEvent<HTMLAnchorElement, MouseEvent>
         ))
     ) {
+      console.log(newValue);
       setValue(newValue);
     }
   };
@@ -378,12 +380,15 @@ export const Navbar = () => {
                   fontSize: "14px",
                 }}
                 value={value}
-                onChange={handleChange}
                 aria-label="nav tabs example"
                 role="navigation"
               >
-                <LinkTab label="Men" href="/catalog/men" />
-                <LinkTab label="Women" href="/catalog/women" />
+                <Link to="/catalog/men">
+                  <LinkTab label="Men" href="/catalog/men" />
+                </Link>
+                <Link to="/catalog/women">
+                  <LinkTab label="Women" href="/catalog/women" />
+                </Link>
               </Tabs>
             </Box>
           </Box>

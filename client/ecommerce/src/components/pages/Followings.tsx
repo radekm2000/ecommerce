@@ -173,17 +173,17 @@ export const Followings = () => {
           </Box>
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
             {user?.followings?.map((following, index) => (
-              <Box
-                key={index}
-                sx={{
-                  cursor: "pointer",
-                  overflow: "hidden",
-                  flexBasis: below700 ? "100%" : "33.333%",
-                  display: "flex",
-                  padding: "16px 0px",
-                }}
-              >
-                <Link to={`/members/${following.follower.id}`}>
+              <Link to={`/members/${following.follower.id}`}>
+                <Box
+                  key={index}
+                  sx={{
+                    cursor: "pointer",
+                    overflow: "hidden",
+                    flexBasis: below700 ? "100%" : "33.333%",
+                    display: "flex",
+                    padding: "16px 0px",
+                  }}
+                >
                   {following.follower.avatar ? (
                     <img
                       style={{
@@ -208,8 +208,8 @@ export const Followings = () => {
                   >
                     {following.follower.username}
                   </Typography>
-                </Link>
-              </Box>
+                </Box>
+              </Link>
             ))}
           </Box>
         </Box>

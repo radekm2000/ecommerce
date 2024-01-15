@@ -77,3 +77,4 @@ export type UserWithFollows = User & {
   followers?: Followers[]
   followings?: Folllowings[]
 };
+

@@ -5,12 +5,11 @@ import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import createTheme from "@mui/material/styles/createTheme";
-
+import Tab from "@mui/material/Tab";
 import InputBase from "@mui/material/InputBase";
 import Badge from "@mui/material/Badge";
 import MenuItem from "@mui/material/MenuItem";
 import Menu from "@mui/material/Menu";
-import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
@@ -18,7 +17,7 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
-import { Avatar, Button } from "@mui/material";
+import { Avatar, Button, Tabs } from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Link, Redirect } from "wouter";
 
@@ -54,6 +53,44 @@ export const theme = createTheme({
     },
   },
 });
+function samePageLinkNavigation(
+  event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
+) {
+  if (
+    event.defaultPrevented ||
+    event.button !== 0 || // ignore everything but left-click
+    event.metaKey ||
+    event.ctrlKey ||
+    event.altKey ||
+    event.shiftKey
+  ) {
+    return false;
+  }
+  return true;
+}
+
+interface LinkTabProps {
+  label?: string;
+  href?: string;
+  selected?: boolean;
+}
+
+function LinkTab(props: LinkTabProps) {
+  return (
+    <Tab
+      sx={{
+        fontSize: "14px",
+        textTransform: "none",
+        "&:hover": {
+          backgroundColor: "rgba(23, 23, 23, 0.02)",
+        },
+      }}
+      component="a"
+      aria-current={props.selected && "page"}
+      {...props}
+    />
+  );
+}
 
 const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "primary.dark",
@@ -70,28 +107,31 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export const Navbar = () => {
+  const below1000 = useMediaQuery(1000);
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    // event.type can be equal to focus with selectionFollowsFocus.
+    if (
+      event.type !== "click" ||
+      (event.type === "click" &&
+        samePageLinkNavigation(
+          event as React.MouseEvent<HTMLAnchorElement, MouseEvent>
+        ))
+    ) {
+      setValue(newValue);
+    }
+  };
+
+  const [value, setValue] = useState(0);
   const below800 = useMediaQuery(800);
   const { user } = useUserContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
 
-  const [drawerAnchorEl, setDrawerAnchorEl] = useState<null | HTMLElement>(
-    null
-  );
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-  const isDrawerOpen = Boolean(drawerAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
-  };
-
-  const handleDrawerOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setDrawerAnchorEl(event.currentTarget);
-  };
-
-  const handleDrawerClose = () => {
-    setDrawerAnchorEl(null);
   };
 
   const handleMobileMenuClose = () => {
@@ -110,19 +150,6 @@ export const Navbar = () => {
 
   const menuId = "primary-search-account-menu";
 
-  const drawerMenu = (
-    <Menu
-      anchorEl={drawerAnchorEl}
-      anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
-      id="drawer-menu"
-      keepMounted
-      open={isDrawerOpen}
-      onClose={handleDrawerClose}
-    >
-      <MenuItem onClick={handleDrawerClose}>Men</MenuItem>
-      <MenuItem onClick={handleDrawerClose}>Women</MenuItem>
-    </Menu>
-  );
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -202,29 +229,24 @@ export const Navbar = () => {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static" elevation={0}>
+        <Box
+          sx={{
+            flexGrow: 1,
+            borderBottom: "1px solid rgba(23, 23, 23, 0.08)",
+            borderColor: "primary.light",
+          }}
+        >
+          <AppBar
+            sx={{ backgroundColor: "#FFFFFF" }}
+            position="static"
+            elevation={0}
+          >
             <Toolbar
               sx={{
-                backgroundColor: "#FFFFFF",
                 padding: "8px 16px",
-                borderBottom: "1px solid",
-                borderColor: "primary.light",
+                margin: "0px 150px",
               }}
             >
-              <IconButton
-                onClick={(e) => handleDrawerOpen(e)}
-                size="large"
-                edge="start"
-                aria-label="open drawer"
-                sx={{
-                  mr: 2,
-                  backgroundColor: "primary.light",
-                  "&:hover": { backgroundColor: "primary.light" },
-                }}
-              >
-                <MenuIcon />
-              </IconButton>
               <Link href="/">
                 <Typography
                   color="#26a69a"
@@ -247,7 +269,7 @@ export const Navbar = () => {
                   Vetted
                 </Typography>
               </Link>
-              <Search>
+              <Search sx={{ flexGrow: 1 }}>
                 <SearchIconWrapper>
                   <SearchIcon color="primary" />
                 </SearchIconWrapper>
@@ -332,8 +354,40 @@ export const Navbar = () => {
           </AppBar>
           {renderMobileMenu}
           {renderMenu}
-          {drawerMenu}
         </Box>
+        {below1000 ? null : (
+          <Box
+            sx={{
+              width: "100%",
+              borderBottom: "1px solid rgba(23, 23, 23, 0.08)",
+            }}
+          >
+            <Box
+              sx={{
+                backgroundColor: "#FFFFFF",
+                margin: "0px 150px",
+              }}
+            >
+              <Tabs
+                TabIndicatorProps={{
+                  style: { display: "none" },
+                }}
+                sx={{
+                  fontFamily: "Maison Neue",
+
+                  fontSize: "14px",
+                }}
+                value={value}
+                onChange={handleChange}
+                aria-label="nav tabs example"
+                role="navigation"
+              >
+                <LinkTab label="Men" href="/catalog/men" />
+                <LinkTab label="Women" href="/catalog/women" />
+              </Tabs>
+            </Box>
+          </Box>
+        )}
       </ThemeProvider>
     </>
   );

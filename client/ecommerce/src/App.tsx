@@ -10,6 +10,7 @@ import { Product } from "./components/pages/Product";
 import { Member } from "./components/pages/Member";
 import { Followers } from "./components/pages/Followers";
 import { Followings } from "./components/pages/Followings";
+import { MenCatalog } from "./components/pages/MenCatalog";
 function App() {
   return (
     <>
@@ -36,6 +37,10 @@ function App() {
           <Route path="/members/:userId/followers">
             <Navbar />
             <Followers />
+          </Route>
+          <Route path="/catalog/men">
+            <Navbar />
+            <MenCatalog />
           </Route>
           <Route path="/members/:userId/followings">
             <Navbar />

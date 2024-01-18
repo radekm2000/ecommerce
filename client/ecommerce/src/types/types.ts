@@ -74,7 +74,16 @@ export type ProductWithImageAndUser = {
 };
 
 export type UserWithFollows = User & {
-  followers?: Followers[]
-  followings?: Folllowings[]
+  followers?: Followers[];
+  followings?: Folllowings[];
 };
 
+export type Brand =
+  | "Zara"
+  | "Reserved"
+  | "Nike"
+  | "House"
+  | "Adidas"
+  | "4F"
+  | "Calvin Klein"
+  | "";

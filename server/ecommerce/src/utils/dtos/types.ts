@@ -8,7 +8,7 @@ export type Brand =
   | 'Adidas'
   | '4F'
   | 'Calvin Klein'
-  | 'unknown';
+  | '';
 
 export type QueryParams = {
   order: Order;

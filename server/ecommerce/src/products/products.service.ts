@@ -73,6 +73,9 @@ export class ProductsService {
         category: 'Men',
       },
     });
+    if (!queryParams) {
+      return products;
+    }
     if (
       (queryParams.brand && !this.isValidBrand(queryParams.brand)) ||
       (queryParams.order && !this.isValidOrder(queryParams.order))
@@ -119,7 +122,6 @@ export class ProductsService {
       'Adidas',
       '4F',
       'Calvin Klein',
-      'unknown',
     ];
     return validBrands.includes(brand);
   }

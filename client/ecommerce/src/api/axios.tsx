@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  Brand,
   LoginInput,
   LoginResponseData,
   ProductWithImage,
@@ -84,4 +85,22 @@ export const getUserData = async (userId: number): Promise<UserWithFollows> => {
 export const followUser = async (userId: number) => {
   const response = await axiosApi.post(`followers/follow/${userId}`);
   return response.data;
+};
+
+export const fetchFilteredProducts = async (order: string, brand: Brand) => {
+  if (order && brand) {
+    const response = await axiosApi.get(
+      `products/men/?order=${order}&brand=${brand}`
+    );
+    return response.data;
+  } else if (order) {
+    const response = await axiosApi.get(`products/men/?order=${order}`);
+    return response.data;
+  } else if (brand) {
+    const response = await axiosApi.get(`products/men/?brand=${brand}`);
+    return response.data;
+  } else {
+    const response = await axiosApi.get("products/men");
+    return response.data
+  }
 };

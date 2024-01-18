@@ -53,21 +53,6 @@ export const theme = createTheme({
     },
   },
 });
-function samePageLinkNavigation(
-  event: React.MouseEvent<HTMLAnchorElement, MouseEvent>
-) {
-  if (
-    event.defaultPrevented ||
-    event.button !== 0 || // ignore everything but left-click
-    event.metaKey ||
-    event.ctrlKey ||
-    event.altKey ||
-    event.shiftKey
-  ) {
-    return false;
-  }
-  return true;
-}
 
 interface LinkTabProps {
   label?: string;
@@ -109,19 +94,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export const Navbar = () => {
   const below1000 = useMediaQuery(1000);
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    // event.type can be equal to focus with selectionFollowsFocus.
-    if (
-      event.type !== "click" ||
-      (event.type === "click" &&
-        samePageLinkNavigation(
-          event as React.MouseEvent<HTMLAnchorElement, MouseEvent>
-        ))
-    ) {
-      console.log(newValue);
-      setValue(newValue);
-    }
-  };
 
   const [value, setValue] = useState(0);
   const below800 = useMediaQuery(800);
@@ -265,6 +237,7 @@ export const Navbar = () => {
                       fontSize: "24px",
                       marginRight: 15,
                       marginLeft: "auto",
+                      
                     },
                   }}
                 >
@@ -376,7 +349,6 @@ export const Navbar = () => {
                 }}
                 sx={{
                   fontFamily: "Maison Neue",
-
                   fontSize: "14px",
                 }}
                 value={value}

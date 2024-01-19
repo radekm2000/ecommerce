@@ -60,19 +60,29 @@ export class ProductsService {
   }
 
   async getMenProducts() {
-    return await this.productRepository.find({
-      where: {
-        category: 'Men',
-      },
-    });
-  }
-
-  async getMenFilteredProducts(queryParams: QueryParams) {
     const products = await this.productRepository.find({
       where: {
         category: 'Men',
       },
+      relations: ['images', 'user'],
     });
+    for (const product of products) {
+      for (const image of product.images) {
+        const getObjectParams = {
+          Bucket: process.env.BUCKET_NAME,
+          Key: image.imageName,
+        };
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+
+        image.imageUrl = url;
+      }
+    }
+    return products;
+  }
+
+  async getMenFilteredProducts(queryParams: QueryParams) {
+    const products = await this.getMenProducts();
     if (!queryParams) {
       return products;
     }

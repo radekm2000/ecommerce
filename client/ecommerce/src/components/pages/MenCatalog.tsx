@@ -221,7 +221,7 @@ export const MenCatalog = () => {
                       padding: "8px",
                     }}
                   >
-                    <Link href={`/products/${product.id}-${product.title}`}>
+                    <Link href={`/members/${product.user.id}}`}>
                       <CardContent
                         sx={{
                           display: "flex",

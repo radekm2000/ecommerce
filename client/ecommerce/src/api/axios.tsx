@@ -87,7 +87,10 @@ export const followUser = async (userId: number) => {
   return response.data;
 };
 
-export const fetchFilteredProducts = async (order: string, brand: Brand) => {
+export const fetchFilteredProducts = async (
+  order: string,
+  brand: Brand
+): Promise<ProductWithImageAndUser[]> => {
   if (order && brand) {
     const response = await axiosApi.get(
       `products/men/?order=${order}&brand=${brand}`
@@ -101,6 +104,6 @@ export const fetchFilteredProducts = async (order: string, brand: Brand) => {
     return response.data;
   } else {
     const response = await axiosApi.get("products/men");
-    return response.data
+    return response.data;
   }
 };

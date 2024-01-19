@@ -24,9 +24,6 @@ export const MenCatalog = () => {
   const [location, setLocation] = useLocation();
 
   const below1600 = useMediaQuery(1600);
-  const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [isActive, setIsActive] = useState(false);
   const [brand, setBrand] = useState<Brand>("");
   const [order, setOrder] = useState("");
   const { user } = useUserContext();
@@ -35,6 +32,20 @@ export const MenCatalog = () => {
 
   console.log(user);
   console.log(order);
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (brand && order) {
+      params.set("brand", brand);
+      params.set("order", order);
+      setLocation(`/catalog/men?${params.toString()}`);
+    }
+    if (brand) {
+      params.set("brand", brand);
+    } else if (order) {
+      params.set("order", order);
+    }
+    setLocation(`/catalog/men?${params.toString()}`);
+  }, [brand, order, setLocation]);
 
   const { data: products, isLoading: isProductsLoading } = useFilteredProducts(
     brand,
@@ -141,7 +152,7 @@ export const MenCatalog = () => {
                 <Button
                   sx={{
                     padding: "8px 12px",
-                    marginLeft: '8px',
+                    marginLeft: "8px",
                     backgroundColor: "#F2F2F2",
                     fontSize: "14px",
                     color: "#171717",
@@ -154,7 +165,7 @@ export const MenCatalog = () => {
               )}
               {order || brand ? (
                 <Button
-                onClick={clearFilters}
+                  onClick={clearFilters}
                   sx={{
                     color: "#007782",
                     textTransform: "none",
@@ -165,7 +176,6 @@ export const MenCatalog = () => {
                     maxHeight: "21px",
                     marginLeft: "auto",
                     padding: "0px 5px",
-                    
                   }}
                 >
                   Clear filters

@@ -42,7 +42,7 @@ export class ProductsController {
   }
 
   @Get('/filtered')
-  async getMenProducts(@Query() queryParams: QueryParams) {
+  async getFilteredProducts(@Query() queryParams: QueryParams) {
     console.log(queryParams);
     if (queryParams.category === 'Men') {
       return await this.productsService.getMenFilteredProducts(queryParams);

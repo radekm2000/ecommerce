@@ -12,6 +12,7 @@ import { Followers } from "./components/pages/Followers";
 import { Followings } from "./components/pages/Followings";
 import { MenCatalog } from "./components/pages/MenCatalog";
 import { WomenCatalog } from "./components/pages/WomenCatalog";
+import { Inbox } from "./components/pages/Inbox";
 function App() {
   return (
     <>
@@ -46,6 +47,10 @@ function App() {
           <Route path="/catalog/women">
             <Navbar />
             <WomenCatalog />
+          </Route>
+          <Route path="/inbox">
+            <Navbar />
+            <Inbox />
           </Route>
           <Route path="/members/:userId/followings">
             <Navbar />

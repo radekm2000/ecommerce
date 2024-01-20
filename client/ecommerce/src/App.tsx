@@ -48,7 +48,7 @@ function App() {
             <Navbar />
             <WomenCatalog />
           </Route>
-          <Route path="/inbox">
+          <Route path="/inbox/:userId*">
             <Navbar />
             <Inbox />
           </Route>

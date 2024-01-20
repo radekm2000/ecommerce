@@ -59,6 +59,49 @@ export class ProductsService {
     return products;
   }
 
+  async getWomenFilteredProducts(queryParams: QueryParams) {
+    const products = await this.productRepository.find({
+      where: {
+        category: 'Women',
+      },
+      relations: ['images', 'user'],
+    });
+    for (const product of products) {
+      for (const image of product.images) {
+        const getObjectParams = {
+          Bucket: process.env.BUCKET_NAME,
+          Key: image.imageName,
+        };
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+
+        image.imageUrl = url;
+      }
+    }
+    if (!queryParams.brand && !queryParams.order) {
+      return products;
+    }
+    if (
+      (queryParams.brand && !this.isValidBrand(queryParams.brand)) ||
+      (queryParams.order && !this.isValidOrder(queryParams.order))
+    ) {
+      return products;
+    }
+    if (queryParams.brand && queryParams.order) {
+      const sortedByPrice = await this.sortByPrice(queryParams.order, products);
+      return await this.sortByBrand(sortedByPrice, queryParams.brand);
+    } else if (queryParams.brand) {
+      return await this.sortByBrand(products, queryParams.brand);
+    } else if (queryParams.order) {
+      const productsSorted = await this.sortByPrice(
+        queryParams.order,
+        products,
+      );
+      return productsSorted;
+    }
+    return products;
+  }
+
   async getMenProducts() {
     const products = await this.productRepository.find({
       where: {
@@ -83,7 +126,7 @@ export class ProductsService {
 
   async getMenFilteredProducts(queryParams: QueryParams) {
     const products = await this.getMenProducts();
-    if (!queryParams) {
+    if (!queryParams.brand && !queryParams.order) {
       return products;
     }
     if (
@@ -98,9 +141,11 @@ export class ProductsService {
     } else if (queryParams.brand) {
       return await this.sortByBrand(products, queryParams.brand);
     } else if (queryParams.order) {
-      const products123 = await this.sortByPrice(queryParams.order, products);
-      console.log(products123);
-      return products123;
+      const productsSorted = await this.sortByPrice(
+        queryParams.order,
+        products,
+      );
+      return productsSorted;
     }
     return products;
   }

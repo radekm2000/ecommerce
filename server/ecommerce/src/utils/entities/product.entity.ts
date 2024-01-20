@@ -28,7 +28,10 @@ export class Product {
   @Column()
   price: number;
 
-  @OneToMany(() => Image, (image) => image.product, { cascade: true })
+  @OneToMany(() => Image, (image) => image.product, {
+    cascade: true,
+    createForeignKeyConstraints: false,
+  })
   images: Image[];
 
   @ManyToOne(() => User, (user) => user.products, { cascade: true })

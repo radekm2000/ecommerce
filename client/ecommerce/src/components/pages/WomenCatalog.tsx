@@ -20,7 +20,7 @@ import { SortByPriceButton } from "../filter-buttons/SortByPriceButton";
 import { useFilteredProducts } from "../../hooks/useFilteredProducts";
 import { AccountCircle } from "@mui/icons-material";
 
-export const MenCatalog = () => {
+export const WomenCatalog = () => {
   const below1200 = useMediaQuery(1200);
   const below960 = useMediaQuery(960);
   const [, setLocation] = useLocation();
@@ -29,7 +29,7 @@ export const MenCatalog = () => {
   const [brand, setBrand] = useState<Brand>("");
   const [order, setOrder] = useState("");
   const { user } = useUserContext();
-  const [category] = useState<string>("Men");
+  const [category] = useState<string>("Women");
   console.log("chosen brand");
   console.log(brand);
 
@@ -40,14 +40,14 @@ export const MenCatalog = () => {
     if (brand && order) {
       params.set("brand", brand);
       params.set("order", order);
-      setLocation(`/catalog/men?${params.toString()}`);
+      setLocation(`/catalog/women?${params.toString()}`);
     }
     if (brand) {
       params.set("brand", brand);
     } else if (order) {
       params.set("order", order);
     }
-    setLocation(`/catalog/men?${params.toString()}`);
+    setLocation(`/catalog/women?${params.toString()}`);
   }, [brand, order, setLocation]);
 
   const { data: products, isLoading: isProductsLoading } = useFilteredProducts(
@@ -90,11 +90,11 @@ export const MenCatalog = () => {
                   textDecoration: "underline",
                 }}
               >
-                Men
+                Women
               </Typography>
             </Link>
             <Typography sx={{ fontSize: "24px", color: "#171717" }}>
-              Men
+              Women
             </Typography>
           </Box>
           <Box
@@ -140,6 +140,7 @@ export const MenCatalog = () => {
                 <Button
                   sx={{
                     padding: "8px 12px",
+                    marginLeft: '8px',
                     backgroundColor: "#F2F2F2",
                     fontSize: "14px",
                     color: "#171717",
@@ -277,36 +278,3 @@ export const MenCatalog = () => {
     </Container>
   );
 };
-
-{
-  /* <Button
-disableRipple
-disableElevation
-sx={{
-  margin: "0px 8px",
-  paddingRight: "12px",
-  textTransform: "none",
-  cursor: "pointer",
-  backgroundColor: isActive ? "#88D4D7" : "initial",
-  color: "black",
-  border: "1px solid lightgrey",
-}}
-endIcon={isMenuOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-variant="outlined"
-onClick={handleClick}
->
-Sort By
-</Button>
-<Menu
-anchorEl={anchorEl}
-open={Boolean(anchorEl)}
-onClose={handleClose}
->
-<MenuItem onClick={() => handleSortBy("price_high_to_low")}>
-  Price: High to Low
-</MenuItem>
-<MenuItem onClick={() => handleSortBy("price_low_to_high")}>
-  Price: Low to High
-</MenuItem>
-</Menu> */
-}

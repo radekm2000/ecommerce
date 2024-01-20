@@ -13,4 +13,5 @@ export type Brand =
 export type QueryParams = {
   order: Order;
   brand: Brand;
+  category: 'Men' | 'Women' | 'All';
 };

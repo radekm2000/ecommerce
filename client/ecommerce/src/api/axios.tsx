@@ -89,21 +89,22 @@ export const followUser = async (userId: number) => {
 
 export const fetchFilteredProducts = async (
   order: string,
-  brand: Brand
+  brand: Brand,
+  category: string
 ): Promise<ProductWithImageAndUser[]> => {
   if (order && brand) {
     const response = await axiosApi.get(
-      `products/men/?order=${order}&brand=${brand}`
+      `products/filtered/?category=${category}&order=${order}&brand=${brand}`
     );
     return response.data;
   } else if (order) {
-    const response = await axiosApi.get(`products/men/?order=${order}`);
+    const response = await axiosApi.get(`products/filtered/?category=${category}&order=${order}`);
     return response.data;
   } else if (brand) {
-    const response = await axiosApi.get(`products/men/?brand=${brand}`);
+    const response = await axiosApi.get(`products/filtered/?category=${category}&brand=${brand}`);
     return response.data;
   } else {
-    const response = await axiosApi.get("products/men");
+    const response = await axiosApi.get(`products/filtered/?category=${category}`);
     return response.data;
   }
 };

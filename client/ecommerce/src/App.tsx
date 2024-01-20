@@ -1,7 +1,7 @@
 import { Toaster } from "react-hot-toast";
 import { Login } from "./components/pages/Login";
 import { Register } from "./components/pages/Register";
-import { Redirect, Route, Router, Switch } from "wouter";
+import { Redirect, Route, Switch } from "wouter";
 import { MainPage } from "./components/pages/MainPage";
 import { UserProvider } from "./contexts/UserContext";
 import { AddProduct } from "./components/pages/AddProduct";
@@ -11,6 +11,7 @@ import { Member } from "./components/pages/Member";
 import { Followers } from "./components/pages/Followers";
 import { Followings } from "./components/pages/Followings";
 import { MenCatalog } from "./components/pages/MenCatalog";
+import { WomenCatalog } from "./components/pages/WomenCatalog";
 function App() {
   return (
     <>
@@ -41,6 +42,10 @@ function App() {
           <Route path="/catalog/men">
             <Navbar />
             <MenCatalog />
+          </Route>
+          <Route path="/catalog/women">
+            <Navbar />
+            <WomenCatalog />
           </Route>
           <Route path="/members/:userId/followings">
             <Navbar />

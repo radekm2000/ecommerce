@@ -41,12 +41,16 @@ export class ProductsController {
     return await this.productsService.getAllProducts();
   }
 
-  @Get('/men')
+  @Get('/filtered')
   async getMenProducts(@Query() queryParams: QueryParams) {
     console.log(queryParams);
-    const products =
-      await this.productsService.getMenFilteredProducts(queryParams);
-    return products;
+    if (queryParams.category === 'Men') {
+      return await this.productsService.getMenFilteredProducts(queryParams);
+    } else if (queryParams.category === 'Women') {
+      return await this.productsService.getWomenFilteredProducts(queryParams);
+    } else {
+      return await this.productsService.getAllProducts();
+    }
   }
 
   @Get(':userId')

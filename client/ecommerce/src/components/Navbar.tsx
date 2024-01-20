@@ -250,7 +250,7 @@ export const Navbar = () => {
                 </SearchIconWrapper>
                 <StyledInputBase
                   sx={{ width: "100%" }}
-                  placeholder="Search…"
+                  placeholder="Search for items"
                   inputProps={{ "aria-label": "search" }}
                 />
               </Search>

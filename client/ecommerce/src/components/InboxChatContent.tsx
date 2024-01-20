@@ -1,6 +1,6 @@
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { Box, Input, List, ListItem, ListItemText } from "@mui/material";
-import { useState } from "react";
+import { Box, Input, List, ListItem, ListItemText, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 
 const recipient1 = {
   username: "radek",
@@ -30,17 +30,18 @@ const conversation = {
     },
     {
       id: 4,
-      content: "a gram sobie na komputerze ogladam filmy tancze robie rozne",
+      content: "a gram sobie na komputerze ",
       author: recipient2,
     },
     {
       id: 4,
-      content: "a gram sobie na komputerze ogladam filmy tancze robie rozne",
+      content:
+        "a gram sobie na komputerze ogladam filmy tancze robie rozne pomarancze ",
       author: recipient2,
     },
     {
       id: 4,
-      content: "a gram sobie na komputerze ogladam filmy tancze robie rozne",
+      content: `Określ, ile imion chcesz wygenerować, opcjonalnie wybierz płeć i jeśli chceOkreśl, ile imion chcesz wygenerować, opcjonalnie wybierz płeć i jeśli chce.Określ, ile imion chcesz wygenerować, opcjonalnie wybierz płeć i jeśli chce..123`,
       author: recipient2,
     },
     {
@@ -52,49 +53,47 @@ const conversation = {
 };
 
 export const InboxChatContent = () => {
-  const [message, setMessage] = useState<string>("");
-  const handleKeyDown = (
-    e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
-    if (e.key === "Enter") {
-      e.preventDefault();
-    }
-  };
+  // use later for  scrolling to the latest msg
+  //                    <Typography ref={divRef}></Typography>
+
+  const divRef = useRef<null | HTMLDivElement>(null);
+  useEffect(() => {
+    divRef?.current?.scrollIntoView({ behavior: "instant" });
+  });
   return (
-    <>
-      <List sx={{ width: "100%" }}>
-        {conversation.messages.map((message, index) => (
-          <ListItem
-            key={index}
-            sx={{
-              justifyContent:
-                message.author === recipient1 ? "flex-start" : "flex-end",
-              alignItems: "center",
-            }}
-          >
-            <Box sx={{ display: "flex" }}>
-              {message.author === recipient1 ? (
-                <AccountCircle
-                  sx={{ color: "grey", width: "40px", height: "40px" }}
-                />
-              ) : null}
-              <ListItemText
-                sx={{
-                  padding: "8px",
-                  borderRadius: "5px",
-                  textAlign: "left",
-                  border: "1px solid rgba(23, 23, 23, 0.08)",
-                  backgroundColor:
-                    message.author === recipient2
-                      ? "rgba(163, 157, 146, 0.15)"
-                      : null,
-                }}
-                primary={message.content}
-              ></ListItemText>
-            </Box>
-          </ListItem>
-        ))}
-      </List>
-    </>
+    <List>
+      {conversation.messages.map((message, index) => (
+        <ListItem
+          key={index}
+          sx={{
+            justifyContent:
+              message.author === recipient1 ? "flex-start" : "flex-end",
+            alignItems: "center",
+          }}
+        >
+          <Box sx={{ display: "flex" }}>
+            {message.author === recipient1 ? (
+              <AccountCircle
+                sx={{ color: "grey", width: "40px", height: "40px" }}
+              />
+            ) : null}
+            <ListItemText
+              sx={{
+                alignItems: 'flex-end',
+                padding: "8px",
+                borderRadius: "5px",
+                textAlign: "left",
+                border: "1px solid rgba(23, 23, 23, 0.08)",
+                backgroundColor:
+                  message.author === recipient2
+                    ? "rgba(163, 157, 146, 0.15)"
+                    : null,
+              }}
+            >{message.content}
+            </ListItemText>
+          </Box>
+        </ListItem>
+      ))}
+    </List>
   );
 };

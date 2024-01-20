@@ -6,6 +6,55 @@ import { InboxChatNavbar } from "../InboxChatNavbar";
 import { InboxChatContent } from "../InboxChatContent";
 import { useParams } from "wouter";
 import { InboxChatInput } from "../InboxChatInput";
+const recipient1 = {
+  username: "radek",
+};
+const recipient2 = {
+  username: "magda",
+};
+
+const conversation = {
+  recipient1: recipient1,
+  recipient2: recipient2,
+  messages: [
+    {
+      id: 1,
+      content: "aha co tam babeczko",
+      author: recipient1,
+    },
+    {
+      id: 2,
+      content: "aha dobra co masz na sprzedaz",
+      author: recipient2,
+    },
+    {
+      id: 3,
+      content: "a u ciebie co slychac",
+      author: recipient1,
+    },
+    {
+      id: 4,
+      content: "a gram sobie na komputerze ",
+      author: recipient2,
+    },
+    {
+      id: 4,
+      content:
+        "a gram sobie na komputerze ogladam filmy tancze robie rozne pomarancze ",
+      author: recipient2,
+    },
+    {
+      id: 4,
+      content: `Określ, ile imion chcesz wygenerować, opcjonalnie wybierz płeć i jeśli chce.Określ, ile imion chcesz wygenerować, opcjonalnie wybierz płeć i jeśli chce.Określ, ile imion chcesz wygenerować, opcjonalnie wybierz płeć i jeśli chce.1233`,
+      author: recipient2,
+    },
+    {
+      id: 4,
+      content: "a gram sobie na komputerze ogladam filmy tancze robie rozne",
+      author: recipient2,
+    },
+  ],
+};
 export const Inbox = () => {
   const params = useParams();
   const userId = params?.userId;
@@ -64,7 +113,7 @@ export const Inbox = () => {
             <InboxSidebar />
           </Box>
         )}
-        <Box sx={{ flex: "1 0 auto" }}>
+        <Box sx={{ width: "auto" }}>
           {userId && (
             <>
               <InboxChatNavbar />

@@ -1,6 +1,6 @@
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { Box, Input, List, ListItem, ListItemText, Typography } from "@mui/material";
-import { useEffect, useRef, useState } from "react";
+import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
+import { useEffect, useRef } from "react";
 
 const recipient1 = {
   username: "radek",
@@ -53,10 +53,9 @@ const conversation = {
 };
 
 export const InboxChatContent = () => {
-  // use later for  scrolling to the latest msg
-  //                    <Typography ref={divRef}></Typography>
-
   const divRef = useRef<null | HTMLDivElement>(null);
+  <Typography ref={divRef}></Typography>;
+
   useEffect(() => {
     divRef?.current?.scrollIntoView({ behavior: "instant" });
   });
@@ -79,7 +78,7 @@ export const InboxChatContent = () => {
             ) : null}
             <ListItemText
               sx={{
-                alignItems: 'flex-end',
+                alignItems: "flex-end",
                 padding: "8px",
                 borderRadius: "5px",
                 textAlign: "left",
@@ -89,7 +88,9 @@ export const InboxChatContent = () => {
                     ? "rgba(163, 157, 146, 0.15)"
                     : null,
               }}
-            >{message.content}
+            >
+              {message.content}
+              <Typography ref={divRef}></Typography>
             </ListItemText>
           </Box>
         </ListItem>

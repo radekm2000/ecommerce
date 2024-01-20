@@ -21,7 +21,7 @@ export const InboxChatInput = () => {
         value={message}
         multiline
         fullWidth
-        maxRows={10}
+        maxRows={2}
         sx={{
           borderRadius: "3px",
           backgroundColor: "rgba(23, 23, 23, 0.08)",

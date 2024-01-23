@@ -9,10 +9,11 @@ import { useUserContext } from "../contexts/UserContext";
 import RssFeedIcon from "@mui/icons-material/RssFeed";
 import { useEffect, useState } from "react";
 import { useFollowUser } from "../utils/followUser";
-import { Link } from "wouter";
+import { Link, useLocation } from "wouter";
 import { QueryClient } from "@tanstack/react-query";
 export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
   const { user: meUser } = useUserContext();
+  const [, setLocation] = useLocation();
 
   const isFollowed = (member: UserWithFollows) => {
     return (member.followings ?? []).some((following) => {
@@ -167,6 +168,7 @@ export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
                     }}
                   >
                     <Button
+                      onClick={() => setLocation(`/inbox/${user.id}`)}
                       variant="outlined"
                       disableElevation
                       disableRipple
@@ -242,6 +244,7 @@ export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
                   }}
                 >
                   <Button
+                    onClick={() => setLocation(`/inbox/new/${user.id}`)}
                     variant="outlined"
                     disableElevation
                     disableRipple

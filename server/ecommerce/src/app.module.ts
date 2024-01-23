@@ -8,6 +8,8 @@ import { config } from 'ormconfig';
 import { ProductsModule } from './products/products.module';
 import { ImagesModule } from './images/images.module';
 import { FollowersModule } from './followers/followers.module';
+import { ConversationsModule } from './conversations/conversations.module';
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -17,6 +19,8 @@ import { FollowersModule } from './followers/followers.module';
     ProductsModule,
     ImagesModule,
     FollowersModule,
+    ConversationsModule,
+    MessagesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

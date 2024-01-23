@@ -1,6 +1,7 @@
 import axios from "axios";
 import {
   Brand,
+  Conversation,
   LoginInput,
   LoginResponseData,
   ProductWithImage,
@@ -98,13 +99,34 @@ export const fetchFilteredProducts = async (
     );
     return response.data;
   } else if (order) {
-    const response = await axiosApi.get(`products/filtered/?category=${category}&order=${order}`);
+    const response = await axiosApi.get(
+      `products/filtered/?category=${category}&order=${order}`
+    );
     return response.data;
   } else if (brand) {
-    const response = await axiosApi.get(`products/filtered/?category=${category}&brand=${brand}`);
+    const response = await axiosApi.get(
+      `products/filtered/?category=${category}&brand=${brand}`
+    );
     return response.data;
   } else {
-    const response = await axiosApi.get(`products/filtered/?category=${category}`);
+    const response = await axiosApi.get(
+      `products/filtered/?category=${category}`
+    );
     return response.data;
   }
+};
+
+export const createConversationAndSendFirstMessage = async (
+  content: string,
+  userId: number
+) => {
+  const response = await axiosApi.post(`messages/new?receiverId=${userId}`, {
+    content,
+  });
+  return response.data;
+};
+
+export const getAllConversations = async () => {
+  const response = await axiosApi.get(`conversations`);
+  return response.data as Conversation[];
 };

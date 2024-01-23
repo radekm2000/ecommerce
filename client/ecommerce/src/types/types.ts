@@ -1,3 +1,5 @@
+import { Message } from "@mui/icons-material";
+
 export type RegisterInput = {
   username: string;
   email: string;
@@ -87,3 +89,22 @@ export type Brand =
   | "4F"
   | "Calvin Klein"
   | "";
+
+export type Message = {
+  id: number;
+  content: string;
+  author: User;
+};
+
+export type Conversation = {
+  id: number;
+  creator: User;
+  recipient: User;
+  messages: Message[];
+  lastMessageSent: Message;
+  lastMessageSentAt: Date;
+};
+
+export type RecipientOfSidebarConversation = Omit<User, "products"> & {
+  lastMessageSent: Message;
+};

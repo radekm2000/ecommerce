@@ -52,7 +52,7 @@ const conversation = {
   ],
 };
 
-export const InboxChatContent = () => {
+export const InboxChatContent = ({userId}: {userId: string}) => {
   const divRef = useRef<null | HTMLDivElement>(null);
   <Typography ref={divRef}></Typography>;
 
@@ -60,7 +60,7 @@ export const InboxChatContent = () => {
     divRef?.current?.scrollIntoView({ behavior: "instant" });
   });
   return (
-    <List>
+    <List sx={{}}>
       {conversation.messages.map((message, index) => (
         <ListItem
           key={index}

@@ -1,7 +1,7 @@
 import { Box, Button, Typography } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
-export const InboxChatNavbar = () => {
+export const InboxChatNavbar = ({ userId }: { userId: string }) => {
   return (
     <Box
       sx={{
@@ -14,9 +14,7 @@ export const InboxChatNavbar = () => {
         padding: "4px",
       }}
     >
-      <Typography sx={{ color: "#007782", margin: "0 auto" }}>
-        user nickname
-      </Typography>
+      <Typography sx={{ color: "#007782", margin: "0 auto" }}>xdd</Typography>
       <Button sx={{ maxWidth: "30px", maxHeight: "50px" }}>
         <InfoOutlinedIcon
           sx={{

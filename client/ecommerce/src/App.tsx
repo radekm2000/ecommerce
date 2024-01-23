@@ -52,6 +52,7 @@ function App() {
             <Navbar />
             <Inbox />
           </Route>
+
           <Route path="/members/:userId/followings">
             <Navbar />
             <Followings />

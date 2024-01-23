@@ -11,6 +11,7 @@ import * as bcrypt from 'bcrypt';
 import { Product } from './product.entity';
 import { Profile } from './profile.entity';
 import { Follow } from './followers.entity';
+import { Message } from './message.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -46,6 +47,9 @@ export class User {
 
   @OneToMany(() => Product, (product) => product.user)
   products: Product[];
+
+  @OneToMany(() => Message, (message) => message.author)
+  messages: Message[];
 
   @BeforeInsert()
   async hashPassword() {

@@ -34,14 +34,17 @@ export class MessagesController {
     @Body() dto: NewMessageDto,
     @AuthUser() authUser: AuthUser,
   ) {
-    const conversation = await this.conversationsService.createNewConversation(
-      receiverId,
-      authUser,
-    );
-
+    console.log(receiverId);
+    const { conversation, isNew } =
+      await this.conversationsService.createNewConversation(
+        receiverId,
+        authUser,
+      );
+    console.log(conversation);
     return await this.messagesService.createFirstMessage(
-      conversation,
+      { conversation: conversation, isNew: isNew },
       dto.content,
+      authUser,
     );
   }
 }

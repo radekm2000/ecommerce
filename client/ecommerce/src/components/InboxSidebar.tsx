@@ -1,6 +1,6 @@
 import { Avatar, Box, Typography } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import {  useLocation, useParams } from "wouter";
+import { useLocation, useParams } from "wouter";
 import { RecipientOfSidebarConversation } from "../types/types";
 const displayLastMessage = (message: string) => {
   if (message.length > 20) {
@@ -54,7 +54,9 @@ const mockUsers = [
 
 export const InboxSidebar = ({
   recipientsOfSidebarConversations,
+  setSelectedUserId,
 }: {
+  setSelectedUserId: React.Dispatch<React.SetStateAction<number>>;
   recipientsOfSidebarConversations:
     | RecipientOfSidebarConversation[]
     | undefined;
@@ -64,13 +66,14 @@ export const InboxSidebar = ({
   const userId = params?.userId;
 
   const handleOnUserClick = (userId: number) => {
+    setSelectedUserId(userId)
     setLocation(`/inbox/${userId}`);
   };
   return (
     <Box
       sx={{
         maxHeight: "425px",
-        overflowY: 'scroll'
+        overflowY: "auto",
       }}
     >
       {recipientsOfSidebarConversations ? (

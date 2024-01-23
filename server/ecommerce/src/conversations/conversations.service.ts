@@ -11,6 +11,23 @@ export class ConversationsService {
     private conversationRepository: Repository<Conversation>,
   ) {}
   async createNewConversation(receiverId: number, authUser: AuthUser) {
+    const existingConversation = await this.conversationRepository.findOne({
+      where: [
+        {
+          creator: { id: authUser.sub },
+          recipient: { id: receiverId },
+        },
+        {
+          creator: { id: receiverId },
+          recipient: { id: authUser.sub },
+        },
+      ],
+
+      relations: ['creator', 'recipient', 'lastMessageSent'],
+    });
+    if (existingConversation) {
+      return { conversation: existingConversation, isNew: false };
+    }
     const conversation = this.conversationRepository.create({
       recipient: {
         id: receiverId,
@@ -19,7 +36,9 @@ export class ConversationsService {
         id: authUser.sub,
       },
     });
-    return this.conversationRepository.save(conversation);
+    const newConversation =
+      await this.conversationRepository.save(conversation);
+    return { conversation: newConversation, isNew: true };
   }
 
   async getAllConversations() {
@@ -34,5 +53,28 @@ export class ConversationsService {
     });
 
     return conversations;
+  }
+
+  async getUserConversations(userId: number, authUser: AuthUser) {
+    return await this.conversationRepository.find({
+      where: [
+        {
+          creator: { id: userId },
+          recipient: { id: authUser.sub },
+        },
+        {
+          creator: { id: authUser.sub },
+          recipient: { id: userId },
+        },
+      ],
+
+      relations: [
+        'messages',
+        'lastMessageSent',
+        'messages.author',
+        'recipient',
+        'creator',
+      ],
+    });
   }
 }

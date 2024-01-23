@@ -10,23 +10,32 @@ import { useLocation } from "wouter";
 import { navigate } from "wouter/use-location";
 import { Conversation } from "../types/types";
 
-export const InboxChatInput = ({ userId }: { userId: string }) => {
+export const InboxChatInput = ({
+  userId,
+  selectedUserConversations,
+}: {
+  userId: string;
+  selectedUserConversations: Conversation[] | undefined;
+}) => {
   const queryClient = useQueryClient();
   const [message, setMessage] = useState<string>("");
   const [, setLocation] = useLocation();
   console.log("user id w inpucie");
   console.log(userId);
+
   const mutation = useMutation({
-    mutationKey: ["sendMessage", userId],
+    mutationKey: ["sendFirstMessage", userId],
     mutationFn: (content: string) => {
       return createConversationAndSendFirstMessage(content, parseInt(userId));
     },
-    onSuccess: (data: Conversation) => {
+    onSuccess: (data: { conversation: Conversation; isNew: boolean }) => {
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
       console.log("wiadomosc udalo sie wsslac");
-      setTimeout(() => {
-        setLocation(`/inbox/${userId}`, { replace: true });
-      }, 1000);
+      if (data.isNew) {
+        setTimeout(() => {
+          setLocation(`/inbox/${userId}`, { replace: true });
+        }, 1000);
+      }
       console.log(data);
     },
     onError: (err) => {

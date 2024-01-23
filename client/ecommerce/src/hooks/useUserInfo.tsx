@@ -7,5 +7,6 @@ export const useUserInfo = (userId: number) => {
     queryFn: () => {
       return getUserData(userId);
     },
+    enabled: !!userId,
   });
 };

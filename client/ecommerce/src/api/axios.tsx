@@ -130,3 +130,12 @@ export const getAllConversations = async () => {
   const response = await axiosApi.get(`conversations`);
   return response.data as Conversation[];
 };
+
+export const getAllUserConversations = async (userId: number) => {
+  const response = await axiosApi.get(`conversations/users/${userId}`);
+  return response.data as Conversation[];
+};
+
+export const sendMessage = async() => {
+  
+}

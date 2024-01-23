@@ -12,6 +12,7 @@ export class Message {
 
   @ManyToOne(() => Conversation, (conversation) => conversation.messages, {
     createForeignKeyConstraints: false,
+    cascade: true,
   })
   conversation: Conversation;
 

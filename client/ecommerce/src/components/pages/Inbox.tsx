@@ -1,9 +1,4 @@
-import {
-  Box,
-  Button,
-  Container,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Container, Typography } from "@mui/material";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import AddCommentOutlinedIcon from "@mui/icons-material/AddCommentOutlined";
 import { InboxSidebar } from "../InboxSidebar";
@@ -15,6 +10,8 @@ import { useAllConversations } from "../../hooks/useAllConversations";
 import { useUserContext } from "../../contexts/UserContext";
 import { getRecipientFromConversation } from "../../utils/getRecipientFromConversation";
 import { useState } from "react";
+import { useUserInfo } from "../../hooks/useUserInfo";
+import { useUserConversations } from "../../hooks/useUserConversations";
 
 export const Inbox = () => {
   const params = useParams();
@@ -24,12 +21,28 @@ export const Inbox = () => {
   const below1200 = useMediaQuery(1200);
   const below960 = useMediaQuery(960);
   const below1600 = useMediaQuery(1600);
+  const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const { data: conversations, isLoading: isConversationsLoading } =
     useAllConversations();
-    
-  console.log(conversations);
-  console.log(user);
-  
+
+
+  const { data: selectedUserData, isLoading: isSelectedUserDataLoading } =
+    useUserInfo(selectedUserId);
+
+  const {
+    data: selectedUserConversations,
+    isLoading: isSelectedUserConversationsLoading,
+  } = useUserConversations(selectedUserId);
+
+  console.log("seleceted user kownersajce");
+  console.log(selectedUserConversations);
+  if (isSelectedUserConversationsLoading) {
+    return "isLoading...";
+  }
+  if (isSelectedUserDataLoading) {
+    return "isLoading...";
+  }
+
   if (isConversationsLoading) {
     return "isLoading...";
   }
@@ -58,7 +71,7 @@ export const Inbox = () => {
     }
   );
   console.log(recipientsOfSidebarConversations);
-
+      
   console.log(conversations);
   const ExistingChat = () => {
     return (
@@ -112,6 +125,7 @@ export const Inbox = () => {
                 </Button>
               </Box>
               <InboxSidebar
+                setSelectedUserId={setSelectedUserId}
                 recipientsOfSidebarConversations={
                   recipientsOfSidebarConversations
                 }
@@ -122,11 +136,11 @@ export const Inbox = () => {
             {/* check if userId is valid (find user with that userId) */}
             {userId && (
               <>
-                <InboxChatNavbar userId={userId}/>
+                <InboxChatNavbar />
                 <Box sx={{ maxHeight: "335px", overflowY: "scroll" }}>
-                  <InboxChatContent userId={userId}  />
+                  <InboxChatContent />
                 </Box>
-                <InboxChatInput userId={userId} />
+                <InboxChatInput userId={userId} selectedUserConversations={selectedUserConversations} />
               </>
             )}
           </Box>
@@ -188,6 +202,7 @@ export const Inbox = () => {
                 </Button>
               </Box>
               <InboxSidebar
+                setSelectedUserId={setSelectedUserId}
                 recipientsOfSidebarConversations={
                   recipientsOfSidebarConversations
                 }
@@ -207,7 +222,7 @@ export const Inbox = () => {
             {/* check if userId is valid (find user with that userId) */}
             {userId && (
               <>
-                <InboxChatNavbar message="New Message" />
+                <InboxChatNavbar />
                 <Box sx={{ display: "block", width: "100%" }}>
                   <InboxChatInput userId={extractUserIdFromParam(userId)} />
                 </Box>

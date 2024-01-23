@@ -1,6 +1,7 @@
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
 import { useEffect, useRef } from "react";
+import { UserWithFollows } from "../types/types";
 
 const recipient1 = {
   username: "radek",
@@ -52,7 +53,7 @@ const conversation = {
   ],
 };
 
-export const InboxChatContent = ({userId}: {userId: string}) => {
+export const InboxChatContent = () => {
   const divRef = useRef<null | HTMLDivElement>(null);
   <Typography ref={divRef}></Typography>;
 

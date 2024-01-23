@@ -1,8 +1,6 @@
 import {
-  CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -24,7 +22,6 @@ export class Conversation {
   recipient: User;
 
   @OneToMany(() => Message, (message) => message.conversation, {
-    cascade: true,
     createForeignKeyConstraints: false,
   })
   messages: Message[];

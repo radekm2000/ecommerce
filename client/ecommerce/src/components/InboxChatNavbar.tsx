@@ -3,17 +3,26 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Conversation, UserWithFollows } from "../types/types";
 import { getRecipientFromConversation } from "../utils/getRecipientFromConversation";
 import { useUserContext } from "../contexts/UserContext";
+import { useState } from "react";
 
 export const InboxChatNavbar = ({
   selectedUserConversation,
+  setIsConversationDetailsOpen,
+  isConversationDetailsOpen
 }: {
   selectedUserConversation: Conversation | undefined;
+  setIsConversationDetailsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isConversationDetailsOpen: boolean
 }) => {
   const { user } = useUserContext();
   const recipientOfConversation = getRecipientFromConversation(
     selectedUserConversation!,
     user.username
   );
+
+  const handleInfoChatClick = () => {
+    setIsConversationDetailsOpen(!isConversationDetailsOpen)
+  };
   return (
     <Box
       sx={{
@@ -26,8 +35,15 @@ export const InboxChatNavbar = ({
         padding: "4px",
       }}
     >
-      <Typography sx={{ color: "#007782", margin: "0 auto" }}>{recipientOfConversation ? recipientOfConversation.username : 'new Message'}</Typography>
-      <Button sx={{ maxWidth: "30px", maxHeight: "50px" }}>
+      <Typography sx={{ color: "#007782", margin: "0 auto" }}>
+        {recipientOfConversation
+          ? recipientOfConversation.username
+          : "new Message"}
+      </Typography>
+      <Button
+        onClick={handleInfoChatClick}
+        sx={{ maxWidth: "30px", maxHeight: "50px" }}
+      >
         <InfoOutlinedIcon
           sx={{
             width: "24px",

@@ -136,6 +136,7 @@ export const getAllUserConversations = async (userId: number) => {
   return response.data as Conversation;
 };
 
-export const sendMessage = async() => {
-  
-}
+export const deleteConversation = async (conversationId: number) => {
+  const response = await axiosApi.delete(`conversations/${conversationId}`);
+  return response.data;
+};

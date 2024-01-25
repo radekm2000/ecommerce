@@ -4,7 +4,7 @@ import AddCommentOutlinedIcon from "@mui/icons-material/AddCommentOutlined";
 import { InboxSidebar } from "../InboxSidebar";
 import { InboxChatNavbar } from "../InboxChatNavbar";
 import { InboxChatContent } from "../InboxChatContent";
-import { Route, Switch, useLocation, useParams } from "wouter";
+import { Redirect, Route, Switch, useLocation, useParams } from "wouter";
 import { InboxChatInput } from "../InboxChatInput";
 import { useAllConversations } from "../../hooks/useAllConversations";
 import { useUserContext } from "../../contexts/UserContext";
@@ -12,6 +12,8 @@ import { getRecipientFromConversation } from "../../utils/getRecipientFromConver
 import { useEffect, useState } from "react";
 import { useUserInfo } from "../../hooks/useUserInfo";
 import { useUserConversations } from "../../hooks/useUserConversations";
+import { ConversationDetailsNavbar } from "../conversation-details/ConversationDetailsNavbar";
+import { ConversationDetailsContent } from "../conversation-details/ConversationDetailsContent";
 
 export const Inbox = () => {
   const params = useParams();
@@ -21,6 +23,9 @@ export const Inbox = () => {
   const below1200 = useMediaQuery(1200);
   const below960 = useMediaQuery(960);
   const below1600 = useMediaQuery(1600);
+  const [isConversationDetailsOpen, setisConversationDetailsOpen] =
+    useState<boolean>(false);
+
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const { data: conversations, isLoading: isConversationsLoading } =
     useAllConversations();
@@ -43,6 +48,7 @@ export const Inbox = () => {
   if (isConversationsLoading) {
     return "isLoading...";
   }
+
   const extractUserIdFromParam = (param: string) => {
     if (param.startsWith("new/")) {
       const userIdParam = param.replace("new/", "");
@@ -142,20 +148,40 @@ export const Inbox = () => {
             {/* check if userId is valid (find user with that userId) */}
             {userId && (
               <>
-                <InboxChatNavbar
-                  selectedUserConversation={selectedUserConversation}
-                />
-                <Box sx={{ maxHeight: "335px", overflowY: "auto" }}>
-                  <InboxChatContent
-                    selectedUserConversation={selectedUserConversation}
-                  />
-                </Box>
-                <Box sx={{ marginTop: "auto" }}>
-                  <InboxChatInput
-                    userId={userId}
-                    selectedUserConversation={selectedUserConversation}
-                  />
-                </Box>
+                {isConversationDetailsOpen ? (
+                  <>
+                    <ConversationDetailsNavbar
+                      isConversationDetailsOpen={isConversationDetailsOpen}
+                      setIsConversationDetailsOpen={
+                        setisConversationDetailsOpen
+                      }
+                    />
+                    <ConversationDetailsContent
+                      selectedUserConversation={selectedUserConversation}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <InboxChatNavbar
+                      setIsConversationDetailsOpen={
+                        setisConversationDetailsOpen
+                      }
+                      isConversationDetailsOpen={isConversationDetailsOpen}
+                      selectedUserConversation={selectedUserConversation}
+                    />
+                    <Box sx={{ maxHeight: "335px", overflowY: "auto" }}>
+                      <InboxChatContent
+                        selectedUserConversation={selectedUserConversation}
+                      />
+                    </Box>
+                    <Box sx={{ marginTop: "auto" }}>
+                      <InboxChatInput
+                        userId={userId}
+                        selectedUserConversation={selectedUserConversation}
+                      />
+                    </Box>
+                  </>
+                )}
               </>
             )}
           </Box>

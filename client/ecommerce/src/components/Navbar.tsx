@@ -165,14 +165,14 @@ export const Navbar = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem>
+      <MenuItem onClick={handleMobileMenuClose}>
         <Link to="/inbox">
           <IconButton
             size="large"
             aria-label="show 4 new mails"
             color="inherit"
           >
-            <Badge badgeContent={4} color="error">
+            <Badge color="error">
               <MailIcon />
             </Badge>
           </IconButton>
@@ -185,7 +185,7 @@ export const Navbar = () => {
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge badgeContent={17} color="error">
+          <Badge  color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -289,7 +289,7 @@ export const Navbar = () => {
                   aria-label="show 4 new mails"
                   color="primary"
                   >
-                  <Badge badgeContent={2} color="error">
+                  <Badge color="error">
                     <MailIcon />
                   </Badge>
                 </IconButton>
@@ -299,7 +299,7 @@ export const Navbar = () => {
                   aria-label="show 17 new notifications"
                   color="primary"
                 >
-                  <Badge badgeContent={17} color="error">
+                  <Badge color="error">
                     <NotificationsIcon />
                   </Badge>
                 </IconButton>

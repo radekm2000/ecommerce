@@ -1,8 +1,10 @@
 import {
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import { ConversationsService } from './conversations.service';
@@ -28,5 +30,10 @@ export class ConversationsController {
       userId,
       authUser,
     );
+  }
+
+  @Delete(`:id`)
+  async deleteConversation(@Param('id', ParseIntPipe) conversationId: number) {
+    return await this.conversationsService.deleteConversation(conversationId);
   }
 }

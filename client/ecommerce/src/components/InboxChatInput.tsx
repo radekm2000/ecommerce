@@ -27,14 +27,12 @@ export const InboxChatInput = ({
       return createConversationAndSendFirstMessage(content, parseInt(userId));
     },
     onSuccess: (data: { conversation: Conversation; isNew: boolean }) => {
-      queryClient.invalidateQueries({ queryKey: ["conversations"] });
       queryClient.invalidateQueries({
         queryKey: [`conversations/users/${userId}`],
       });
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
       if (data.isNew) {
-        setTimeout(() => {
-          setLocation(`/inbox/${userId}`, { replace: true });
-        }, 1000);
+        setLocation(`/inbox`);
       }
     },
     onError: (err) => {

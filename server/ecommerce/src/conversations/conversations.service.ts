@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { Conversation } from 'src/utils/entities/conversation.entity';
@@ -76,5 +76,20 @@ export class ConversationsService {
         'creator',
       ],
     });
+  }
+
+  async deleteConversation(conversationId: number) {
+    const conversation = await this.conversationRepository.findOne({
+      where: {
+        id: conversationId,
+      },
+    });
+    if (!conversation) {
+      throw new HttpException(
+        'Conversation doesnt exist',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    return await this.conversationRepository.remove(conversation);
   }
 }

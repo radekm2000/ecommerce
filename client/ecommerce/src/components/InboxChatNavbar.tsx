@@ -1,8 +1,19 @@
 import { Box, Button, Typography } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { UserWithFollows } from "../types/types";
+import { Conversation, UserWithFollows } from "../types/types";
+import { getRecipientFromConversation } from "../utils/getRecipientFromConversation";
+import { useUserContext } from "../contexts/UserContext";
 
-export const InboxChatNavbar = () => {
+export const InboxChatNavbar = ({
+  selectedUserConversation,
+}: {
+  selectedUserConversation: Conversation | undefined;
+}) => {
+  const { user } = useUserContext();
+  const recipientOfConversation = getRecipientFromConversation(
+    selectedUserConversation!,
+    user.username
+  );
   return (
     <Box
       sx={{
@@ -15,7 +26,7 @@ export const InboxChatNavbar = () => {
         padding: "4px",
       }}
     >
-      <Typography sx={{ color: "#007782", margin: "0 auto" }}>new</Typography>
+      <Typography sx={{ color: "#007782", margin: "0 auto" }}>{recipientOfConversation ? recipientOfConversation.username : 'new Message'}</Typography>
       <Button sx={{ maxWidth: "30px", maxHeight: "50px" }}>
         <InfoOutlinedIcon
           sx={{

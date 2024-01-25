@@ -42,12 +42,10 @@ export class MessagesService {
       conversation: conversation,
       author: meUser,
     });
-    const timeNow = new Date();
     await this.messageRepository.save(newMessage);
     const updatedConversation = {
       ...conversation,
       lastMessageSent: newMessage,
-      lastMessageSentAt: timeNow,
     } as Conversation;
 
     await this.conversationRepository.save(updatedConversation);

@@ -4,25 +4,23 @@ import {
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
+
 import { useState } from "react";
 import { createConversationAndSendFirstMessage } from "../api/axios";
 import { useLocation } from "wouter";
-import { navigate } from "wouter/use-location";
 import { Conversation } from "../types/types";
 
 export const InboxChatInput = ({
   userId,
-  selectedUserConversations,
+  selectedUserConversation,
 }: {
   userId: string;
-  selectedUserConversations: Conversation[] | undefined;
+  selectedUserConversation: Conversation | undefined;
 }) => {
   const queryClient = useQueryClient();
+
   const [message, setMessage] = useState<string>("");
   const [, setLocation] = useLocation();
-  console.log("user id w inpucie");
-  console.log(userId);
-
   const mutation = useMutation({
     mutationKey: ["sendFirstMessage", userId],
     mutationFn: (content: string) => {
@@ -30,13 +28,14 @@ export const InboxChatInput = ({
     },
     onSuccess: (data: { conversation: Conversation; isNew: boolean }) => {
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
-      console.log("wiadomosc udalo sie wsslac");
+      queryClient.invalidateQueries({
+        queryKey: [`conversations/users/${userId}`],
+      });
       if (data.isNew) {
         setTimeout(() => {
           setLocation(`/inbox/${userId}`, { replace: true });
         }, 1000);
       }
-      console.log(data);
     },
     onError: (err) => {
       console.log(err);

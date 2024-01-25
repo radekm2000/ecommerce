@@ -56,7 +56,7 @@ export class ConversationsService {
   }
 
   async getUserConversations(userId: number, authUser: AuthUser) {
-    return await this.conversationRepository.find({
+    return await this.conversationRepository.findOne({
       where: [
         {
           creator: { id: userId },

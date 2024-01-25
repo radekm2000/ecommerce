@@ -9,7 +9,7 @@ import { InboxChatInput } from "../InboxChatInput";
 import { useAllConversations } from "../../hooks/useAllConversations";
 import { useUserContext } from "../../contexts/UserContext";
 import { getRecipientFromConversation } from "../../utils/getRecipientFromConversation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserInfo } from "../../hooks/useUserInfo";
 import { useUserConversations } from "../../hooks/useUserConversations";
 
@@ -25,17 +25,14 @@ export const Inbox = () => {
   const { data: conversations, isLoading: isConversationsLoading } =
     useAllConversations();
 
-
   const { data: selectedUserData, isLoading: isSelectedUserDataLoading } =
     useUserInfo(selectedUserId);
 
   const {
-    data: selectedUserConversations,
+    data: selectedUserConversation,
     isLoading: isSelectedUserConversationsLoading,
   } = useUserConversations(selectedUserId);
 
-  console.log("seleceted user kownersajce");
-  console.log(selectedUserConversations);
   if (isSelectedUserConversationsLoading) {
     return "isLoading...";
   }
@@ -70,8 +67,9 @@ export const Inbox = () => {
       }
     }
   );
+
   console.log(recipientsOfSidebarConversations);
-      
+
   console.log(conversations);
   const ExistingChat = () => {
     return (
@@ -82,6 +80,7 @@ export const Inbox = () => {
           margin: below1600 ? null : "0px 150px",
           display: "flex",
           padding: "20px 20px",
+          minHeight: "500px",
         }}
       >
         <Box
@@ -132,15 +131,31 @@ export const Inbox = () => {
               />
             </Box>
           )}
-          <Box>
+          <Box
+            sx={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
             {/* check if userId is valid (find user with that userId) */}
             {userId && (
               <>
-                <InboxChatNavbar />
-                <Box sx={{ maxHeight: "335px", overflowY: "scroll" }}>
-                  <InboxChatContent />
+                <InboxChatNavbar
+                  selectedUserConversation={selectedUserConversation}
+                />
+                <Box sx={{ maxHeight: "335px", overflowY: "auto" }}>
+                  <InboxChatContent
+                    selectedUserConversation={selectedUserConversation}
+                  />
                 </Box>
-                <InboxChatInput userId={userId} selectedUserConversations={selectedUserConversations} />
+                <Box sx={{ marginTop: "auto" }}>
+                  <InboxChatInput
+                    userId={userId}
+                    selectedUserConversation={selectedUserConversation}
+                  />
+                </Box>
               </>
             )}
           </Box>
@@ -222,9 +237,14 @@ export const Inbox = () => {
             {/* check if userId is valid (find user with that userId) */}
             {userId && (
               <>
-                <InboxChatNavbar />
+                <InboxChatNavbar
+                  selectedUserConversation={selectedUserConversation}
+                />
                 <Box sx={{ display: "block", width: "100%" }}>
-                  <InboxChatInput userId={extractUserIdFromParam(userId)} />
+                  <InboxChatInput
+                    selectedUserConversation={selectedUserConversation}
+                    userId={extractUserIdFromParam(userId)}
+                  />
                 </Box>
               </>
             )}

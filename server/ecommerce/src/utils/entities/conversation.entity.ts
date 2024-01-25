@@ -1,9 +1,11 @@
 import {
+  Column,
   Entity,
   JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 import { Message } from './message.entity';
@@ -29,7 +31,4 @@ export class Conversation {
   @OneToOne(() => Message, { nullable: true })
   @JoinColumn()
   lastMessageSent: Message;
-
-  @JoinColumn()
-  lastMessageSentAt: Date;
 }

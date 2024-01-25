@@ -1,7 +1,15 @@
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import { Box, List, ListItem, ListItemText, Typography } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+} from "@mui/material";
 import { useEffect, useRef } from "react";
-import { UserWithFollows } from "../types/types";
+import { Conversation, UserWithFollows } from "../types/types";
+import { useUserContext } from "../contexts/UserContext";
 
 const recipient1 = {
   username: "radek",
@@ -42,7 +50,7 @@ const conversation = {
     },
     {
       id: 4,
-      content: `Określ, ile imion chcesz wygenerować, opcjonalnie wybierz płeć i jeśli chceOkreśl, ile imion chcesz wygenerować, opcjonalnie wybierz płeć i jeśli chce.Określ, ile imion chcesz wygenerować, opcjonalnie wybierz płeć i jeśli chce..123`,
+      content: `Ok3`,
       author: recipient2,
     },
     {
@@ -53,49 +61,110 @@ const conversation = {
   ],
 };
 
-export const InboxChatContent = () => {
+export const InboxChatContent = ({
+  selectedUserConversation,
+}: {
+  selectedUserConversation: Conversation | undefined;
+}) => {
+  const { user } = useUserContext();
   const divRef = useRef<null | HTMLDivElement>(null);
   <Typography ref={divRef}></Typography>;
 
   useEffect(() => {
     divRef?.current?.scrollIntoView({ behavior: "instant" });
   });
-  return (
-    <List sx={{}}>
-      {conversation.messages.map((message, index) => (
-        <ListItem
-          key={index}
-          sx={{
-            justifyContent:
-              message.author === recipient1 ? "flex-start" : "flex-end",
-            alignItems: "center",
-          }}
-        >
-          <Box sx={{ display: "flex" }}>
-            {message.author === recipient1 ? (
-              <AccountCircle
-                sx={{ color: "grey", width: "40px", height: "40px" }}
-              />
-            ) : null}
-            <ListItemText
+
+  const xp = () => {
+    return (
+      <List sx={{}}>
+        {selectedUserConversation &&
+          selectedUserConversation.messages.map((message, index) => (
+            <ListItem
+              key={index}
               sx={{
-                alignItems: "flex-end",
-                padding: "8px",
-                borderRadius: "5px",
-                textAlign: "left",
-                border: "1px solid rgba(23, 23, 23, 0.08)",
-                backgroundColor:
-                  message.author === recipient2
-                    ? "rgba(163, 157, 146, 0.15)"
-                    : null,
+                justifyContent:
+                  message.author.username !== user.username
+                    ? "flex-start"
+                    : "flex-end",
+                alignItems: "center",
               }}
             >
-              {message.content}
-              <Typography ref={divRef}></Typography>
-            </ListItemText>
-          </Box>
-        </ListItem>
-      ))}
+              <Box sx={{ display: "flex" }}>
+                {message.author.username !== user.username ? (
+                  message.author.avatar ? (
+                    <Avatar src={message.author.avatar} />
+                  ) : (
+                    <AccountCircle
+                      sx={{ color: "grey", width: "40px", height: "40px" }}
+                    />
+                  )
+                ) : null}
+                <ListItemText
+                  sx={{
+                    alignItems: "flex-end",
+                    padding: "8px",
+                    borderRadius: "5px",
+                    textAlign: "left",
+                    border: "1px solid rgba(23, 23, 23, 0.08)",
+                    backgroundColor:
+                      message.author.username === user.username
+                        ? "rgba(163, 157, 146, 0.15)"
+                        : null,
+                  }}
+                >
+                  {message.content}
+                  <Typography ref={divRef}></Typography>
+                </ListItemText>
+              </Box>
+            </ListItem>
+          ))}
+      </List>
+    );
+  };
+
+  return (
+    <List sx={{}}>
+      {selectedUserConversation &&
+        selectedUserConversation.messages.map((message, index) => (
+          <ListItem
+            key={index}
+            sx={{
+              justifyContent:
+                message.author.username !== user.username
+                  ? "flex-start"
+                  : "flex-end",
+              alignItems: "center",
+            }}
+          >
+            <Box sx={{ display: "flex" }}>
+              {message.author.username !== user.username ? (
+                message.author.avatar ? (
+                  <Avatar src={message.author.avatar} />
+                ) : (
+                  <AccountCircle
+                    sx={{ color: "grey", width: "40px", height: "40px" }}
+                  />
+                )
+              ) : null}
+              <ListItemText
+                sx={{
+                  alignItems: "flex-end",
+                  padding: "8px",
+                  borderRadius: "5px",
+                  textAlign: "left",
+                  border: "1px solid rgba(23, 23, 23, 0.08)",
+                  backgroundColor:
+                    message.author.username === user.username
+                      ? "rgba(163, 157, 146, 0.15)"
+                      : null,
+                }}
+              >
+                {message.content}
+                <Typography ref={divRef}></Typography>
+              </ListItemText>
+            </Box>
+          </ListItem>
+        ))}
     </List>
   );
 };

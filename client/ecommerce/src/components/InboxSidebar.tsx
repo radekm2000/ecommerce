@@ -8,49 +8,6 @@ const displayLastMessage = (message: string) => {
   }
   return message;
 };
-const mockUsers = [
-  {
-    username: "user1",
-    lastMessage: "message",
-    id: 130,
-  },
-  {
-    username: "user2",
-    lastMessage: "messagedddddddddddddddddd",
-    id: 135,
-  },
-  {
-    username: "user3",
-    lastMessage: "mess",
-    id: 134,
-  },
-  {
-    username: "user4",
-    lastMessage: "messaaage",
-    id: 134,
-  },
-
-  {
-    username: "user5",
-    lastMessage: "messaghahpxe",
-    id: 134,
-  },
-  {
-    username: "user5",
-    lastMessage: "messaghahpxe",
-    id: 134,
-  },
-  {
-    username: "user5",
-    lastMessage: "messaghahpxe",
-    id: 134,
-  },
-  {
-    username: "user6",
-    lastMessage: "messaghahpxe",
-    id: 134,
-  },
-];
 
 export const InboxSidebar = ({
   recipientsOfSidebarConversations,
@@ -66,7 +23,7 @@ export const InboxSidebar = ({
   const userId = params?.userId;
 
   const handleOnUserClick = (userId: number) => {
-    setSelectedUserId(userId)
+    setSelectedUserId(userId);
     setLocation(`/inbox/${userId}`);
   };
   return (
@@ -78,8 +35,9 @@ export const InboxSidebar = ({
     >
       {recipientsOfSidebarConversations ? (
         recipientsOfSidebarConversations.map(
-          (recipientsOfSidebarConversation) => (
+          (recipientsOfSidebarConversation, index) => (
             <Box
+              key={index}
               onClick={() =>
                 handleOnUserClick(recipientsOfSidebarConversation.id)
               }

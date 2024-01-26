@@ -14,4 +14,5 @@ export type QueryParams = {
   order: Order;
   brand: Brand;
   category: 'Men' | 'Women' | 'All';
+  search_text: string;
 };

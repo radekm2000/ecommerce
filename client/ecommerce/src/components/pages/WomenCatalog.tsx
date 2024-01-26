@@ -140,7 +140,7 @@ export const WomenCatalog = () => {
                 <Button
                   sx={{
                     padding: "8px 12px",
-                    marginLeft: '8px',
+                    marginLeft: "8px",
                     backgroundColor: "#F2F2F2",
                     fontSize: "14px",
                     color: "#171717",

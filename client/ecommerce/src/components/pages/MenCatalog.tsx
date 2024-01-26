@@ -32,7 +32,6 @@ export const MenCatalog = () => {
   const [category] = useState<string>("Men");
   console.log("chosen brand");
   console.log(brand);
-
   console.log(user);
   console.log(order);
   useEffect(() => {
@@ -53,7 +52,7 @@ export const MenCatalog = () => {
   const { data: products, isLoading: isProductsLoading } = useFilteredProducts(
     brand,
     order,
-    category
+    category,
   );
 
   if (isProductsLoading) {

@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/utils/entities/product.entity';
-import { Repository } from 'typeorm';
+import { ILike, Repository } from 'typeorm';
 import 'dotenv/config';
 import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
@@ -185,5 +185,12 @@ export class ProductsService {
     console.log(order);
     const validOrders: Order[] = ['price_high_to_low', 'price_low_to_high'];
     return validOrders.includes(order as Order);
+  }
+
+  public async getFilteredSearchTextProducts(searchText: string) {
+    return await this.productRepository.findBy({
+      description: ILike(`%${searchText}#%`),
+      title: ILike(`%${searchText}#%`),
+    });
   }
 }

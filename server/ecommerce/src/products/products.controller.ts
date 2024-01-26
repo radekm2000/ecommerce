@@ -53,6 +53,11 @@ export class ProductsController {
     }
   }
 
+  @Get('q')
+  async searchProducts(@Query('search_text') searchText: string) {
+    return await this.productsService.getFilteredSearchTextProducts(searchText);
+  }
+
   @Get(':userId')
   async getUserProducts(@Param('userId', ParseIntPipe) userId: number) {
     const products = await this.productsService.getUserProducts(userId);

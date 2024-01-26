@@ -13,6 +13,7 @@ import { Followings } from "./components/pages/Followings";
 import { MenCatalog } from "./components/pages/MenCatalog";
 import { WomenCatalog } from "./components/pages/WomenCatalog";
 import { Inbox } from "./components/pages/Inbox";
+import SearchTextResults from "./components/pages/SearchTextResults";
 function App() {
   return (
     <>
@@ -47,6 +48,10 @@ function App() {
           <Route path="/catalog/women">
             <Navbar />
             <WomenCatalog />
+          </Route>
+          <Route path='/q/:searchText'>
+            <Navbar/>
+            <SearchTextResults/>
           </Route>
           <Route path="/inbox/:userId*">
             <Navbar />

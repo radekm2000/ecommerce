@@ -17,9 +17,16 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
-import { Avatar, Button, Tabs } from "@mui/material";
+import {
+  Avatar,
+  Button,
+  Card,
+  CardActionArea,
+  CardContent,
+  Tabs,
+} from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
-import { Link, Redirect } from "wouter";
+import { Link, Redirect, useLocation } from "wouter";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -94,18 +101,22 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export const Navbar = () => {
   const below1000 = useMediaQuery(1000);
-
+  const [searchInputValue, setSearchInputValue] = useState("");
   const [value, setValue] = useState(0);
   const below800 = useMediaQuery(800);
   const { user } = useUserContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
-
+  console.log(searchInputValue);
+  const [, setLocation] = useLocation();
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
+  };
+  const handleSearchTextClick = () => {
+    setLocation(`/q/search_text=${searchInputValue}`, { replace: true });
   };
 
   const handleMobileMenuClose = () => {
@@ -185,7 +196,7 @@ export const Navbar = () => {
           aria-label="show 17 new notifications"
           color="inherit"
         >
-          <Badge  color="error">
+          <Badge color="error">
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -249,16 +260,47 @@ export const Navbar = () => {
                   Vetted
                 </Typography>
               </Link>
-              <Search sx={{ flexGrow: 1 }}>
-                <SearchIconWrapper>
-                  <SearchIcon color="primary" />
-                </SearchIconWrapper>
-                <StyledInputBase
-                  sx={{ width: "100%" }}
-                  placeholder="Search for items"
-                  inputProps={{ "aria-label": "search" }}
-                />
-              </Search>
+              <Box sx={{ width: "50%", position: "relative" }}>
+                <Search sx={{ flexGrow: 1 }}>
+                  <SearchIconWrapper>
+                    <SearchIcon color="primary" />
+                  </SearchIconWrapper>
+                  <StyledInputBase
+                    onChange={(e) => setSearchInputValue(e.target.value)}
+                    value={searchInputValue}
+                    sx={{ width: "100%" }}
+                    placeholder="Search for items"
+                    inputProps={{ "aria-label": "search" }}
+                  />
+                </Search>
+                {searchInputValue && (
+                  <CardActionArea onClick={handleSearchTextClick}>
+                    <Card
+                      sx={{
+                        position: "absolute",
+                        width: "100%",
+                        border: "1px solid rgba(23, 23, 23, 0.15)",
+                        marginTop: "8px",
+                        zIndex: 1,
+                      }}
+                    >
+                      <CardContent
+                        sx={{
+                          p: 2,
+                          "&:last-child": { pb: 2 },
+                          alignItems: "center",
+                          justifyContent: "flex-start",
+                          color: "#171717",
+                          fontSize: "16px",
+                          fontWeight: "400",
+                        }}
+                      >
+                        Search "{searchInputValue}"
+                      </CardContent>
+                    </Card>
+                  </CardActionArea>
+                )}
+              </Box>
               <Box sx={{ flexGrow: 1 }} />
               <Button
                 sx={{
@@ -284,16 +326,16 @@ export const Navbar = () => {
               </Button>
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 <Link to="/inbox">
-                <IconButton
-                  size="large"
-                  aria-label="show 4 new mails"
-                  color="primary"
+                  <IconButton
+                    size="large"
+                    aria-label="show 4 new mails"
+                    color="primary"
                   >
-                  <Badge color="error">
-                    <MailIcon />
-                  </Badge>
-                </IconButton>
-                  </Link>
+                    <Badge color="error">
+                      <MailIcon />
+                    </Badge>
+                  </IconButton>
+                </Link>
                 <IconButton
                   size="large"
                   aria-label="show 17 new notifications"

@@ -15,7 +15,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
 import {
   Avatar,
@@ -27,6 +27,7 @@ import {
 } from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Link, Redirect, useLocation } from "wouter";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -110,13 +111,25 @@ export const Navbar = () => {
     useState<null | HTMLElement>(null);
   console.log(searchInputValue);
   const [, setLocation] = useLocation();
+  const queryClient = useQueryClient();
   const isMenuOpen = Boolean(anchorEl);
+  useEffect(() => {
+    queryClient.invalidateQueries({
+      queryKey: ["products", "filter", searchInputValue],
+    });
+  }, [searchInputValue]);
+
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
   const handleSearchTextClick = () => {
-    setLocation(`/q/search_text=${searchInputValue}`, { replace: true });
+    const params = new URLSearchParams();
+    if (searchInputValue) {
+      params.set("search_text", searchInputValue);
+      setLocation(`/q/?${params.toString()}`);
+      setSearchInputValue("");
+    }
   };
 
   const handleMobileMenuClose = () => {

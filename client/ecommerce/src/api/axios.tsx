@@ -140,3 +140,8 @@ export const deleteConversation = async (conversationId: number) => {
   const response = await axiosApi.delete(`conversations/${conversationId}`);
   return response.data;
 };
+
+export const getFilteredProductsBySearchText = async (searchText) => {
+  const response = await axiosApi.get(`products/q/?search_text=${searchText}`);
+  return response.data as ProductWithImageAndUser[];
+};

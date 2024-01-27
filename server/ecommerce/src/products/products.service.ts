@@ -58,6 +58,31 @@ export class ProductsService {
     }
     return products;
   }
+  async getFilteredSearchTextProducts(searchText: string) {
+    const products = await this.productRepository.find({
+      where: [
+        {
+          description: ILike(`%${searchText}%`),
+        },
+        { title: ILike(`%${searchText}%`) },
+      ],
+      relations: ['images', 'user'],
+    });
+    for (const product of products) {
+      for (const image of product.images) {
+        const getObjectParams = {
+          Bucket: process.env.BUCKET_NAME,
+          Key: image.imageName,
+        };
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+
+        image.imageUrl = url;
+      }
+    }
+    console.log(products);
+    return products;
+  }
 
   async getWomenFilteredProducts(queryParams: QueryParams) {
     const products = await this.productRepository.find({
@@ -185,12 +210,5 @@ export class ProductsService {
     console.log(order);
     const validOrders: Order[] = ['price_high_to_low', 'price_low_to_high'];
     return validOrders.includes(order as Order);
-  }
-
-  public async getFilteredSearchTextProducts(searchText: string) {
-    return await this.productRepository.findBy({
-      description: ILike(`%${searchText}#%`),
-      title: ILike(`%${searchText}#%`),
-    });
   }
 }

@@ -55,7 +55,9 @@ export class ProductsController {
 
   @Get('q')
   async searchProducts(@Query('search_text') searchText: string) {
-    return await this.productsService.getFilteredSearchTextProducts(searchText);
+    const products =
+      await this.productsService.getFilteredSearchTextProducts(searchText);
+    return products;
   }
 
   @Get(':userId')

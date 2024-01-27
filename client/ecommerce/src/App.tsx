@@ -49,7 +49,7 @@ function App() {
             <Navbar />
             <WomenCatalog />
           </Route>
-          <Route path='/q/:searchText'>
+          <Route path='/q/:search_text?'>
             <Navbar/>
             <SearchTextResults/>
           </Route>

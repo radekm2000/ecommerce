@@ -61,7 +61,7 @@ export const Product = () => {
             padding: "0px 10px",
             justifyContent: "center",
             flexDirection: "column",
-            alignItems: "center",
+            alignItems: "flex-start",
             gap: "20px",
             height:
               userProducts?.length == 1 ? (below800 ? "auto" : "78vh") : "",
@@ -70,7 +70,7 @@ export const Product = () => {
           <Box
             component="img"
             src={product?.images[0].imageUrl}
-            sx={{ height: "100%" }}
+            sx={{ height: "100%", alignSelf: 'center' }}
           ></Box>
           <Box
             sx={{

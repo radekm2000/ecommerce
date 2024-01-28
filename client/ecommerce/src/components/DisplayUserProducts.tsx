@@ -11,6 +11,7 @@ import {
 import { ProductWithImageAndUser } from "../types/types";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Link, useLocation } from "wouter";
+import { calculateGridWidth } from "../utils/calculateGridWidth";
 
 export const DisplayUserProducts = ({
   products,
@@ -34,9 +35,11 @@ export const DisplayUserProducts = ({
   };
   const below600 = useMediaQuery(600);
   const below700 = useMediaQuery(700);
+
   const below1050 = useMediaQuery(1050);
   const below1200 = useMediaQuery(1200);
   const below1600 = useMediaQuery(1600);
+  const settingsWhenProductsBelow4 = () => {};
   return (
     <Box
       sx={{
@@ -53,13 +56,35 @@ export const DisplayUserProducts = ({
           <Grid
             item
             key={index}
-            sm={below600 ? 6 : 6}
-            xs={below700 ? 6 : 4}
-            md={below1050 ? 4 : 3}
-            lg={below1200 ? 4 : 3}
-            sx={{
-              flexBasis: below1600 ? "auto" : "calc(25% - 1px)",
-            }}
+            sm={calculateGridWidth(
+              products,
+              below600,
+              below700,
+              below1050,
+              below1200
+            )}
+            xs={calculateGridWidth(
+              products,
+              below600,
+              below700,
+              below1050,
+              below1200
+            )}
+            md={calculateGridWidth(
+              products,
+              below600,
+              below700,
+              below1050,
+              below1200
+            )}
+            lg={calculateGridWidth(
+              products,
+              below600,
+              below700,
+              below1050,
+              below1200
+            )}
+            sx={{}}
           >
             <Card
               square={true}

@@ -9,8 +9,9 @@ import { ProductWithImageAndUser } from "../../types/types";
 export const Product = () => {
   const below960 = useMediaQuery(960);
   const below1600 = useMediaQuery(1600);
+  const below800 = useMediaQuery(800);
   const params = useParams();
-  const [, setLocation] = useLocation()
+  const [, setLocation] = useLocation();
   const productId = params?.productId;
   const {
     data: product,
@@ -40,8 +41,7 @@ export const Product = () => {
       sx={{
         backgroundColor: "rgba(37,44,51,0.08)",
         display: "flex",
-        minHeight: "calc(100vh -81px)",
-        height: "100%",
+        height: "calc(100vh -81px)",
         padding: "16px 30px",
         alignItems: "center",
         justifyContent: "center",
@@ -63,6 +63,8 @@ export const Product = () => {
             flexDirection: "column",
             alignItems: "center",
             gap: "20px",
+            height:
+              userProducts?.length == 1 ? (below800 ? "auto" : "78vh") : "",
           }}
         >
           <Box
@@ -91,7 +93,8 @@ export const Product = () => {
             </Typography>
           </Box>
           <Box sx={{ display: below960 ? "none" : "inline" }}>
-            <DisplayUserProducts setLocation={setLocation}
+            <DisplayUserProducts
+              setLocation={setLocation}
               products={productsWithoutMainOne as ProductWithImageAndUser[]}
             />
           </Box>
@@ -111,7 +114,7 @@ export const Product = () => {
               display: "flex",
               backgroundColor: "white",
               padding: "16px",
-              maxHeight: '50%'
+              maxHeight: "50%",
             }}
           >
             <Box
@@ -207,7 +210,13 @@ export const Product = () => {
           </Box>
         </Box>
 
-        <Box sx={{ display: below960 ? "inline" : "none", width: "100%", marginLeft: '10px' }}>
+        <Box
+          sx={{
+            display: below960 ? "inline" : "none",
+            width: "100%",
+            marginLeft: "10px",
+          }}
+        >
           <Box
             sx={{
               visibility: below960 ? "visible" : "hidden",
@@ -228,8 +237,15 @@ export const Product = () => {
             </Typography>
           </Box>
         </Box>
-        <Box sx={{ display: below960 ? "inline" : "none", marginTop: "24px", marginLeft: '15px' }}>
-          <DisplayUserProducts setLocation={setLocation}
+        <Box
+          sx={{
+            display: below960 ? "inline" : "none",
+            marginTop: "24px",
+            marginLeft: "15px",
+          }}
+        >
+          <DisplayUserProducts
+            setLocation={setLocation}
             products={productsWithoutMainOne as ProductWithImageAndUser[]}
           />
         </Box>

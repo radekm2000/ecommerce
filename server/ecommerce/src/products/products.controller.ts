@@ -60,8 +60,13 @@ export class ProductsController {
     return products;
   }
 
-  @Get(':userId')
+  @Get(':id')
+  async getProduct(@Param('id', ParseIntPipe) productId: number) {
+    return await this.productsService.findProduct(productId);
+  }
+  @Get('user/:userId')
   async getUserProducts(@Param('userId', ParseIntPipe) userId: number) {
+    console.log(userId);
     const products = await this.productsService.getUserProducts(userId);
     return products;
   }

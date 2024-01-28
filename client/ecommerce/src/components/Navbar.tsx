@@ -111,13 +111,8 @@ export const Navbar = () => {
     useState<null | HTMLElement>(null);
   console.log(searchInputValue);
   const [, setLocation] = useLocation();
-  const queryClient = useQueryClient();
   const isMenuOpen = Boolean(anchorEl);
-  useEffect(() => {
-    queryClient.invalidateQueries({
-      queryKey: ["products", "filter", searchInputValue],
-    });
-  }, [searchInputValue]);
+
 
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {

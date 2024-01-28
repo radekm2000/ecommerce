@@ -14,6 +14,28 @@ export class ProductsService {
     @InjectRepository(Product) private productRepository: Repository<Product>,
   ) {}
 
+  async findProduct(productId: number) {
+    const product = await this.productRepository.findOne({
+      where: {
+        id: productId,
+      },
+      relations: ['images', 'user'],
+    });
+
+    for (const image of product.images) {
+      const getObjectParams = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: image.imageName,
+      };
+      const command = new GetObjectCommand(getObjectParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+
+      image.imageUrl = url;
+    }
+
+    return product;
+  }
+
   async getUserProducts(userId: number) {
     const products = await this.productRepository.find({
       where: {
@@ -21,7 +43,7 @@ export class ProductsService {
           id: userId,
         },
       },
-      relations: ['images'],
+      relations: ['images', 'user'],
     });
 
     for (const product of products) {

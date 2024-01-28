@@ -1,4 +1,5 @@
 import { Message } from "@mui/icons-material";
+import { z } from "zod";
 
 export type RegisterInput = {
   username: string;
@@ -46,12 +47,6 @@ export type LoginResponseData = {
   user: User;
 };
 
-export type Image = {
-  id: number;
-  imageName: string;
-  imageUrl: string;
-};
-
 export type ProductWithImage = {
   id: number;
   brand: string;
@@ -67,13 +62,24 @@ type UserWithoutProductsRelation = Omit<User, "products">;
 export type ProductWithImageAndUser = {
   id: number;
   brand: string;
-  category: "men" | "women";
+  category: "Men" | "Women"
   title: string;
   description: string;
   price: number;
   images: Image[];
   user: UserWithoutProductsRelation;
 };
+
+export type SingleProduct = {
+  id: number;
+  brand: string;
+  category: "Men" | "Women" | 'Unisex'
+  title: string;
+  description: string;
+  price: number;
+  images: Image[];
+  user: User
+}
 
 export type UserWithFollows = User & {
   followers?: Followers[];
@@ -108,3 +114,36 @@ export type Conversation = {
 export type RecipientOfSidebarConversation = Omit<User, "products"> & {
   lastMessageSent: Message;
 };
+export type Image = {
+  id: number;
+  imageName: string;
+  imageUrl: string;
+};
+
+export const imageSchema = z.object({
+  id: z.number(),
+  imageName: z.string(),
+  imageUrl: z.string(),
+});
+export const userSchema = z.object({
+  id: z.number(),
+  role: z.literal("admin").or(z.literal("user")),
+  username: z.string(),
+  googleId: z.string().or(z.undefined()).optional().nullable(),
+  email: z.string(),
+  avatar: z.string().or(z.undefined()).optional().nullable(),
+});
+const imagesSchema = z.array(imageSchema);
+
+export const ProductWithImageAndUserSchema = z.object({
+  id: z.number(),
+  brand: z.string(),
+  category: z.literal("Men").or(z.literal("Women")),
+  title: z.string(),
+  description: z.string(),
+  price: z.number(),
+  images: imagesSchema,
+  user: userSchema,
+});
+
+export type ProductType = z.infer<typeof ProductWithImageAndUserSchema>;

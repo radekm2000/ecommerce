@@ -6,6 +6,7 @@ import {
   LoginResponseData,
   ProductWithImage,
   ProductWithImageAndUser,
+  ProductWithImageAndUserSchema,
   RegisterInput,
   User,
   UserWithFollows,
@@ -66,9 +67,21 @@ export const getUserProducts = async (userId: number) => {
   return response.data;
 };
 
+export const getGivenUserProducts = async (userId: number) => {
+  const response = await axiosApi.get(`products/user/${userId}`);
+  return response.data as ProductWithImageAndUser[];
+};
+
 export const getUserSingleProduct = async (
   productId: number
 ): Promise<ProductWithImage> => {
+  const response = await axiosApi.get(`products/${productId}`);
+  return response.data;
+};
+
+export const getProduct = async (
+  productId: number
+): Promise<ProductWithImageAndUser> => {
   const response = await axiosApi.get(`products/${productId}`);
   return response.data;
 };

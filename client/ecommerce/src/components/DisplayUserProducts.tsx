@@ -6,23 +6,37 @@ import {
   CardContent,
   CardMedia,
   Grid,
-  Link,
   Typography,
 } from "@mui/material";
-import React from "react";
 import { ProductWithImageAndUser } from "../types/types";
 import { useMediaQuery } from "../hooks/useMediaQuery";
+import { Link, useLocation } from "wouter";
 
 export const DisplayUserProducts = ({
   products,
+  setLocation,
 }: {
   products: ProductWithImageAndUser[];
+  setLocation: (
+    to: string,
+    options?:
+      | {
+          replace?: boolean | undefined;
+        }
+      | undefined
+  ) => void;
 }) => {
-    const below600 = useMediaQuery(600)
+  const handleOnProductClick = (productId: number, productTitle: string) => {
+    const url = `/products/${productId}-${productTitle}`;
+    console.log(productId);
+    console.log(productTitle);
+    setLocation(url, { replace: true });
+  };
+  const below600 = useMediaQuery(600);
   const below700 = useMediaQuery(700);
   const below1050 = useMediaQuery(1050);
   const below1200 = useMediaQuery(1200);
-  const below1600 = useMediaQuery(1600)
+  const below1600 = useMediaQuery(1600);
   return (
     <Box
       sx={{
@@ -30,17 +44,21 @@ export const DisplayUserProducts = ({
         display: "flex",
       }}
     >
-      <Grid spacing={1}  container sx={{ backgroundColor: "rgba(37,44,51,0.00)" }}>
+      <Grid
+        spacing={1}
+        container
+        sx={{ backgroundColor: "rgba(37,44,51,0.00)" }}
+      >
         {products.map((product, index) => (
           <Grid
             item
             key={index}
-            sm={below600 ? 6: 6}
+            sm={below600 ? 6 : 6}
             xs={below700 ? 6 : 4}
             md={below1050 ? 4 : 3}
             lg={below1200 ? 4 : 3}
             sx={{
-              flexBasis: below1600 ? 'auto' : 'calc(25% - 1px)'
+              flexBasis: below1600 ? "auto" : "calc(25% - 1px)",
             }}
           >
             <Card
@@ -51,7 +69,7 @@ export const DisplayUserProducts = ({
                 height: "fit-content",
               }}
             >
-              <Link underline='none' href={`/members/${product.user.id}}`}>
+              <Link href={`/members/${product.user.id}}`}>
                 <CardContent
                   sx={{
                     display: "flex",
@@ -86,18 +104,19 @@ export const DisplayUserProducts = ({
                   </Typography>
                 </CardContent>
               </Link>
-              <Link href={`products/${product.id}-${product.title}`}>
-                <CardMedia
-                  alt={product.title}
-                  component="img"
-                  sx={{
-                    width: "100%",
-                    height: "330px",
-                    cursor: "pointer",
-                  }}
-                  image={product.images[0].imageUrl}
-                ></CardMedia>
-              </Link>
+              {/* <Link href={`products/${product.id}-${product.title}`}> */}
+              <CardMedia
+                onClick={() => handleOnProductClick(product.id, product.title)}
+                alt={product.title}
+                component="img"
+                sx={{
+                  width: "100%",
+                  height: "330px",
+                  cursor: "pointer",
+                }}
+                image={product.images[0].imageUrl}
+              ></CardMedia>
+              {/* </Link> */}
               <CardContent
                 sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
               >

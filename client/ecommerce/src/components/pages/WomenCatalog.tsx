@@ -249,7 +249,7 @@ export const WomenCatalog = () => {
                         </Typography>
                       </CardContent>
                     </Link>
-                    <Link href={`products/${product.id}-${product.title}`}>
+                    <Link href={`/products/${product.id}-${product.title}`}>
                       <CardMedia
                         alt={product.title}
                         component="img"

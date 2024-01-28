@@ -113,7 +113,6 @@ export const Navbar = () => {
   const [, setLocation] = useLocation();
   const isMenuOpen = Boolean(anchorEl);
 
-
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -246,8 +245,8 @@ export const Navbar = () => {
                 margin: "0px 150px",
               }}
             >
-              <Link href="/">
                 <Typography
+                  onClick={() => setLocation("/")}
                   color="#26a69a"
                   variant="h6"
                   noWrap
@@ -267,7 +266,6 @@ export const Navbar = () => {
                 >
                   Vetted
                 </Typography>
-              </Link>
               <Box sx={{ width: "50%", position: "relative" }}>
                 <Search sx={{ flexGrow: 1 }}>
                   <SearchIconWrapper>

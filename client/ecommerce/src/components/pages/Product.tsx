@@ -1,4 +1,4 @@
-import { useParams } from "wouter";
+import { useLocation, useParams } from "wouter";
 import { useSingleProduct } from "../../hooks/useSingleProduct";
 import { Box, Typography } from "@mui/material";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
@@ -10,6 +10,7 @@ export const Product = () => {
   const below960 = useMediaQuery(960);
   const below1600 = useMediaQuery(1600);
   const params = useParams();
+  const [, setLocation] = useLocation()
   const productId = params?.productId;
   const {
     data: product,
@@ -67,11 +68,11 @@ export const Product = () => {
           <Box
             component="img"
             src={product?.images[0].imageUrl}
-            sx={{ height: "auto" }}
+            sx={{ height: "100%" }}
           ></Box>
           <Box
             sx={{
-              visibility: below960 ? "hidden" : "visible",
+              display: below960 ? "none" : "inline",
               marginTop: "40px",
               padding: "20px 16px",
               backgroundColor: "white",
@@ -90,7 +91,7 @@ export const Product = () => {
             </Typography>
           </Box>
           <Box sx={{ display: below960 ? "none" : "inline" }}>
-            <DisplayUserProducts
+            <DisplayUserProducts setLocation={setLocation}
               products={productsWithoutMainOne as ProductWithImageAndUser[]}
             />
           </Box>
@@ -110,8 +111,7 @@ export const Product = () => {
               display: "flex",
               backgroundColor: "white",
               padding: "16px",
-              height: '25%'
-              
+              maxHeight: '50%'
             }}
           >
             <Box
@@ -154,7 +154,8 @@ export const Product = () => {
                 </Typography>
               </Box>
             </Box>
-            <Box component='div'
+            <Box
+              component="div"
               sx={{
                 marginTop: "20px",
                 display: "flex",
@@ -162,8 +163,8 @@ export const Product = () => {
                 alignItems: "flex-start",
                 justifyContent: "flex-start",
                 width: below960 ? "50%" : "100%",
-                whiteSpace: 'normal !important',
-                wordBreak: 'break-word'
+                whiteSpace: "normal !important",
+                wordBreak: "break-word",
               }}
             >
               <Typography sx={{ fontSize: "18px" }}>
@@ -178,7 +179,7 @@ export const Product = () => {
                 {product?.description}
               </Typography>
             </Box>
-            <Box
+            {/* <Box
               sx={{
                 visibility: below960 ? "visible" : "hidden",
                 marginTop: "24px",
@@ -197,13 +198,40 @@ export const Product = () => {
               >
                 Member's items ({userProducts?.length})
               </Typography>
-            </Box>
-            <Box sx={{ visibility: below960 ? "visible" : "hidden" }}>
+            </Box> */}
+            {/* <Box sx={{ display: below960 ? "inline" : "none" }}>
               <DisplayUserProducts
                 products={productsWithoutMainOne as ProductWithImageAndUser[]}
               />
-            </Box>
+            </Box> */}
           </Box>
+        </Box>
+
+        <Box sx={{ display: below960 ? "inline" : "none", width: "100%", marginLeft: '10px' }}>
+          <Box
+            sx={{
+              visibility: below960 ? "visible" : "hidden",
+              marginTop: "24px",
+              padding: "20px 16px",
+              backgroundColor: "white",
+            }}
+          >
+            <Typography
+              sx={{
+                color: "#757575",
+                fontSize: "14px",
+                borderBottom: "1px solid rgba(23, 23, 23, 0.15)",
+                paddingBottom: "5px",
+              }}
+            >
+              Member's items ({userProducts?.length})
+            </Typography>
+          </Box>
+        </Box>
+        <Box sx={{ display: below960 ? "inline" : "none", marginTop: "24px", marginLeft: '15px' }}>
+          <DisplayUserProducts setLocation={setLocation}
+            products={productsWithoutMainOne as ProductWithImageAndUser[]}
+          />
         </Box>
       </Box>
     </Box>

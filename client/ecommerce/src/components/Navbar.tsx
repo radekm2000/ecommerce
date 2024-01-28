@@ -242,31 +242,37 @@ export const Navbar = () => {
             <Toolbar
               sx={{
                 padding: "8px 16px",
-                margin: "0px 150px",
+                margin: below800 ? '0px 10px' : '0px 150px'
               }}
             >
-                <Typography
-                  onClick={() => setLocation("/")}
-                  color="#26a69a"
-                  variant="h6"
-                  noWrap
-                  component="div"
-                  sx={{
-                    cursor: "pointer",
-                    display: {
-                      xs: "none",
-                      sm: "block",
-                      fontFamily: "Maison Neue",
-                      fontWeight: "800",
-                      fontSize: "24px",
-                      marginRight: 15,
-                      marginLeft: "auto",
-                    },
-                  }}
-                >
-                  Vetted
-                </Typography>
-              <Box sx={{ width: "50%", position: "relative" }}>
+              <Typography
+                onClick={() => setLocation("/")}
+                color="#26a69a"
+                variant="h6"
+                noWrap
+                component="div"
+                sx={{
+                  cursor: "pointer",
+                  display: {
+                    xs: "none",
+                    sm: "block",
+                    fontFamily: "Maison Neue",
+                    fontWeight: "800",
+                    fontSize: "24px",
+                    marginRight: 15,
+                    marginLeft: "auto",
+                  },
+                }}
+              >
+                Vetted
+              </Typography>
+              <Box
+                sx={{
+                  width: "50%",
+                  position: "relative",
+                  display: below800 ? "none" : "inline",
+                }}
+              >
                 <Search sx={{ flexGrow: 1 }}>
                   <SearchIconWrapper>
                     <SearchIcon color="primary" />
@@ -385,6 +391,51 @@ export const Navbar = () => {
           {renderMobileMenu}
           {renderMenu}
         </Box>
+        {below800 ? (
+          <Box sx={{ padding: "16px 16px", width: "auto", justifyContent: 'center', display: 'block', flexDirection: 'row' }}>
+            <Box sx={{ position: "relative" }}>
+              <Search sx={{ flexGrow: 1, width: '100%' }}>
+                <SearchIconWrapper>
+                  <SearchIcon color="primary" />
+                </SearchIconWrapper>
+                <StyledInputBase
+                  onChange={(e) => setSearchInputValue(e.target.value)}
+                  value={searchInputValue}
+                  sx={{ width: "100%" }}
+                  placeholder="Search for items"
+                  inputProps={{ "aria-label": "search" }}
+                />
+              </Search>
+              {searchInputValue && (
+                <CardActionArea onClick={handleSearchTextClick}>
+                  <Card
+                    sx={{
+                      position: "absolute",
+                      width: "100%",
+                      border: "1px solid rgba(23, 23, 23, 0.15)",
+                      marginTop: "8px",
+                      zIndex: 1,
+                    }}
+                  >
+                    <CardContent
+                      sx={{
+                        p: 2,
+                        "&:last-child": { pb: 2 },
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                        color: "#171717",
+                        fontSize: "16px",
+                        fontWeight: "400",
+                      }}
+                    >
+                      Search "{searchInputValue}"
+                    </CardContent>
+                  </Card>
+                </CardActionArea>
+              )}
+            </Box>
+          </Box>
+        ) : null}
         {below1000 ? null : (
           <Box
             sx={{

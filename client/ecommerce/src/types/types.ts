@@ -57,7 +57,7 @@ export type ProductWithImage = {
   images: Image[];
 };
 
-type UserWithoutProductsRelation = Omit<User, "products">;
+export type UserWithoutProductsRelation = Omit<User, "products">;
 
 export type ProductWithImageAndUser = {
   id: number;

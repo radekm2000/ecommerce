@@ -5,10 +5,10 @@ import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { useGivenUserProducts } from "../../hooks/useGivenUserProducts";
 import { DisplayUserProducts } from "../DisplayUserProducts";
 import { ProductWithImageAndUser } from "../../types/types";
+import { DisplayUserInfo } from "../ProductPage/DisplayUserInfo";
 
 export const Product = () => {
   const below960 = useMediaQuery(960);
-  const below1600 = useMediaQuery(1600);
   const below800 = useMediaQuery(800);
   const params = useParams();
   const [, setLocation] = useLocation();
@@ -36,6 +36,11 @@ export const Product = () => {
     (userProduct) => userProduct.id != product?.id
   );
   console.log(productsWithoutMainOne);
+
+  const productAuthor = product?.user;
+  if (!productAuthor) {
+    return;
+  }
   return (
     <Box
       sx={{
@@ -70,7 +75,7 @@ export const Product = () => {
           <Box
             component="img"
             src={product?.images[0].imageUrl}
-            sx={{ height: "100%", alignSelf: 'center' }}
+            sx={{ height: "100%", alignSelf: "center" }}
           ></Box>
           <Box
             sx={{
@@ -104,7 +109,9 @@ export const Product = () => {
             width: below960 ? "100%" : "23%",
             display: "flex",
             padding: "0px 10px",
+            flexDirection: "column",
             paddingTop: below960 ? "20px" : 0,
+            gap: "15px",
           }}
         >
           <Box
@@ -182,32 +189,9 @@ export const Product = () => {
                 {product?.description}
               </Typography>
             </Box>
-            {/* <Box
-              sx={{
-                visibility: below960 ? "visible" : "hidden",
-                marginTop: "24px",
-                padding: "20px 16px",
-                backgroundColor: "white",
-                width: "96%",
-              }}
-            >
-              <Typography
-                sx={{
-                  color: "#757575",
-                  fontSize: "14px",
-                  borderBottom: "1px solid rgba(23, 23, 23, 0.15)",
-                  paddingBottom: "5px",
-                }}
-              >
-                Member's items ({userProducts?.length})
-              </Typography>
-            </Box> */}
-            {/* <Box sx={{ display: below960 ? "inline" : "none" }}>
-              <DisplayUserProducts
-                products={productsWithoutMainOne as ProductWithImageAndUser[]}
-              />
-            </Box> */}
           </Box>
+
+          <DisplayUserInfo user={productAuthor} product={product} />
         </Box>
 
         <Box

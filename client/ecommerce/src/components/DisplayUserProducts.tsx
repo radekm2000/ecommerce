@@ -39,7 +39,6 @@ export const DisplayUserProducts = ({
   const below1050 = useMediaQuery(1050);
   const below1200 = useMediaQuery(1200);
   const below1600 = useMediaQuery(1600);
-  const settingsWhenProductsBelow4 = () => {};
   return (
     <Box
       sx={{

@@ -24,6 +24,9 @@ export const Product = () => {
   if (isLoading) {
     return "isLoading...";
   }
+  if (!product) {
+    return;
+  }
   if (isFetching) {
     return "data is fetching...";
   }
@@ -37,10 +40,8 @@ export const Product = () => {
   );
   console.log(productsWithoutMainOne);
 
-  const productAuthor = product?.user;
-  if (!productAuthor) {
-    return;
-  }
+  const productAuthorId = product.user.id;
+
   return (
     <Box
       sx={{
@@ -191,7 +192,7 @@ export const Product = () => {
             </Box>
           </Box>
 
-          <DisplayUserInfo user={productAuthor} product={product} />
+          <DisplayUserInfo userId={productAuthorId} product={product} />
         </Box>
 
         <Box

@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   ProductWithImageAndUser,
   User,
+  UserWithFollows,
   UserWithoutProductsRelation,
 } from "../../types/types";
 import { Avatar, Box, Button, Typography } from "@mui/material";
@@ -11,19 +12,34 @@ import { AccountCircle } from "@mui/icons-material";
 import { useFollowUser } from "../../utils/followUser";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Link, useLocation } from "wouter";
+import { useUserInfo } from "../../hooks/useUserInfo";
 export const DisplayUserInfo = ({
-  user,
+  userId,
   product,
 }: {
-  user: UserWithoutProductsRelation | undefined;
+  userId: number;
   product: ProductWithImageAndUser | undefined;
 }) => {
   const [, setLocation] = useLocation();
   const { user: meUser } = useUserContext();
   const [followButonClicked, setFollowButtonClicked] = useState(false);
-
-  const mutation = useFollowUser(user!.id);
+  const isFollowed = (member: UserWithFollows | undefined) => {
+    return (member?.followings ?? []).some((following) => {
+      return following.follower.id === meUser.id;
+    });
+  };
+  const { data: user, isLoading: isUserLoading } = useUserInfo(userId);
+  useEffect(() => {
+    setFollowButtonClicked(isFollowed(user));
+  }, [user]);
+  const mutation = useFollowUser(user?.id);
   if (!product) {
+    return;
+  }
+  if (isUserLoading) {
+    return "userLoading...";
+  }
+  if (!user) {
     return;
   }
   const { mutate } = mutation;

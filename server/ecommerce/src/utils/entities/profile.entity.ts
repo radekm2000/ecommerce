@@ -1,6 +1,7 @@
 import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { User } from './user.entity';
-
+const countries = ['Poland', 'England'] as const;
+type Country = (typeof countries)[number];
 @Entity()
 export class Profile {
   @PrimaryGeneratedColumn()
@@ -12,7 +13,5 @@ export class Profile {
   @OneToOne(() => User, (user) => user.profile)
   user: User;
 
-  country: 'Poland' | 'England';
-
-  town: string;
+  country: Country;
 }

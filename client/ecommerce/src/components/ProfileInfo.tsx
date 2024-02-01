@@ -38,6 +38,10 @@ export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
     mutate(user.id);
   };
 
+  const handleEditProfileClick = () => {
+    setLocation("/settings/profile");
+  };
+
   return (
     <Box
       sx={{
@@ -143,6 +147,7 @@ export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
                     }}
                   >
                     <Button
+                      onClick={() => handleEditProfileClick()}
                       disableElevation
                       disableRipple
                       sx={{
@@ -221,6 +226,7 @@ export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
               </Box>
               {user.id === meUser.id ? (
                 <Button
+                  onClick={() => handleEditProfileClick()}
                   disableElevation
                   disableRipple
                   sx={{

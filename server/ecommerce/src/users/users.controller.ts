@@ -1,15 +1,20 @@
 import {
+  Body,
   Controller,
   Get,
   Param,
   ParseIntPipe,
+  Post,
   Req,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 import { AuthUser } from 'src/decorators/user.decorator';
+import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('users')
 export class UsersController {
@@ -24,5 +29,16 @@ export class UsersController {
   @Get(':id')
   async getUserInfo(@Param('id', ParseIntPipe) userId: number) {
     return await this.usersService.getUserInfo(userId);
+  }
+
+  @Post('profile/update')
+  @UseGuards(AuthGuard)
+  @UseInterceptors(FileInterceptor('file'))
+  async updateProfile(
+    @Body() body: any,
+    @UploadedFile() file: Express.Multer.File,
+    @AuthUser() authUser: AuthUser,
+  ) {
+    return;
   }
 }

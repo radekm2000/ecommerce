@@ -14,6 +14,7 @@ import { MenCatalog } from "./components/pages/MenCatalog";
 import { WomenCatalog } from "./components/pages/WomenCatalog";
 import { Inbox } from "./components/pages/Inbox";
 import SearchTextResults from "./components/pages/SearchTextResults";
+import { EditProfile } from "./components/pages/EditProfile";
 function App() {
   return (
     <>
@@ -40,6 +41,10 @@ function App() {
           <Route path="/members/:userId/followers">
             <Navbar />
             <Followers />
+          </Route>
+          <Route path="/settings/profile">
+            <Navbar/>
+            <EditProfile/>
           </Route>
           <Route path="/catalog/men">
             <Navbar />

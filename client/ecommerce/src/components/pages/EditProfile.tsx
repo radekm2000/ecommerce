@@ -2,7 +2,6 @@ import {
   Avatar,
   Box,
   Button,
-  CardMedia,
   Input,
   MenuItem,
   TextField,
@@ -12,21 +11,27 @@ import { useUserContext } from "../../contexts/UserContext";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { AccountCircle } from "@mui/icons-material";
 import { ChangeEvent, useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { updateProfile } from "../../api/axios";
+import toast from "react-hot-toast";
+import { Redirect, useLocation } from "wouter";
 
 type FormData = {
   country: string;
-  about: string;
+  aboutYou: string;
 };
 
 const countries = ["Poland", "England"] as const;
 
 export const EditProfile = () => {
   const { user } = useUserContext();
+  const formDataToBackend = new FormData();
+  const [, setLocation] = useLocation();
   const [selectedFile, setSelectedFile] = useState<File | "">("");
   const below960 = useMediaQuery(960);
   const [formData, setFormData] = useState<FormData>({
     country: "",
-    about: "",
+    aboutYou: "",
   });
 
   const handleAvatarChange = (
@@ -39,10 +44,23 @@ export const EditProfile = () => {
     const file = uploadedFiles[0];
     setSelectedFile(file);
   };
-
+  const mutation = useMutation({
+    mutationKey: ["profile", "update"],
+    mutationFn: updateProfile,
+    onSuccess: () => {
+      toast.success("Profile updated");
+      setLocation("/");
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+  const { mutate } = mutation;
   const handleSubmitProfileChangeClick = () => {
-    console.log(formData);
-    console.log(selectedFile);
+    formDataToBackend.append("file", selectedFile);
+    formDataToBackend.append("data", JSON.stringify(formData));
+
+    mutate(formDataToBackend);
   };
   return (
     <Box
@@ -160,9 +178,9 @@ export const EditProfile = () => {
               <TextField
                 spellCheck="false"
                 onChange={(e) =>
-                  setFormData({ ...formData, about: e.target.value })
+                  setFormData({ ...formData, aboutYou: e.target.value })
                 }
-                value={formData.about}
+                value={formData.aboutYou}
                 placeholder="Tell us more about yourself"
                 variant="standard"
                 multiline
@@ -225,6 +243,9 @@ export const EditProfile = () => {
                 backgroundColor: "#007782",
                 textTransform: "none",
                 marginTop: "10px",
+                "&:hover": {
+                  backgroundColor: "#007782",
+                },
               }}
             >
               Edit profile

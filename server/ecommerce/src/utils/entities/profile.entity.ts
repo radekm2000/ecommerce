@@ -7,11 +7,12 @@ export class Profile {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @Column()
+  @Column({ nullable: true })
   aboutYou: string;
 
   @OneToOne(() => User, (user) => user.profile)
   user: User;
 
+  @Column({ default: 'Poland' })
   country: Country;
 }

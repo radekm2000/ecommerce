@@ -1,8 +1,14 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3';
+import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { randomUUID } from 'crypto';
 import { Profile } from 'passport-google-oauth20';
+import * as sharp from 'sharp';
+import { s3 } from 'src/main';
 import { RegisterUserDto } from 'src/utils/dtos/user.dto';
+import { Avatar } from 'src/utils/entities/avatar.entity';
 import { Follow } from 'src/utils/entities/followers.entity';
+import { Profile as userProfile } from 'src/utils/entities/profile.entity';
 import { User } from 'src/utils/entities/user.entity';
 import { Repository } from 'typeorm';
 
@@ -11,6 +17,10 @@ export class UsersService {
   constructor(
     @InjectRepository(Follow) private followsRepository: Repository<Follow>,
     @InjectRepository(User) private usersRepository: Repository<User>,
+    @InjectRepository(userProfile)
+    private profilesRepository: Repository<userProfile>,
+    @InjectRepository(Avatar)
+    private avatarRepository: Repository<Avatar>,
   ) {}
 
   async findUser({
@@ -51,6 +61,11 @@ export class UsersService {
     }
 
     const newUser = this.usersRepository.create(dto);
+    const newProfile = this.profilesRepository.create({
+      user: newUser,
+    });
+    newUser.profile = newProfile;
+    await this.profilesRepository.save(newProfile);
     return await this.usersRepository.save(newUser);
   }
 
@@ -153,5 +168,92 @@ export class UsersService {
     };
 
     return updatedUser;
+  }
+
+  async updateUserProfile(
+    userProfileInfo: {
+      aboutYou?: string;
+      country?: 'Poland' | 'England';
+    },
+    file: Express.Multer.File,
+    userId: number,
+  ) {
+    const user = await this.findUserById(userId);
+    if (!user) {
+      throw new HttpException(
+        'User not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    const profile = await this.profilesRepository.findOne({
+      where: {
+        user: {
+          id: userId,
+        },
+      },
+    });
+    if (!profile) {
+      throw new HttpException(
+        'Profile doesnt exist',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    if (!file && !userProfileInfo) {
+      throw new HttpException(
+        `No changes were given`,
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    if (!file) {
+      if (!userProfileInfo.aboutYou) {
+        profile.country = userProfileInfo.country;
+        return await this.profilesRepository.save(profile);
+      } else if (!userProfileInfo.country) {
+        profile.aboutYou = userProfileInfo.aboutYou;
+        return await this.profilesRepository.save(profile);
+      } else {
+        profile.country = userProfileInfo.country;
+        profile.aboutYou = userProfileInfo.aboutYou;
+
+        return await this.profilesRepository.save(profile);
+      }
+    } else {
+      profile.country = userProfileInfo.country;
+      profile.aboutYou = userProfileInfo.aboutYou;
+      await this.profilesRepository.save(profile);
+      //update avatar
+      const buffer = await sharp(file.buffer)
+        .resize({
+          height: 64,
+          width: 64,
+          withoutEnlargement: true,
+          fit: 'inside',
+        })
+        .withMetadata()
+        .jpeg({ quality: 80 })
+        .toBuffer();
+      const avatarImageName = `${randomUUID()}${file.originalname}`;
+      const avatar = this.avatarRepository.create({
+        avatarName: avatarImageName,
+        user: user,
+      });
+      await this.avatarRepository.save(avatar);
+
+      user.avatarEntity = avatar;
+      await this.usersRepository.save(user);
+      const paramsToS3 = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: avatarImageName,
+        Body: buffer,
+        ContentType: file.mimetype,
+      } as PutObjectCommandInput;
+
+      const command = new PutObjectCommand(paramsToS3);
+      try {
+        return await s3.send(command);
+      } catch (error) {
+        return 'Failed uploading avatar to s3 bucket';
+      }
+    }
   }
 }

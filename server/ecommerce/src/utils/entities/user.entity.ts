@@ -12,6 +12,7 @@ import { Product } from './product.entity';
 import { Profile } from './profile.entity';
 import { Follow } from './followers.entity';
 import { Message } from './message.entity';
+import { Avatar } from './avatar.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -38,6 +39,10 @@ export class User {
 
   @Column({ nullable: true })
   avatar: string;
+
+  @OneToOne(() => Avatar, (avatarEntity) => avatarEntity.user)
+  @JoinColumn()
+  avatarEntity: Avatar;
 
   @OneToMany(() => Follow, (follow) => follow.follower)
   followers: Follow[];

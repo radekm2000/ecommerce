@@ -10,6 +10,7 @@ import { ImagesModule } from './images/images.module';
 import { FollowersModule } from './followers/followers.module';
 import { ConversationsModule } from './conversations/conversations.module';
 import { MessagesModule } from './messages/messages.module';
+import { AvatarsModule } from './avatars/avatars.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { MessagesModule } from './messages/messages.module';
     FollowersModule,
     ConversationsModule,
     MessagesModule,
+    AvatarsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

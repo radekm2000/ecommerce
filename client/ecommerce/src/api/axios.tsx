@@ -154,7 +154,16 @@ export const deleteConversation = async (conversationId: number) => {
   return response.data;
 };
 
-export const getFilteredProductsBySearchText = async (searchText) => {
+export const getFilteredProductsBySearchText = async (searchText: string) => {
   const response = await axiosApi.get(`products/q/?search_text=${searchText}`);
   return response.data as ProductWithImageAndUser[];
+};
+
+export const updateProfile = async (formData: FormData) => {
+  const response = await axiosApi.post(`users/profile/update`, formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
 };

@@ -1,5 +1,10 @@
-import { PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3';
-import { HttpException, HttpStatus, Inject, Injectable } from '@nestjs/common';
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  PutObjectCommandInput,
+} from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'crypto';
 import { Profile } from 'passport-google-oauth20';
@@ -118,6 +123,7 @@ export class UsersService {
         profile: true,
         followers: true,
         followings: true,
+        avatarEntity: true,
       },
     });
     if (!user) {
@@ -130,6 +136,19 @@ export class UsersService {
     const followings = user.followings;
     const detailedFollowings = [];
     const detailedFollowers = [];
+
+    const userAvatar = user.avatarEntity;
+    if (userAvatar) {
+      const getObjectParams = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: userAvatar.avatarName,
+      };
+      const command = new GetObjectCommand(getObjectParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+
+      user.avatar = url;
+      await this.usersRepository.save(user);
+    }
 
     if (followings) {
       for (const following of followings) {
@@ -224,8 +243,8 @@ export class UsersService {
       //update avatar
       const buffer = await sharp(file.buffer)
         .resize({
-          height: 64,
-          width: 64,
+          height: 2000,
+          width: 2000,
           withoutEnlargement: true,
           fit: 'inside',
         })
@@ -250,7 +269,19 @@ export class UsersService {
 
       const command = new PutObjectCommand(paramsToS3);
       try {
-        return await s3.send(command);
+        await s3.send(command);
+        const getObjectParams = {
+          Bucket: process.env.BUCKET_NAME,
+          Key: avatarImageName,
+        };
+        const getObjectCommand = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, getObjectCommand, {
+          expiresIn: 3600,
+        });
+
+        user.avatar = url;
+        await this.usersRepository.save(user);
+        return 'Profile updated sucesfully with avatar';
       } catch (error) {
         return 'Failed uploading avatar to s3 bucket';
       }

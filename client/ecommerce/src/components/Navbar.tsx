@@ -27,7 +27,6 @@ import {
 } from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Link, Redirect, useLocation } from "wouter";
-import { useQueryClient } from "@tanstack/react-query";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",

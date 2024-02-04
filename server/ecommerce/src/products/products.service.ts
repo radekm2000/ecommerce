@@ -73,9 +73,19 @@ export class ProductsService {
           Key: image.imageName,
         };
         const command = new GetObjectCommand(getObjectParams);
-        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+        const url = await getSignedUrl(s3, command, { expiresIn: 36000 });
 
         image.imageUrl = url;
+      }
+      if (product.user.avatarEntity) {
+        const getObjectParams = {
+          Bucket: process.env.BUCKET_NAME,
+          Key: product.user.avatarEntity.avatarName,
+        };
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 36000 });
+
+        product.user.avatar = url;
       }
     }
     return products;

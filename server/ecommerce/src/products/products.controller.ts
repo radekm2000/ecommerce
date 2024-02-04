@@ -6,16 +6,23 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  Res,
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  UsePipes,
 } from '@nestjs/common';
 import 'dotenv/config';
 import * as sharp from 'sharp';
+import Stripe from 'stripe';
 
 import { FileInterceptor } from '@nestjs/platform-express';
 import { randomUUID } from 'crypto';
-import { createProductFromJson } from 'src/utils/dtos/product.dto';
+import {
+  ProductWithImageAndUser,
+  ProductWithImageAndUserSchema,
+  createProductFromJson,
+} from 'src/utils/dtos/product.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { PutObjectCommand, PutObjectCommandInput } from '@aws-sdk/client-s3';
@@ -27,6 +34,10 @@ import { Repository } from 'typeorm';
 import { Image } from 'src/utils/entities/image.entity';
 import { ProductsService } from './products.service';
 import { QueryParams } from 'src/utils/dtos/types';
+import { ZodValidationPipe } from 'src/utils/pipes/ZodValidationPipe';
+import { Response } from 'express';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
 @Controller('products')
 export class ProductsController {
   constructor(
@@ -69,6 +80,45 @@ export class ProductsController {
     console.log(userId);
     const products = await this.productsService.getUserProducts(userId);
     return products;
+  }
+
+  @Post('create-checkout-session')
+  @UseGuards(AuthGuard)
+  @UsePipes(new ZodValidationPipe(ProductWithImageAndUserSchema))
+  async createStripeCheckoutSession(
+    @AuthUser() authUser: AuthUser,
+    @Body() dto: ProductWithImageAndUser,
+    @Res() res: Response,
+  ) {
+    const session = await stripe.checkout.sessions.create({
+      line_items: [
+        {
+          price_data: {
+            currency: 'usd',
+            product_data: {
+              name: `${dto.title}`,
+              images: [dto.images[0].imageUrl],
+            },
+            unit_amount: dto.price * 100,
+          },
+
+          quantity: 1,
+        },
+      ],
+
+      payment_method_types: ['card'],
+      mode: 'payment',
+      success_url: 'http://localhost:5173/success',
+      cancel_url: 'http://localhost:5173/cancel',
+      custom_text: {
+        submit: {
+          message: 'Card number 4242 4242 4242 4242 for succesfull payment ',
+        },
+      },
+    });
+    res.json({
+      url: session.url,
+    });
   }
 
   @Post('upload')

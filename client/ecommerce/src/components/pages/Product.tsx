@@ -1,13 +1,20 @@
 import { useLocation, useParams } from "wouter";
 import { useSingleProduct } from "../../hooks/useSingleProduct";
-import { Box, Typography } from "@mui/material";
+import { Box, Button, Typography } from "@mui/material";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { useGivenUserProducts } from "../../hooks/useGivenUserProducts";
 import { DisplayUserProducts } from "../DisplayUserProducts";
 import { ProductWithImageAndUser } from "../../types/types";
 import { DisplayUserInfo } from "../ProductPage/DisplayUserInfo";
+import { loadStripe } from "@stripe/stripe-js";
+import { sendProductInfoToCheckout } from "../../api/axios";
+import { useElements, useStripe } from "@stripe/react-stripe-js";
+import { useMutation } from "@tanstack/react-query";
 
 export const Product = () => {
+  const stripe = useStripe();
+  const elements = useElements();
+
   const below960 = useMediaQuery(960);
   const below800 = useMediaQuery(800);
   const params = useParams();
@@ -18,7 +25,17 @@ export const Product = () => {
     isLoading,
     isFetching,
   } = useSingleProduct(parseInt(productId!));
-
+  const mutation = useMutation({
+    mutationFn: sendProductInfoToCheckout,
+    mutationKey: ["stripe"],
+    onSuccess: (data) => {
+      window.location.href = data.url;
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
+  const { mutate } = mutation;
   const { data: userProducts, isLoading: isUserProductsLoading } =
     useGivenUserProducts(product?.user.id, product);
   if (isLoading) {
@@ -41,6 +58,16 @@ export const Product = () => {
   console.log(productsWithoutMainOne);
 
   const productAuthorId = product.user.id;
+
+  const handleCheckout = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    if (!stripe) {
+      return;
+    }
+    mutate(product);
+  };
 
   return (
     <Box
@@ -190,6 +217,31 @@ export const Product = () => {
                 {product?.description}
               </Typography>
             </Box>
+          </Box>
+          <Box
+            sx={{
+              display: "flex",
+              width: "100%",
+              padding: "0px 16px",
+            }}
+          >
+            <Button
+              onClick={(e) => handleCheckout(e)}
+              sx={{
+                display: "flex",
+                width: "100%",
+                textTransform: "none",
+                color: "white",
+                backgroundColor: "#007782",
+                justifyContent: "center",
+                alignItems: "center",
+                "&:hover": {
+                  backgroundColor: "#007782",
+                },
+              }}
+            >
+              Buy now
+            </Button>
           </Box>
 
           <DisplayUserInfo userId={productAuthorId} product={product} />

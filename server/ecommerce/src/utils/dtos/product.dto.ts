@@ -25,3 +25,33 @@ export const createProductFromJson = (
     );
   }
 };
+
+const Image = z.object({
+  id: z.number(),
+  imageName: z.string(),
+  imageUrl: z.string(),
+});
+
+const User = z.object({
+  id: z.number(),
+  username: z.string(),
+  googleId: z.string().or(z.null()),
+  email: z.string(),
+  role: z.enum(['user', 'admin']),
+  avatar: z.string().or(z.null()),
+});
+
+export const ProductWithImageAndUserSchema = z.object({
+  id: z.number(),
+  brand: z.string(),
+  category: z.enum(['Women', 'Men', 'Unisex']),
+  title: z.string(),
+  description: z.string(),
+  price: z.number(),
+  images: z.array(Image),
+  user: User,
+});
+
+export type ProductWithImageAndUser = z.infer<
+  typeof ProductWithImageAndUserSchema
+>;

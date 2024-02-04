@@ -16,62 +16,79 @@ import { Inbox } from "./components/pages/Inbox";
 import SearchTextResults from "./components/pages/SearchTextResults";
 import { EditProfile } from "./components/pages/EditProfile";
 import { ProductProvider } from "./contexts/ProductContext";
+import { PaymentSuccess } from "./components/pages/PaymentSuccess";
+import { PaymentCancel } from "./components/pages/PaymentCancel";
+import { Elements } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
+
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
+
 function App() {
   return (
     <>
       <UserProvider>
         <ProductProvider>
-          <Switch>
-            <Route path="/register" component={Register}></Route>
-            <Route path="/login" component={Login}></Route>
-            <Route path="/">
-              <Navbar />
-              <MainPage />
-            </Route>
-            <Route path="/products/:productId-:productTitle">
-              <Navbar />
-              <Product />
-            </Route>
-            <Route path="/members/:userId">
-              <Navbar />
-              <Member />
-            </Route>
-            <Route path="/products/new">
-              <Navbar />
-              <AddProduct />
-            </Route>
-            <Route path="/members/:userId/followers">
-              <Navbar />
-              <Followers />
-            </Route>
-            <Route path="/settings/profile">
-              <Navbar />
-              <EditProfile />
-            </Route>
-            <Route path="/catalog/men">
-              <Navbar />
-              <MenCatalog />
-            </Route>
-            <Route path="/catalog/women">
-              <Navbar />
-              <WomenCatalog />
-            </Route>
-            <Route path="/q/:search_text?">
-              <Navbar />
-              <SearchTextResults />
-            </Route>
-            <Route path="/inbox/:userId*">
-              <Navbar />
-              <Inbox />
-            </Route>
+          <Elements stripe={stripePromise}>
+            <Switch>
+              <Route path="/register" component={Register}></Route>
+              <Route path="/login" component={Login}></Route>
+              <Route path="/">
+                <Navbar />
+                <MainPage />
+              </Route>
+              <Route path="/products/:productId-:productTitle">
+                <Navbar />
+                <Product />
+              </Route>
+              <Route path="/members/:userId">
+                <Navbar />
+                <Member />
+              </Route>
+              <Route path="/products/new">
+                <Navbar />
+                <AddProduct />
+              </Route>
+              <Route path="/members/:userId/followers">
+                <Navbar />
+                <Followers />
+              </Route>
+              <Route path="/settings/profile">
+                <Navbar />
+                <EditProfile />
+              </Route>
+              <Route path="/catalog/men">
+                <Navbar />
+                <MenCatalog />
+              </Route>
+              <Route path="/catalog/women">
+                <Navbar />
+                <WomenCatalog />
+              </Route>
+              <Route path="/q/:search_text?">
+                <Navbar />
+                <SearchTextResults />
+              </Route>
+              <Route path="/inbox/:userId*">
+                <Navbar />
+                <Inbox />
+              </Route>
+              <Route path="/success">
+                <Navbar />
+                <PaymentSuccess />
+              </Route>
+              <Route path="/cancel">
+                <Navbar />
+                <PaymentCancel />
+              </Route>
 
-            <Route path="/members/:userId/followings">
-              <Navbar />
-              <Followings />
-            </Route>
-            <Route path="/:rest*">{() => <Redirect to="/" />}</Route>
-          </Switch>
-          <Toaster />
+              <Route path="/members/:userId/followings">
+                <Navbar />
+                <Followings />
+              </Route>
+              <Route path="/:rest*">{() => <Redirect to="/" />}</Route>
+            </Switch>
+            <Toaster />
+          </Elements>
         </ProductProvider>
       </UserProvider>
     </>

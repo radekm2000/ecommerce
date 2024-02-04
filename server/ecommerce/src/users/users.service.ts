@@ -144,7 +144,7 @@ export class UsersService {
         Key: userAvatar.avatarName,
       };
       const command = new GetObjectCommand(getObjectParams);
-      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+      const url = await getSignedUrl(s3, command, { expiresIn: 360000 });
 
       user.avatar = url;
       await this.usersRepository.save(user);

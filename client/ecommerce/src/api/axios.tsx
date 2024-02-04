@@ -167,3 +167,10 @@ export const updateProfile = async (formData: FormData) => {
   });
   return response.data;
 };
+
+export const sendProductInfoToCheckout = async (
+  product: ProductWithImageAndUser
+) => {
+  const response = await axiosApi.post("products/create-checkout-session", product);
+  return response.data;
+};

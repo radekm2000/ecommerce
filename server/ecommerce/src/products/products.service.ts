@@ -243,4 +243,8 @@ export class ProductsService {
     const validOrders: Order[] = ['price_high_to_low', 'price_low_to_high'];
     return validOrders.includes(order as Order);
   }
+
+  async deleteProduct(productId: number) {
+    return await this.productRepository.delete({ id: productId });
+  }
 }

@@ -73,7 +73,6 @@ function App() {
                 <Inbox />
               </Route>
               <Route path="/success">
-                <Navbar />
                 <PaymentSuccess />
               </Route>
               <Route path="/cancel">

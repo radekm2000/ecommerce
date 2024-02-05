@@ -6,20 +6,22 @@ import { useGivenUserProducts } from "../../hooks/useGivenUserProducts";
 import { DisplayUserProducts } from "../DisplayUserProducts";
 import { ProductWithImageAndUser } from "../../types/types";
 import { DisplayUserInfo } from "../ProductPage/DisplayUserInfo";
-import { loadStripe } from "@stripe/stripe-js";
 import { sendProductInfoToCheckout } from "../../api/axios";
-import { useElements, useStripe } from "@stripe/react-stripe-js";
+import { useStripe } from "@stripe/react-stripe-js";
 import { useMutation } from "@tanstack/react-query";
+import { useUserContext } from "../../contexts/UserContext";
+import { useEffect, useState } from "react";
+import { useDeleteProduct } from "../../hooks/useDeleteProduct";
 
 export const Product = () => {
   const stripe = useStripe();
-  const elements = useElements();
-
+  const { user } = useUserContext();
   const below960 = useMediaQuery(960);
   const below800 = useMediaQuery(800);
   const params = useParams();
   const [, setLocation] = useLocation();
   const productId = params?.productId;
+
   const {
     data: product,
     isLoading,
@@ -35,9 +37,11 @@ export const Product = () => {
       console.log(err);
     },
   });
+  const { mutate: deleteProductMutate } = useDeleteProduct(product?.id);
   const { mutate } = mutation;
   const { data: userProducts, isLoading: isUserProductsLoading } =
     useGivenUserProducts(product?.user.id, product);
+  const productAuthorId = product?.user.id;
   if (isLoading) {
     return "isLoading...";
   }
@@ -50,15 +54,13 @@ export const Product = () => {
   if (isUserProductsLoading) {
     return "isUserProductsLoading...";
   }
-  console.log(product);
 
   const productsWithoutMainOne = userProducts?.filter(
     (userProduct) => userProduct.id != product?.id
   );
-  console.log(productsWithoutMainOne);
-
-  const productAuthorId = product.user.id;
-
+  if (!productAuthorId) {
+    return;
+  }
   const handleCheckout = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
@@ -69,6 +71,12 @@ export const Product = () => {
     mutate(product);
   };
 
+  const handleDeleteProduct = async (
+    e: React.MouseEvent<HTMLButtonElement, MouseEvent>
+  ) => {
+    e.preventDefault();
+    deleteProductMutate(product.id);
+  };
   return (
     <Box
       sx={{
@@ -225,23 +233,46 @@ export const Product = () => {
               padding: "0px 16px",
             }}
           >
-            <Button
-              onClick={(e) => handleCheckout(e)}
-              sx={{
-                display: "flex",
-                width: "100%",
-                textTransform: "none",
-                color: "white",
-                backgroundColor: "#007782",
-                justifyContent: "center",
-                alignItems: "center",
-                "&:hover": {
+            {productAuthorId === user.id ? (
+              <Button
+                variant="outlined"
+                onClick={(e) => handleDeleteProduct(e)}
+                sx={{
+                  display: "flex",
+                  width: "100%",
+                  textTransform: "none",
+                  border: "1px solid red",
+                  color: "red",
+                  backgroundColor: "white",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  "&:hover": {
+                    border: "1px solid red",
+                    backgroundColor: "white",
+                  },
+                }}
+              >
+                Delete
+              </Button>
+            ) : (
+              <Button
+                onClick={(e) => handleCheckout(e)}
+                sx={{
+                  display: "flex",
+                  width: "100%",
+                  textTransform: "none",
+                  color: "white",
                   backgroundColor: "#007782",
-                },
-              }}
-            >
-              Buy now
-            </Button>
+                  justifyContent: "center",
+                  alignItems: "center",
+                  "&:hover": {
+                    backgroundColor: "#007782",
+                  },
+                }}
+              >
+                Buy now
+              </Button>
+            )}
           </Box>
 
           <DisplayUserInfo userId={productAuthorId} product={product} />

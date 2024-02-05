@@ -4,14 +4,14 @@ import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutli
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import { useMediaQuery } from "../hooks/useMediaQuery";
-import { User, UserWithFollows } from "../types/types";
+import { ExtendedUserWithProfile, User, UserWithFollows } from "../types/types";
 import { useUserContext } from "../contexts/UserContext";
 import RssFeedIcon from "@mui/icons-material/RssFeed";
 import { useEffect, useState } from "react";
 import { useFollowUser } from "../utils/followUser";
 import { Link, useLocation } from "wouter";
 import { QueryClient } from "@tanstack/react-query";
-export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
+export const ProfileInfo = ({ user }: { user: ExtendedUserWithProfile }) => {
   const { user: meUser } = useUserContext();
   const [, setLocation] = useLocation();
 
@@ -322,10 +322,16 @@ export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
                     gap: "5px",
                   }}
                 >
-                  <LocationOnOutlinedIcon
-                    sx={{ width: "16px", height: "16px", color: "grey" }}
-                  />
-                  <Typography color={"#4D4D4D"}>Poland</Typography>
+                  {user?.profile?.country ? (
+                    <>
+                      <LocationOnOutlinedIcon
+                        sx={{ width: "16px", height: "16px", color: "grey" }}
+                      />
+                      <Typography color={"#4D4D4D"}>
+                        {user.profile?.country}
+                      </Typography>
+                    </>
+                  ) : null}
                 </Box>
                 <Box
                   sx={{
@@ -363,7 +369,9 @@ export const ProfileInfo = ({ user }: { user: UserWithFollows }) => {
                     display: "flex",
                   }}
                 >
-                  <Typography color={"#4D4D4D"}>good reputation</Typography>
+                  <Typography color={"#4D4D4D"}>
+                    {user?.profile?.aboutYou ? user.profile.aboutYou : ""}
+                  </Typography>
                 </Box>
               </Box>
               <Box

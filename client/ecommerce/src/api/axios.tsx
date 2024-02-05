@@ -2,6 +2,7 @@ import axios from "axios";
 import {
   Brand,
   Conversation,
+  ExtendedUserWithProfile,
   LoginInput,
   LoginResponseData,
   ProductWithImage,
@@ -91,7 +92,9 @@ export const getProducts = async (): Promise<ProductWithImageAndUser[]> => {
   return response.data;
 };
 
-export const getUserData = async (userId: number): Promise<UserWithFollows> => {
+export const getUserData = async (
+  userId: number
+): Promise<ExtendedUserWithProfile> => {
   const response = await axiosApi.get(`users/${userId}`);
   return response.data;
 };
@@ -171,6 +174,14 @@ export const updateProfile = async (formData: FormData) => {
 export const sendProductInfoToCheckout = async (
   product: ProductWithImageAndUser
 ) => {
-  const response = await axiosApi.post("products/create-checkout-session", product);
+  const response = await axiosApi.post(
+    "products/create-checkout-session",
+    product
+  );
+  return response.data;
+};
+
+export const deleteProduct = async (productId: number) => {
+  const response = await axiosApi.delete(`products/${productId}`);
   return response.data;
 };

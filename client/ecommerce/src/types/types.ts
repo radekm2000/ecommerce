@@ -62,24 +62,32 @@ export type UserWithoutProductsRelation = Omit<User, "products">;
 export type ProductWithImageAndUser = {
   id: number;
   brand: string;
-  category: "Men" | "Women"
+  category: "Men" | "Women";
   title: string;
   description: string;
   price: number;
   images: Image[];
   user: UserWithoutProductsRelation;
 };
+export type UserProfile = {
+  country: string;
+  aboutYou: string;
+};
+
+export type ExtendedUserWithProfile = UserWithFollows & {
+  profile?: UserProfile;
+};
 
 export type SingleProduct = {
   id: number;
   brand: string;
-  category: "Men" | "Women" | 'Unisex'
+  category: "Men" | "Women" | "Unisex";
   title: string;
   description: string;
   price: number;
   images: Image[];
-  user: User
-}
+  user: User;
+};
 
 export type UserWithFollows = User & {
   followers?: Followers[];

@@ -3,16 +3,15 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Conversation, UserWithFollows } from "../types/types";
 import { getRecipientFromConversation } from "../utils/getRecipientFromConversation";
 import { useUserContext } from "../contexts/UserContext";
-import { useState } from "react";
 
 export const InboxChatNavbar = ({
   selectedUserConversation,
   setIsConversationDetailsOpen,
-  isConversationDetailsOpen
+  isConversationDetailsOpen,
 }: {
   selectedUserConversation: Conversation | undefined;
   setIsConversationDetailsOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  isConversationDetailsOpen: boolean
+  isConversationDetailsOpen: boolean;
 }) => {
   const { user } = useUserContext();
   const recipientOfConversation = getRecipientFromConversation(
@@ -21,7 +20,7 @@ export const InboxChatNavbar = ({
   );
 
   const handleInfoChatClick = () => {
-    setIsConversationDetailsOpen(!isConversationDetailsOpen)
+    setIsConversationDetailsOpen(!isConversationDetailsOpen);
   };
   return (
     <Box
@@ -35,10 +34,10 @@ export const InboxChatNavbar = ({
         padding: "4px",
       }}
     >
-      <Typography sx={{ color: "#007782", margin: "0 auto" }}>
+      <Typography sx={{ color: "black", margin: "0 auto" }}>
         {recipientOfConversation
           ? recipientOfConversation.username
-          : "new Message"}
+          : "New Message"}
       </Typography>
       <Button
         onClick={handleInfoChatClick}

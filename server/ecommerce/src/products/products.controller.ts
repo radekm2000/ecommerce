@@ -1,11 +1,14 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   ParseIntPipe,
   Post,
   Query,
+  RawBodyRequest,
+  Req,
   Res,
   UploadedFile,
   UseGuards,
@@ -35,7 +38,7 @@ import { Image } from 'src/utils/entities/image.entity';
 import { ProductsService } from './products.service';
 import { QueryParams } from 'src/utils/dtos/types';
 import { ZodValidationPipe } from 'src/utils/pipes/ZodValidationPipe';
-import { Response } from 'express';
+import { Request, Response } from 'express';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 @Controller('products')
@@ -80,6 +83,11 @@ export class ProductsController {
     console.log(userId);
     const products = await this.productsService.getUserProducts(userId);
     return products;
+  }
+
+  @Delete(':id')
+  async deleteProduct(@Param('id', ParseIntPipe) productId: number) {
+    return await this.productsService.deleteProduct(productId);
   }
 
   @Post('create-checkout-session')

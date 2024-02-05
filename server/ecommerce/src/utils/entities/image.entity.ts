@@ -12,6 +12,8 @@ export class Image {
   @Column()
   imageName: string;
 
-  @ManyToOne(() => Product, (product) => product.images)
+  @ManyToOne(() => Product, (product) => product.images, {
+    createForeignKeyConstraints: false,
+  })
   product: Product;
 }

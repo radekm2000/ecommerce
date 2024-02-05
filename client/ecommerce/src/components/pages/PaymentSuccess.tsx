@@ -1,11 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  CardContent,
-  IconButton,
-  Typography,
-} from "@mui/material";
+import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 import { useLocation } from "wouter";
 export const PaymentSuccess = () => {
@@ -13,12 +6,13 @@ export const PaymentSuccess = () => {
   const handleButtonClick = () => {
     setLocation("/");
   };
+
   return (
     <Box
       sx={{
         backgroundColor: "rgba(37,44,51,0.08)",
         display: "flex",
-        height: "78vh",
+        height: "95vh",
         padding: "16px 30px",
         alignItems: "center",
         justifyContent: "center",

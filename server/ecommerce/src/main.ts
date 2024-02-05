@@ -16,6 +16,7 @@ export const s3 = new S3Client({
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.use(cookieParser());
+
   app.enableCors({
     origin: ['http://localhost:5173', 'https://checkout.stripe.com'],
     credentials: true,

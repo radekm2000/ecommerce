@@ -13,7 +13,15 @@ describe('Users findUser method ', () => {
       findOne: () => jest.fn().mockResolvedValue(false),
     } as any;
 
-    const usersService = new UsersService(userRepositoryMock);
+    const followRepositoryMock = {} as any;
+    const profileRepository = {} as any;
+    const avatarRepository = {} as any;
+    const usersService = new UsersService(
+      followRepositoryMock,
+      userRepositoryMock,
+      profileRepository,
+      avatarRepository,
+    );
     try {
       await usersService.findUser({
         username: userDto.username,
@@ -33,8 +41,16 @@ describe('Users findUser method ', () => {
     const userRepositoryMock = {
       findOne: jest.fn().mockResolvedValue(userDto),
     } as any;
+    const followRepositoryMock = {} as any;
+    const profileRepository = {} as any;
+    const avatarRepository = {} as any;
 
-    const usersService = new UsersService(userRepositoryMock);
+    const usersService = new UsersService(
+      followRepositoryMock,
+      userRepositoryMock,
+      profileRepository,
+      avatarRepository,
+    );
     try {
       const result = await usersService.findUser({
         username: userDto.username,
@@ -56,8 +72,16 @@ describe('Users register method', () => {
     const userRepositoryMock = {
       findOne: jest.fn().mockResolvedValue(userMockInDb),
     } as any;
+    const followRepositoryMock = {} as any;
+    const profileRepository = {} as any;
+    const avatarRepository = {} as any;
 
-    const usersService = new UsersService(userRepositoryMock);
+    const usersService = new UsersService(
+      followRepositoryMock,
+      userRepositoryMock,
+      profileRepository,
+      avatarRepository,
+    );
     const dto: RegisterUserDto = {
       username: 'usermock',
       password: 'somepassword',
@@ -81,8 +105,16 @@ describe('Users register method', () => {
     const userRepositoryMock = {
       findOne: jest.fn().mockResolvedValue(userMockInDb),
     } as any;
+    const followRepositoryMock = {} as any;
+    const profileRepository = {} as any;
+    const avatarRepository = {} as any;
 
-    const usersService = new UsersService(userRepositoryMock);
+    const usersService = new UsersService(
+      followRepositoryMock,
+      userRepositoryMock,
+      profileRepository,
+      avatarRepository,
+    );
     const dto: RegisterUserDto = {
       username: 'usermock123',
       password: 'somepassword',
@@ -112,8 +144,15 @@ describe('Users register method', () => {
         .fn()
         .mockResolvedValue({ username: dto.username, email: dto.email, id: 1 }),
     } as any;
-
-    const usersService = new UsersService(userRepositoryMock);
+    const followRepositoryMock = {} as any;
+    const profileRepository = {} as any;
+    const avatarRepository = {} as any;
+    const usersService = new UsersService(
+      followRepositoryMock,
+      userRepositoryMock,
+      profileRepository,
+      avatarRepository,
+    );
 
     try {
       const user = await usersService.register(dto);

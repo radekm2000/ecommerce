@@ -29,6 +29,7 @@ export const Inbox = () => {
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const { data: conversations, isLoading: isConversationsLoading } =
     useAllConversations();
+  console.log(conversations);
 
   const { data: selectedUserData, isLoading: isSelectedUserDataLoading } =
     useUserInfo(selectedUserId);
@@ -69,6 +70,7 @@ export const Inbox = () => {
         return {
           ...recipient,
           lastMessageSent: conversation.lastMessageSent,
+          lastMessageSentAt: conversation.lastMessageSentAt,
         };
       }
     }

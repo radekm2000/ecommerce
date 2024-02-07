@@ -31,4 +31,7 @@ export class Conversation {
   @OneToOne(() => Message, { nullable: true })
   @JoinColumn()
   lastMessageSent: Message;
+
+  @UpdateDateColumn({})
+  lastMessageSentAt: Date;
 }

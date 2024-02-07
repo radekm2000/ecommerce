@@ -11,7 +11,6 @@ import { Avatar } from 'src/utils/entities/avatar.entity';
 
 export let config: PostgresConnectionOptions;
 if (process.env.IS_PRODUCTION === 'true') {
-  console.log('production');
 } else {
   config = {
     type: 'postgres',

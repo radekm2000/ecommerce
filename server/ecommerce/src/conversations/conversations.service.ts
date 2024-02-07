@@ -41,7 +41,7 @@ export class ConversationsService {
     return { conversation: newConversation, isNew: true };
   }
 
-  async getAllConversations() {
+  async getAllConversations(authUserId: number) {
     const conversations = await this.conversationRepository.find({
       relations: [
         'messages',
@@ -49,6 +49,10 @@ export class ConversationsService {
         'messages.author',
         'recipient',
         'creator',
+      ],
+      where: [
+        { creator: { id: authUserId } },
+        { recipient: { id: authUserId } },
       ],
     });
 

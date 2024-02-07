@@ -38,13 +38,21 @@ export const InboxChatContent = ({
               alignItems: "center",
             }}
           >
-            <Box sx={{ display: "flex" }}>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
               {message.author.username !== user.username ? (
                 message.author.avatar ? (
-                  <Avatar src={message.author.avatar} />
+                  <Avatar
+                    src={message.author.avatar}
+                    sx={{ marginRight: "5px" }}
+                  />
                 ) : (
                   <AccountCircle
-                    sx={{ color: "grey", width: "40px", height: "40px" }}
+                    sx={{
+                      color: "grey",
+                      width: "40px",
+                      height: "40px",
+                      marginRight: "5px",
+                    }}
                   />
                 )
               ) : null}

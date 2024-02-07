@@ -116,11 +116,12 @@ export type Conversation = {
   recipient: User;
   messages: Message[];
   lastMessageSent: Message;
-  lastMessageSentAt: Date;
+  lastMessageSentAt: string;
 };
 
 export type RecipientOfSidebarConversation = Omit<User, "products"> & {
   lastMessageSent: Message;
+  lastMessageSentAt: string;
 };
 export type Image = {
   id: number;

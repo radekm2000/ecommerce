@@ -21,7 +21,14 @@ export const InboxSidebar = ({
   const [, setLocation] = useLocation();
   const params = useParams();
   const userId = params?.userId;
-
+  const sortedRecipients = [...recipientsOfSidebarConversations!].sort(
+    (a, b) => {
+      const dateA = new Date(b.lastMessageSentAt).getTime();
+      const dateB = new Date(a.lastMessageSentAt).getTime();
+      const differenceInMilliseconds = dateA - dateB;
+      return differenceInMilliseconds;
+    }
+  );
   const handleOnUserClick = (userId: number) => {
     setSelectedUserId(userId);
     setLocation(`/inbox/${userId}`);
@@ -33,57 +40,55 @@ export const InboxSidebar = ({
         overflowY: "auto",
       }}
     >
-      {recipientsOfSidebarConversations ? (
-        recipientsOfSidebarConversations.map(
-          (recipientsOfSidebarConversation, index) => (
+      {sortedRecipients ? (
+        sortedRecipients.map((recipientsOfSidebarConversation, index) => (
+          <Box
+            key={index}
+            onClick={() =>
+              handleOnUserClick(recipientsOfSidebarConversation.id)
+            }
+            sx={{
+              cursor: "pointer",
+              display: "flex",
+              backgroundColor:
+                recipientsOfSidebarConversation.id === parseInt(userId!)
+                  ? "rgba(163, 157, 146, 0.1)"
+                  : null,
+              alignItems: "center",
+              padding: "16px",
+              "&:hover": {
+                backgroundColor: "rgba(163, 157, 146, 0.05)",
+              },
+            }}
+          >
+            {!recipientsOfSidebarConversation.avatar ? (
+              <AccountCircle
+                sx={{ width: "48px", height: "48px", color: "grey" }}
+              />
+            ) : (
+              <Avatar
+                sx={{ marginRight: "5px" }}
+                src={`${recipientsOfSidebarConversation.avatar}`}
+              />
+            )}
             <Box
-              key={index}
-              onClick={() =>
-                handleOnUserClick(recipientsOfSidebarConversation.id)
-              }
               sx={{
-                cursor: "pointer",
-                display: "flex",
-                backgroundColor:
-                  recipientsOfSidebarConversation.id === parseInt(userId!)
-                    ? "rgba(163, 157, 146, 0.1)"
-                    : null,
+                flexDirection: "column",
                 alignItems: "center",
-                padding: "16px",
-                "&:hover": {
-                  backgroundColor: "rgba(163, 157, 146, 0.05)",
-                },
+                justifyContent: "flex-start",
               }}
             >
-              {!recipientsOfSidebarConversation.avatar ? (
-                <AccountCircle
-                  sx={{ width: "48px", height: "48px", color: "grey" }}
-                />
-              ) : (
-                <Avatar
-                  sx={{ marginRight: "5px" }}
-                  src={`${recipientsOfSidebarConversation.avatar}`}
-                />
-              )}
-              <Box
-                sx={{
-                  flexDirection: "column",
-                  alignItems: "center",
-                  justifyContent: "flex-start",
-                }}
-              >
-                <Typography sx={{ fontSize: "16px" }}>
-                  {recipientsOfSidebarConversation.username}
-                </Typography>
-                <Typography sx={{ fontSize: "14px", color: "#4D4D4D" }}>
-                  {displayLastMessage(
-                    recipientsOfSidebarConversation.lastMessageSent.content
-                  )}
-                </Typography>
-              </Box>
+              <Typography sx={{ fontSize: "16px" }}>
+                {recipientsOfSidebarConversation.username}
+              </Typography>
+              <Typography sx={{ fontSize: "14px", color: "#4D4D4D" }}>
+                {displayLastMessage(
+                  recipientsOfSidebarConversation.lastMessageSent.content
+                )}
+              </Typography>
             </Box>
-          )
-        )
+          </Box>
+        ))
       ) : (
         <Typography>no messagessss</Typography>
       )}

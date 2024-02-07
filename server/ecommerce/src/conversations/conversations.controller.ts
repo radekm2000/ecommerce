@@ -16,8 +16,9 @@ export class ConversationsController {
   constructor(private conversationsService: ConversationsService) {}
 
   @Get()
-  async getAllConversations() {
-    return await this.conversationsService.getAllConversations();
+  @UseGuards(AuthGuard)
+  async getAllConversations(@AuthUser() authUser: AuthUser) {
+    return await this.conversationsService.getAllConversations(authUser.sub);
   }
 
   @Get(`users/:userId`)

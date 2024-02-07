@@ -15,7 +15,6 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { ProfileChangeSchema } from 'src/utils/dtos/user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -41,7 +40,6 @@ export class UsersController {
     @AuthUser() authUser: AuthUser,
   ) {
     const parsedContent = JSON.parse(body.data);
-    // const userInfo = ProfileChangeSchema.parse(parsedContent);
 
     const userInfo = parsedContent as {
       aboutYou?: string;

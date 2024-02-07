@@ -10,7 +10,6 @@ import RssFeedIcon from "@mui/icons-material/RssFeed";
 import { useEffect, useState } from "react";
 import { useFollowUser } from "../utils/followUser";
 import { Link, useLocation } from "wouter";
-import { QueryClient } from "@tanstack/react-query";
 export const ProfileInfo = ({ user }: { user: ExtendedUserWithProfile }) => {
   const { user: meUser } = useUserContext();
   const [, setLocation] = useLocation();

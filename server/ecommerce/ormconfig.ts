@@ -8,6 +8,7 @@ import { Follow } from 'src/utils/entities/followers.entity';
 import { Conversation } from 'src/utils/entities/conversation.entity';
 import { Message } from 'src/utils/entities/message.entity';
 import { Avatar } from 'src/utils/entities/avatar.entity';
+import { Notification } from 'src/utils/entities/notification.entity';
 
 export let config: PostgresConnectionOptions;
 if (process.env.IS_PRODUCTION === 'true') {
@@ -28,6 +29,7 @@ if (process.env.IS_PRODUCTION === 'true') {
       Conversation,
       Message,
       Avatar,
+      Notification,
     ],
     synchronize: true,
   };

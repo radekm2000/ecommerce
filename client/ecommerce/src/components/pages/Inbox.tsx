@@ -14,6 +14,7 @@ import { useUserInfo } from "../../hooks/useUserInfo";
 import { useUserConversations } from "../../hooks/useUserConversations";
 import { ConversationDetailsNavbar } from "../conversation-details/ConversationDetailsNavbar";
 import { ConversationDetailsContent } from "../conversation-details/ConversationDetailsContent";
+import { useNotificationsContext } from "../../contexts/ChatNotificationsContext";
 
 export const Inbox = () => {
   const params = useParams();
@@ -25,11 +26,10 @@ export const Inbox = () => {
   const below1600 = useMediaQuery(1600);
   const [isConversationDetailsOpen, setisConversationDetailsOpen] =
     useState<boolean>(false);
-
+  const { notifications, setNotifications } = useNotificationsContext();
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const { data: conversations, isLoading: isConversationsLoading } =
     useAllConversations();
-  console.log(conversations);
 
   const { data: selectedUserData, isLoading: isSelectedUserDataLoading } =
     useUserInfo(selectedUserId);
@@ -58,7 +58,6 @@ export const Inbox = () => {
       return param;
     }
   };
-  console.log(user);
   const recipientsOfSidebarConversations = (conversations ?? []).map(
     (conversation) => {
       if (user.username) {
@@ -76,9 +75,6 @@ export const Inbox = () => {
     }
   );
 
-  console.log(recipientsOfSidebarConversations);
-
-  console.log(conversations);
   const ExistingChat = () => {
     return (
       <Container

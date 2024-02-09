@@ -27,6 +27,8 @@ import {
 } from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Link, Redirect, useLocation } from "wouter";
+import { useNotificationsContext } from "../contexts/ChatNotificationsContext";
+import { useNotifications } from "../hooks/useNotifications";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -108,14 +110,22 @@ export const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
-  console.log(searchInputValue);
   const [, setLocation] = useLocation();
   const isMenuOpen = Boolean(anchorEl);
-
+  const { notifications, setNotifications } = useNotificationsContext();
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
+
+  const { data: notificationsReceived, isLoading: isNotificationsLoading } =
+    useNotifications(user.id);
+  if (isNotificationsLoading) {
+    return "isNotificationsLoading...";
+  }
+  if (notificationsReceived) {
+    setNotifications(notificationsReceived);
+  }
   const handleSearchTextClick = () => {
     const params = new URLSearchParams();
     if (searchInputValue) {
@@ -124,7 +134,6 @@ export const Navbar = () => {
       setSearchInputValue("");
     }
   };
-
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
   };
@@ -140,7 +149,9 @@ export const Navbar = () => {
   };
 
   const menuId = "primary-search-account-menu";
-
+  const shownNotificationsInboxNumber = notifications.filter(
+    (notification) => notification.isRead !== true
+  );
   const renderMenu = (
     <Menu
       anchorEl={anchorEl}
@@ -241,7 +252,7 @@ export const Navbar = () => {
             <Toolbar
               sx={{
                 padding: "8px 16px",
-                margin: below800 ? '0px 10px' : '0px 150px'
+                margin: below800 ? "0px 10px" : "0px 150px",
               }}
             >
               <Typography
@@ -342,7 +353,10 @@ export const Navbar = () => {
                     aria-label="show 4 new mails"
                     color="primary"
                   >
-                    <Badge color="error">
+                    <Badge
+                      badgeContent={shownNotificationsInboxNumber.length}
+                      color="error"
+                    >
                       <MailIcon />
                     </Badge>
                   </IconButton>
@@ -391,9 +405,17 @@ export const Navbar = () => {
           {renderMenu}
         </Box>
         {below800 ? (
-          <Box sx={{ padding: "16px 16px", width: "auto", justifyContent: 'center', display: 'block', flexDirection: 'row' }}>
+          <Box
+            sx={{
+              padding: "16px 16px",
+              width: "auto",
+              justifyContent: "center",
+              display: "block",
+              flexDirection: "row",
+            }}
+          >
             <Box sx={{ position: "relative" }}>
-              <Search sx={{ flexGrow: 1, width: '100%' }}>
+              <Search sx={{ flexGrow: 1, width: "100%" }}>
                 <SearchIconWrapper>
                   <SearchIcon color="primary" />
                 </SearchIconWrapper>

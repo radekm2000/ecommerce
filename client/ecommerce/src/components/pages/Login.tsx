@@ -15,7 +15,7 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { signInUser } from "../../api/axios";
 import toast from "react-hot-toast";
 import { Redirect } from "wouter";
@@ -23,13 +23,16 @@ import GoogleButton from "react-google-button";
 import { AxiosError } from "axios";
 import { LoginInput, LoginResponseData } from "../../types/types";
 import { useUserContext } from "../../contexts/UserContext";
+import { useNotifications } from "../../hooks/useNotifications";
+import { useNotificationsContext } from "../../contexts/ChatNotificationsContext";
 export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [redirect, setRedirect] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const { setUser } = useUserContext();
-
+  const queryClient = useQueryClient();
+  const { setNotifications } = useNotificationsContext();
   const handleClickShowPassword = () => setShowPassword((show) => !show);
 
   const handleMouseDownPassword = (
@@ -46,11 +49,13 @@ export const Login = () => {
   const loginMutation = useMutation<LoginResponseData, Error, LoginInput>({
     mutationFn: signInUser,
     mutationKey: ["login"],
-    onSuccess: (data) => {
+    onSuccess: async (data) => {
       toast.success("User logged in");
       localStorage.setItem("accessToken", data.accessToken);
       setUser(data.user);
       setRedirect(true);
+
+        
     },
     onError: (err) => {
       const error = err as AxiosError<Error>;
@@ -58,7 +63,9 @@ export const Login = () => {
       toast.error(message);
     },
   });
+
   const { mutate } = loginMutation;
+
   if (redirect) {
     return <Redirect to="/" />;
   }

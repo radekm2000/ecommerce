@@ -16,6 +16,7 @@ export const Member = () => {
   const below700 = useMediaQuery(700);
   const below1200 = useMediaQuery(1200);
   const params = useParams();
+  
   const userId = params?.userId;
   const { data: user, isLoading: isUserLoading } = useUserInfo(
     parseInt(userId!)

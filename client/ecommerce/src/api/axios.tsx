@@ -3,12 +3,15 @@ import {
   Brand,
   Conversation,
   ExtendedUserWithProfile,
+  FetchedNotifications,
   LoginInput,
   LoginResponseData,
+  Notification,
   ProductWithImage,
   ProductWithImageAndUser,
   ProductWithImageAndUserSchema,
   RegisterInput,
+  SimpleNotification,
   User,
   UserWithFollows,
 } from "../types/types";
@@ -183,5 +186,20 @@ export const sendProductInfoToCheckout = async (
 
 export const deleteProduct = async (productId: number) => {
   const response = await axiosApi.delete(`products/${productId}`);
+  return response.data;
+};
+
+export const fetchNotifications = async () => {
+  const response = await axiosApi.get("notifications");
+  return response.data as FetchedNotifications[];
+};
+
+export const addNotification = async (notification: Notification) => {
+  const response = await axiosApi.post("notifications", notification);
+  return response.data;
+};
+
+export const markNotificationsAsRead = async (senderId: number) => {
+  const response = await axiosApi.patch(`notifications`, { senderId });
   return response.data;
 };

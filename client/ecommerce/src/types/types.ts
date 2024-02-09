@@ -128,6 +128,20 @@ export type Image = {
   imageName: string;
   imageUrl: string;
 };
+export type FetchedNotifications = {
+  isRead: boolean;
+  sender: { id: number };
+  receiver: { id: number };
+  date?: string;
+};
+
+export type Notification = {
+  isRead: boolean;
+  senderId: number;
+  receiverId: number;
+  date?: string;
+};
+export type SimpleNotification = Omit<Notification, "receiverId" | "senderId">;
 
 export const imageSchema = z.object({
   id: z.number(),

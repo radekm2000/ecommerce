@@ -16,3 +16,10 @@ export type QueryParams = {
   category: 'Men' | 'Women' | 'All';
   search_text: string;
 };
+
+export type Notification = {
+  isRead: boolean;
+  date: Date;
+  senderId: number;
+  receiverId: number;
+};

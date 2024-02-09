@@ -1,7 +1,10 @@
-import { Avatar, Box, Typography } from "@mui/material";
+import { Avatar, Badge, Box, Typography } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useLocation, useParams } from "wouter";
 import { RecipientOfSidebarConversation } from "../types/types";
+import { useNotificationsContext } from "../contexts/ChatNotificationsContext";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { markNotificationsAsRead } from "../api/axios";
 const displayLastMessage = (message: string) => {
   if (message.length > 20) {
     return message.slice(0, 20).concat("...");
@@ -18,9 +21,23 @@ export const InboxSidebar = ({
     | RecipientOfSidebarConversation[]
     | undefined;
 }) => {
+  const { notifications, setNotifications } = useNotificationsContext();
+  console.log(notifications);
   const [, setLocation] = useLocation();
   const params = useParams();
   const userId = params?.userId;
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: markNotificationsAsRead,
+    mutationKey: [`notifications`, `update`],
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["notifications"] });
+      console.log(notifications);
+    },
+    onError: (err) => {
+      console.log(err);
+    },
+  });
   const sortedRecipients = [...recipientsOfSidebarConversations!].sort(
     (a, b) => {
       const dateA = new Date(b.lastMessageSentAt).getTime();
@@ -29,7 +46,25 @@ export const InboxSidebar = ({
       return differenceInMilliseconds;
     }
   );
+  const sortedRecipientsWithNotifications = sortedRecipients.map(
+    (sortedRecipient) => {
+      const recipientNotifications = notifications.filter((notification) => {
+        return notification.sender.id === sortedRecipient.id;
+      });
+      return { ...sortedRecipient, notifications: recipientNotifications };
+    }
+  );
   const handleOnUserClick = (userId: number) => {
+    const { mutate } = mutation;
+
+    // const userNotifications = notifications.filter(
+    //   (notification) => notification.sender.id === userId
+    // );
+
+    // const updatedUserNotifications = userNotifications.map((notification) => {
+    //   return { ...notification, isRead: true };
+    // });
+    mutate(userId);
     setSelectedUserId(userId);
     setLocation(`/inbox/${userId}`);
   };
@@ -40,55 +75,88 @@ export const InboxSidebar = ({
         overflowY: "auto",
       }}
     >
-      {sortedRecipients ? (
-        sortedRecipients.map((recipientsOfSidebarConversation, index) => (
-          <Box
-            key={index}
-            onClick={() =>
-              handleOnUserClick(recipientsOfSidebarConversation.id)
-            }
-            sx={{
-              cursor: "pointer",
-              display: "flex",
-              backgroundColor:
-                recipientsOfSidebarConversation.id === parseInt(userId!)
-                  ? "rgba(163, 157, 146, 0.1)"
-                  : null,
-              alignItems: "center",
-              padding: "16px",
-              "&:hover": {
-                backgroundColor: "rgba(163, 157, 146, 0.05)",
-              },
-            }}
-          >
-            {!recipientsOfSidebarConversation.avatar ? (
-              <AccountCircle
-                sx={{ width: "48px", height: "48px", color: "grey" }}
-              />
-            ) : (
-              <Avatar
-                sx={{ marginRight: "5px" }}
-                src={`${recipientsOfSidebarConversation.avatar}`}
-              />
-            )}
+      {sortedRecipientsWithNotifications ? (
+        sortedRecipientsWithNotifications.map(
+          (recipientsOfSidebarConversation, index) => (
             <Box
+              key={index}
+              onClick={() =>
+                handleOnUserClick(recipientsOfSidebarConversation.id)
+              }
               sx={{
-                flexDirection: "column",
+                cursor: "pointer",
+                display: "flex",
+                backgroundColor:
+                  recipientsOfSidebarConversation.id === parseInt(userId!)
+                    ? "rgba(163, 157, 146, 0.1)"
+                    : null,
                 alignItems: "center",
-                justifyContent: "flex-start",
+                padding: "16px",
+                "&:hover": {
+                  backgroundColor: "rgba(163, 157, 146, 0.05)",
+                },
               }}
             >
-              <Typography sx={{ fontSize: "16px" }}>
-                {recipientsOfSidebarConversation.username}
-              </Typography>
-              <Typography sx={{ fontSize: "14px", color: "#4D4D4D" }}>
-                {displayLastMessage(
-                  recipientsOfSidebarConversation.lastMessageSent.content
-                )}
-              </Typography>
+              {!recipientsOfSidebarConversation.avatar ? (
+                <AccountCircle
+                  sx={{ width: "48px", height: "48px", color: "grey" }}
+                />
+              ) : (
+                <Avatar
+                  sx={{ marginRight: "5px" }}
+                  src={`${recipientsOfSidebarConversation.avatar}`}
+                />
+              )}
+              <Box
+                sx={{
+                  flexDirection: "column",
+                  alignItems: "center",
+                  justifyContent: "flex-start",
+                }}
+              >
+                <Box sx={{ display: "flex", gap: "10px" }}>
+                  {recipientsOfSidebarConversation.notifications.length > 0 &&
+                  recipientsOfSidebarConversation.notifications.some(
+                    (notification) => !notification.isRead
+                  ) ? (
+                    <Badge
+                      color="error"
+                      badgeContent={
+                        recipientsOfSidebarConversation.notifications.filter(
+                          (notification) => !notification.isRead
+                        ).length
+                      }
+                    >
+                      <Typography sx={{ fontSize: "16px" }}>
+                        {recipientsOfSidebarConversation.username}
+                      </Typography>
+                    </Badge>
+                  ) : (
+                    <Typography sx={{ fontSize: "16px" }}>
+                      {recipientsOfSidebarConversation.username}
+                    </Typography>
+                  )}
+                  {/* <Box
+                    sx={{
+                      color: "white",
+                      borderRadius: "10%",
+                      backgroundColor: "red",
+                    }}
+                  >
+                    {recipientsOfSidebarConversation.notifications.length > 0
+                      ? recipientsOfSidebarConversation.notifications.length
+                      : undefined}
+                  </Box> */}
+                </Box>
+                <Typography sx={{ fontSize: "14px", color: "#4D4D4D" }}>
+                  {displayLastMessage(
+                    recipientsOfSidebarConversation.lastMessageSent.content
+                  )}
+                </Typography>
+              </Box>
             </Box>
-          </Box>
-        ))
+          )
+        )
       ) : (
         <Typography>no messagessss</Typography>
       )}

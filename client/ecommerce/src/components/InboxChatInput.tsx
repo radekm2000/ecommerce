@@ -9,6 +9,9 @@ import { useState } from "react";
 import { createConversationAndSendFirstMessage } from "../api/axios";
 import { useLocation } from "wouter";
 import { Conversation } from "../types/types";
+import { useNotificationsContext } from "../contexts/ChatNotificationsContext";
+import { useUserContext } from "../contexts/UserContext";
+import { useNotificationMutation } from "../hooks/useNotificationMutation";
 
 export const InboxChatInput = ({
   userId,
@@ -18,7 +21,7 @@ export const InboxChatInput = ({
   selectedUserConversation: Conversation | undefined;
 }) => {
   const queryClient = useQueryClient();
-
+  const { user: meUser } = useUserContext();
   const [message, setMessage] = useState<string>("");
   const [, setLocation] = useLocation();
   const mutation = useMutation({
@@ -40,6 +43,8 @@ export const InboxChatInput = ({
     },
   });
   const { mutate } = mutation;
+  const notificationMutation = useNotificationMutation();
+  const { mutate: mutateNotification } = notificationMutation;
   const handleKeyDown = (
     e: React.KeyboardEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -47,6 +52,11 @@ export const InboxChatInput = ({
       e.preventDefault();
       mutate(message);
       setMessage("");
+      mutateNotification({
+        isRead: false,
+        receiverId: parseInt(userId),
+        senderId: meUser.id,
+      });
     }
   };
   return (

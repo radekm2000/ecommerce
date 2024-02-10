@@ -21,8 +21,7 @@ export const InboxSidebar = ({
     | RecipientOfSidebarConversation[]
     | undefined;
 }) => {
-  const { notifications, setNotifications } = useNotificationsContext();
-  console.log(notifications);
+  const { notifications } = useNotificationsContext();
   const [, setLocation] = useLocation();
   const params = useParams();
   const userId = params?.userId;
@@ -32,7 +31,6 @@ export const InboxSidebar = ({
     mutationKey: [`notifications`, `update`],
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["notifications"] });
-      console.log(notifications);
     },
     onError: (err) => {
       console.log(err);
@@ -57,13 +55,6 @@ export const InboxSidebar = ({
   const handleOnUserClick = (userId: number) => {
     const { mutate } = mutation;
 
-    // const userNotifications = notifications.filter(
-    //   (notification) => notification.sender.id === userId
-    // );
-
-    // const updatedUserNotifications = userNotifications.map((notification) => {
-    //   return { ...notification, isRead: true };
-    // });
     mutate(userId);
     setSelectedUserId(userId);
     setLocation(`/inbox/${userId}`);
@@ -136,17 +127,6 @@ export const InboxSidebar = ({
                       {recipientsOfSidebarConversation.username}
                     </Typography>
                   )}
-                  {/* <Box
-                    sx={{
-                      color: "white",
-                      borderRadius: "10%",
-                      backgroundColor: "red",
-                    }}
-                  >
-                    {recipientsOfSidebarConversation.notifications.length > 0
-                      ? recipientsOfSidebarConversation.notifications.length
-                      : undefined}
-                  </Box> */}
                 </Box>
                 <Typography sx={{ fontSize: "14px", color: "#4D4D4D" }}>
                   {displayLastMessage(
@@ -158,7 +138,7 @@ export const InboxSidebar = ({
           )
         )
       ) : (
-        <Typography>no messagessss</Typography>
+        <Typography>no messages</Typography>
       )}
     </Box>
   );

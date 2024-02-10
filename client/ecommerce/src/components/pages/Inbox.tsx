@@ -26,7 +26,6 @@ export const Inbox = () => {
   const below1600 = useMediaQuery(1600);
   const [isConversationDetailsOpen, setisConversationDetailsOpen] =
     useState<boolean>(false);
-  const { notifications, setNotifications } = useNotificationsContext();
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
   const { data: conversations, isLoading: isConversationsLoading } =
     useAllConversations();

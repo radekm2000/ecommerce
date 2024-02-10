@@ -200,7 +200,10 @@ export const Navbar = () => {
             aria-label="show 4 new mails"
             color="inherit"
           >
-            <Badge color="error">
+            <Badge
+              color="error"
+              badgeContent={shownNotificationsInboxNumber.length}
+            >
               <MailIcon />
             </Badge>
           </IconButton>
@@ -256,7 +259,7 @@ export const Navbar = () => {
               }}
             >
               <Typography
-                onClick={() => setLocation("/")}
+                onClick={() => setLocation("/", { replace: true })}
                 color="#26a69a"
                 variant="h6"
                 noWrap

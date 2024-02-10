@@ -23,12 +23,20 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  CardMedia,
+  Popover,
   Tabs,
 } from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Link, Redirect, useLocation } from "wouter";
 import { useNotificationsContext } from "../contexts/ChatNotificationsContext";
 import { useNotifications } from "../hooks/useNotifications";
+import { useProductNotifications } from "../hooks/useProductNotifications";
+import { useProductNotificationsContext } from "../contexts/ProductNotificationContext";
+import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
+import { ProductNotification } from "../types/types";
+import { useMarkProductNotificationAsRead } from "../hooks/useMarkProductNotificationAsRead";
+import PopoverPopupState from "./PopoverPopupState";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -103,10 +111,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export const Navbar = () => {
   const below1000 = useMediaQuery(1000);
+
   const [searchInputValue, setSearchInputValue] = useState("");
   const [value, setValue] = useState(0);
   const below800 = useMediaQuery(800);
   const { user } = useUserContext();
+  const { productNotifications, setProductNotifications } =
+    useProductNotificationsContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -118,6 +129,16 @@ export const Navbar = () => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleProductNotificationsIconClick = () => {
+    markProductNotificationsAsRead();
+  };
+  const {
+    data: productNotificationsReceived,
+    isLoading: isProductNotificationsLoading,
+  } = useProductNotifications(user.id);
+
+  const mutation = useMarkProductNotificationAsRead();
+  const { mutate: markProductNotificationsAsRead } = mutation;
   const { data: notificationsReceived, isLoading: isNotificationsLoading } =
     useNotifications(user.id);
   if (isNotificationsLoading) {
@@ -126,6 +147,13 @@ export const Navbar = () => {
   if (notificationsReceived) {
     setNotifications(notificationsReceived);
   }
+  if (productNotificationsReceived) {
+    setProductNotifications(productNotificationsReceived);
+  }
+  if (isProductNotificationsLoading) {
+    return "isProductNotificationsLoading...";
+  }
+  console.log(productNotifications);
   const handleSearchTextClick = () => {
     const params = new URLSearchParams();
     if (searchInputValue) {
@@ -195,11 +223,7 @@ export const Navbar = () => {
     >
       <MenuItem onClick={handleMobileMenuClose}>
         <Link to="/inbox">
-          <IconButton
-            size="large"
-            aria-label="show 4 new mails"
-            color="inherit"
-          >
+          <IconButton size="large" aria-label="show  new mails" color="inherit">
             <Badge
               color="error"
               badgeContent={shownNotificationsInboxNumber.length}
@@ -213,10 +237,10 @@ export const Navbar = () => {
       <MenuItem>
         <IconButton
           size="large"
-          aria-label="show 17 new notifications"
+          aria-label="show  new notifications"
           color="inherit"
         >
-          <Badge color="error">
+          <Badge color="error" badgeContent={productNotifications.length}>
             <NotificationsIcon />
           </Badge>
         </IconButton>
@@ -364,15 +388,12 @@ export const Navbar = () => {
                     </Badge>
                   </IconButton>
                 </Link>
-                <IconButton
-                  size="large"
-                  aria-label="show 17 new notifications"
-                  color="primary"
-                >
-                  <Badge color="error">
-                    <NotificationsIcon />
-                  </Badge>
+                <IconButton onClick={handleProductNotificationsIconClick}>
+                  <PopoverPopupState
+                    productNotifications={productNotifications}
+                  />
                 </IconButton>
+
                 <IconButton
                   size="large"
                   edge="end"

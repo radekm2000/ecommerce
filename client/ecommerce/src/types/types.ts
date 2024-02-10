@@ -109,6 +109,13 @@ export type Message = {
   content: string;
   author: User;
 };
+export type ProductNotification = {
+  id: number;
+  message: string;
+  isRead: boolean;
+  product: ProductWithImageAndUser;
+  receiverId: number;
+};
 
 export type Conversation = {
   id: number;

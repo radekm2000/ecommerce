@@ -12,6 +12,7 @@ import { ConversationsModule } from './conversations/conversations.module';
 import { MessagesModule } from './messages/messages.module';
 import { AvatarsModule } from './avatars/avatars.module';
 import { NotificationsModule } from './notifications/notifications.module';
+import { ProductNotificationModule } from './product-notification/product-notification.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     MessagesModule,
     AvatarsModule,
     NotificationsModule,
+    ProductNotificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],

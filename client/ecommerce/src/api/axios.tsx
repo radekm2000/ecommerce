@@ -7,6 +7,7 @@ import {
   LoginInput,
   LoginResponseData,
   Notification,
+  ProductNotification,
   ProductWithImage,
   ProductWithImageAndUser,
   ProductWithImageAndUserSchema,
@@ -202,4 +203,14 @@ export const addNotification = async (notification: Notification) => {
 export const markNotificationsAsRead = async (senderId: number) => {
   const response = await axiosApi.patch(`notifications`, { senderId });
   return response.data;
+};
+
+export const markProductNotificationsAsRead = async () => {
+  const response = await axiosApi.patch(`product-notifications`);
+  return response.data;
+};
+
+export const fetchProductNotifications = async () => {
+  const response = await axiosApi.get(`product-notifications`);
+  return response.data as ProductNotification[];
 };

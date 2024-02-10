@@ -36,4 +36,5 @@ export class Product {
 
   @ManyToOne(() => User, (user) => user.products, { cascade: true })
   user: User;
+  notifications: any;
 }

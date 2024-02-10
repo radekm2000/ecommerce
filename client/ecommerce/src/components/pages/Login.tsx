@@ -53,9 +53,9 @@ export const Login = () => {
       toast.success("User logged in");
       localStorage.setItem("accessToken", data.accessToken);
       setUser(data.user);
-      setRedirect(true);
-
-        
+      setTimeout(() => {
+        setRedirect(true);
+      }, 1000);
     },
     onError: (err) => {
       const error = err as AxiosError<Error>;

@@ -162,7 +162,6 @@ export const Navbar = () => {
   };
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
-    return <Redirect to="/inbox" />;
   };
 
   const handleMenuClose = () => {
@@ -220,7 +219,12 @@ export const Navbar = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={handleMobileMenuClose}>
+      <MenuItem
+        onClick={() => {
+          setLocation("inbox");
+          handleMobileMenuClose();
+        }}
+      >
         <Link to="/inbox">
           <IconButton size="large" aria-label="show  new mails" color="inherit">
             <Badge
@@ -233,18 +237,7 @@ export const Navbar = () => {
         </Link>
         <p>Messages</p>
       </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show  new notifications"
-          color="inherit"
-        >
-          <Badge color="error" badgeContent={productNotifications.length}>
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
+
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"

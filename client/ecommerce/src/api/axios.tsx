@@ -214,3 +214,8 @@ export const fetchProductNotifications = async () => {
   const response = await axiosApi.get(`product-notifications`);
   return response.data as ProductNotification[];
 };
+
+export const deleteProductNotifications = async () => {
+  const response = await axiosApi.delete(`product-notifications`);
+  return response.data;
+};

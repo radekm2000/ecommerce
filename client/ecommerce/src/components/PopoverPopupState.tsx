@@ -3,6 +3,7 @@ import { ProductNotification } from "../types/types";
 import {
   Badge,
   Box,
+  Button,
   Card,
   CardContent,
   CardMedia,
@@ -12,12 +13,18 @@ import {
 } from "@mui/material";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "wouter";
+import { useDeleteProductNotificationsMutation } from "../hooks/useDeleteProductNotificationsMutation";
 
 export default function PopoverPopupState({
   productNotifications,
 }: {
   productNotifications: ProductNotification[];
 }) {
+  const mutation = useDeleteProductNotificationsMutation();
+  const { mutate: deleteProductNotifications } = mutation;
+  const handleClearNotificationsClick = () => {
+    deleteProductNotifications();
+  };
   const notReadProductNotifications = productNotifications.filter(
     (n) => !n.isRead
   );
@@ -26,8 +33,8 @@ export default function PopoverPopupState({
       {(popupState) => (
         <>
           <IconButton
+            component="span"
             {...bindTrigger(popupState)}
-            size="large"
             aria-label="show new notifications"
             color="primary"
           >
@@ -93,6 +100,26 @@ export default function PopoverPopupState({
                     <Typography>No notifications</Typography>
                   </CardContent>
                 </Box>
+              )}
+              {productNotifications.length >= 1 && (
+                <Button
+                  component="span"
+                  onClick={handleClearNotificationsClick}
+                  variant="outlined"
+                  sx={{
+                    textTransform: "none",
+                    color: "#007782",
+                    width: "100%",
+                    padding: "16px",
+                    border: "none",
+                    "&: hover": {
+                      backgroundColor: "rgba(23, 23, 23, 0.05)",
+                      border: "none",
+                    },
+                  }}
+                >
+                  Clear notifications
+                </Button>
               )}
             </Card>
           </Popover>

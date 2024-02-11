@@ -43,7 +43,7 @@ export const PaymentCancel = () => {
               padding: "16px",
             }}
           />
-          <Typography sx={{ fontSize: "24px" }}>Payment Cancelled</Typography>
+          <Typography sx={{ fontSize: "24px" }}>Payment Canceled</Typography>
           <Button
             onClick={handleButtonClick}
             sx={{

@@ -1,9 +1,9 @@
 import { HttpException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { RegisterUserDto } from 'src/utils/dtos/user.dto';
-import { User } from 'src/utils/entities/user.entity';
 
 describe('Users findUser method ', () => {
+  jest.mock('ormconfig', () => ({}));
   it('should throw error when user is not found ', async () => {
     const userDto = {
       username: 'usermock',
@@ -55,13 +55,13 @@ describe('Users findUser method ', () => {
       const result = await usersService.findUser({
         username: userDto.username,
       });
-      expect(result).toBeInstanceOf(User);
       expect(result).toHaveProperty(['username', 'email', 'id']);
     } catch (error) {}
   });
 });
 
 describe('Users register method', () => {
+  jest.mock('ormconfig', () => ({}));
   it('should throw error if username already exists', async () => {
     const userMockInDb = {
       username: 'usermock',

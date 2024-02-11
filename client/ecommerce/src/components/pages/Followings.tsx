@@ -173,7 +173,7 @@ export const Followings = () => {
           </Box>
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
             {user?.followings?.map((following, index) => (
-              <Link to={`/members/${following.follower.id}`}>
+              <Link key={index} to={`/members/${following.follower.id}`}>
                 <Box
                   key={index}
                   sx={{

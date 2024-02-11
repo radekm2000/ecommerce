@@ -351,14 +351,14 @@ export const ProfileInfo = ({ user }: { user: ExtendedUserWithProfile }) => {
                     >
                       {user?.followers?.length || 0}
                     </Link>{" "}
-                    followers{" "}
+                    {user?.followers!.length > 1 ? "followers" : "follower"}{" "}
                     <Link
                       style={{ color: "#007782" }}
                       to={`/members/${user.id}/followings`}
                     >
                       {user?.followings?.length || 0}
                     </Link>{" "}
-                    followings
+                    {user.followings!.length > 1 ? "followings" : "following"}
                   </Typography>
                 </Box>
                 <Box

@@ -13,7 +13,6 @@ import Menu from "@mui/material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
-import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
@@ -29,6 +28,10 @@ import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Link, Redirect, useLocation } from "wouter";
 import { useNotificationsContext } from "../contexts/ChatNotificationsContext";
 import { useNotifications } from "../hooks/useNotifications";
+import { useProductNotifications } from "../hooks/useProductNotifications";
+import { useProductNotificationsContext } from "../contexts/ProductNotificationContext";
+import { useMarkProductNotificationAsRead } from "../hooks/useMarkProductNotificationAsRead";
+import PopoverPopupState from "./PopoverPopupState";
 
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
@@ -103,10 +106,13 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export const Navbar = () => {
   const below1000 = useMediaQuery(1000);
+
   const [searchInputValue, setSearchInputValue] = useState("");
   const [value, setValue] = useState(0);
   const below800 = useMediaQuery(800);
   const { user } = useUserContext();
+  const { productNotifications, setProductNotifications } =
+    useProductNotificationsContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -118,14 +124,33 @@ export const Navbar = () => {
     setAnchorEl(event.currentTarget);
   };
 
+  const handleProductNotificationsIconClick = () => {
+    markProductNotificationsAsRead();
+  };
+  const {
+    data: productNotificationsReceived,
+    isLoading: isProductNotificationsLoading,
+  } = useProductNotifications(user.id);
+
+  const mutation = useMarkProductNotificationAsRead();
+  const { mutate: markProductNotificationsAsRead } = mutation;
   const { data: notificationsReceived, isLoading: isNotificationsLoading } =
     useNotifications(user.id);
   if (isNotificationsLoading) {
     return "isNotificationsLoading...";
   }
-  if (notificationsReceived) {
-    setNotifications(notificationsReceived);
+  if (!notificationsReceived) {
+    return "Notifications not received yet";
   }
+
+  if (!productNotificationsReceived) {
+    return "Product notifications not received yet";
+  }
+  if (isProductNotificationsLoading) {
+    return "isProductNotificationsLoading...";
+  }
+  setNotifications(notificationsReceived);
+  setProductNotifications(productNotificationsReceived);
   const handleSearchTextClick = () => {
     const params = new URLSearchParams();
     if (searchInputValue) {
@@ -193,13 +218,14 @@ export const Navbar = () => {
       open={isMobileMenuOpen}
       onClose={handleMobileMenuClose}
     >
-      <MenuItem onClick={handleMobileMenuClose}>
+      <MenuItem
+        onClick={() => {
+          setLocation("inbox");
+          handleMobileMenuClose();
+        }}
+      >
         <Link to="/inbox">
-          <IconButton
-            size="large"
-            aria-label="show 4 new mails"
-            color="inherit"
-          >
+          <IconButton size="large" aria-label="show  new mails" color="inherit">
             <Badge
               color="error"
               badgeContent={shownNotificationsInboxNumber.length}
@@ -210,18 +236,7 @@ export const Navbar = () => {
         </Link>
         <p>Messages</p>
       </MenuItem>
-      <MenuItem>
-        <IconButton
-          size="large"
-          aria-label="show 17 new notifications"
-          color="inherit"
-        >
-          <Badge color="error">
-            <NotificationsIcon />
-          </Badge>
-        </IconButton>
-        <p>Notifications</p>
-      </MenuItem>
+
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
           size="large"
@@ -352,8 +367,9 @@ export const Navbar = () => {
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 <Link to="/inbox">
                   <IconButton
+                    disableFocusRipple
                     size="large"
-                    aria-label="show 4 new mails"
+                    aria-label="show  new mails"
                     color="primary"
                   >
                     <Badge
@@ -365,14 +381,19 @@ export const Navbar = () => {
                   </IconButton>
                 </Link>
                 <IconButton
-                  size="large"
-                  aria-label="show 17 new notifications"
-                  color="primary"
+                  disableFocusRipple
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                    },
+                  }}
+                  onClick={handleProductNotificationsIconClick}
                 >
-                  <Badge color="error">
-                    <NotificationsIcon />
-                  </Badge>
+                  <PopoverPopupState
+                    productNotifications={productNotifications}
+                  />
                 </IconButton>
+
                 <IconButton
                   size="large"
                   edge="end"

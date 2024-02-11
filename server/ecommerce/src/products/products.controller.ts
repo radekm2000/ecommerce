@@ -38,7 +38,8 @@ import { Image } from 'src/utils/entities/image.entity';
 import { ProductsService } from './products.service';
 import { QueryParams } from 'src/utils/dtos/types';
 import { ZodValidationPipe } from 'src/utils/pipes/ZodValidationPipe';
-import { Request, Response } from 'express';
+import { Response } from 'express';
+import { ProductNotificationService } from 'src/product-notification/product-notification.service';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 @Controller('products')
@@ -48,6 +49,7 @@ export class ProductsController {
     @InjectRepository(Product) private productRepository: Repository<Product>,
     @InjectRepository(Image) private imageRepository: Repository<Image>,
     private productsService: ProductsService,
+    private productNotificationService: ProductNotificationService,
   ) {}
 
   @Get()
@@ -162,7 +164,9 @@ export class ProductsController {
       Body: buffer,
       ContentType: file.mimetype,
     } as PutObjectCommandInput;
-
+    await this.productNotificationService.notifyFollowersAboutNewProduct(
+      newProduct,
+    );
     const command = new PutObjectCommand(paramsToS3);
 
     try {

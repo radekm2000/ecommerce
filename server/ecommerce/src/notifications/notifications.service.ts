@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { NotificationDto } from 'src/utils/dtos/notification.dto';
 import { Notification } from 'src/utils/entities/notification.entity';
+import { Product } from 'src/utils/entities/product.entity';
 import { Repository } from 'typeorm';
 
 @Injectable()
@@ -22,7 +23,6 @@ export class NotificationsService {
   }
 
   async getNotifications(authUserId: number) {
-    console.log(authUserId);
     const notifications = await this.notificationRepository.find({
       where: {
         receiver: { id: authUserId },
@@ -33,12 +33,11 @@ export class NotificationsService {
         sender: { id: true },
       },
     });
-    console.log(notifications);
     return notifications;
   }
 
   async markNotificationsAsRead(senderId: number, authUserId: number) {
-    const markedNotifications = await this.notificationRepository.update(
+    return await this.notificationRepository.update(
       { sender: { id: senderId }, receiver: { id: authUserId } },
       { isRead: true },
     );

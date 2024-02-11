@@ -31,7 +31,6 @@ export const Product = () => {
     mutationFn: sendProductInfoToCheckout,
     mutationKey: ["stripe"],
     onSuccess: (data) => {
-      console.log(data);
       window.location.href = data.url;
     },
     onError: (err) => {

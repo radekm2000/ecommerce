@@ -5,6 +5,6 @@ export const useNotifications = (userId: number | undefined) => {
   return useQuery({
     queryKey: ["notifications"],
     queryFn: fetchNotifications,
-    enabled: !!userId,
+    enabled: !!userId
   });
 };

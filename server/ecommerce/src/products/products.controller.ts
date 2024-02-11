@@ -142,8 +142,8 @@ export class ProductsController {
     const productBody = createProductFromJson(body.data);
     const buffer = await sharp(file.buffer)
       .resize({
-        height: 260,
-        width: 340,
+        height: 500,
+        width: 500,
         fit: 'contain',
       })
       .toBuffer();

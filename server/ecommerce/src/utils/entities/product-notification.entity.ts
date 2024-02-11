@@ -17,7 +17,9 @@ export class ProductNotification {
   @Column()
   isRead: boolean;
 
-  @ManyToOne(() => Product, (product) => product.notifications)
+  @ManyToOne(() => Product, (product) => product.notifications, {
+    createForeignKeyConstraints: false,
+  })
   @JoinColumn({ name: 'productId' })
   product: Product;
 

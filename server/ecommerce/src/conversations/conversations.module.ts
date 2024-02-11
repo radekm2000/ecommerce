@@ -8,5 +8,6 @@ import { Conversation } from 'src/utils/entities/conversation.entity';
   controllers: [ConversationsController],
   providers: [ConversationsService],
   imports: [TypeOrmModule.forFeature([Conversation])],
+  exports: [ConversationsService],
 })
 export class ConversationsModule {}

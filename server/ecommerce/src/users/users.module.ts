@@ -11,6 +11,7 @@ import { Avatar } from 'src/utils/entities/avatar.entity';
 @Module({
   imports: [TypeOrmModule.forFeature([User, Follow, Profile, Avatar])],
   controllers: [UsersController],
-  providers: [UsersService, FollowersService],
+  providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}

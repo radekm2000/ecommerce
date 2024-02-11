@@ -28,5 +28,6 @@ import { ProductNotification } from 'src/utils/entities/product-notification.ent
     ]),
     FollowersModule,
   ],
+  exports: [ProductsService],
 })
 export class ProductsModule {}

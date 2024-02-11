@@ -1,4 +1,4 @@
-import { Controller, Get, Patch, UseGuards } from '@nestjs/common';
+import { Controller, Delete, Get, Patch, UseGuards } from '@nestjs/common';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { ProductNotificationService } from './product-notification.service';
@@ -19,6 +19,14 @@ export class ProductNotificationController {
   @Patch()
   async markProductNotificationAsRead(@AuthUser() authUser: AuthUser) {
     return await this.productNotificationService.markProductNotificationsAsRead(
+      authUser.sub,
+    );
+  }
+
+  @Delete()
+  @UseGuards(AuthGuard)
+  async deleteProductNotifications(@AuthUser() authUser: AuthUser) {
+    return await this.productNotificationService.deleteProductNotifications(
       authUser.sub,
     );
   }

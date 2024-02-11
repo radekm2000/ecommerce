@@ -11,28 +11,50 @@ import { Avatar } from 'src/utils/entities/avatar.entity';
 import { Notification } from 'src/utils/entities/notification.entity';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
 
-export let config: PostgresConnectionOptions;
-if (process.env.IS_PRODUCTION === 'true') {
-} else {
-  config = {
-    type: 'postgres',
-    database: process.env.POSTGRES_DB,
-    host: 'localhost',
-    port: 5432,
-    username: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
-    entities: [
-      User,
-      Product,
-      Image,
-      Profile,
-      Follow,
-      Conversation,
-      Message,
-      Avatar,
-      Notification,
-      ProductNotification,
-    ],
-    synchronize: true,
-  };
-}
+// export let config: PostgresConnectionOptions;
+// if (process.env.IS_PRODUCTION === 'true') {
+// } else {
+//   config = {
+//     type: 'postgres',
+//     database: process.env.POSTGRES_DB,
+//     host: 'localhost',
+//     port: 5432,
+//     username: process.env.POSTGRES_USER,
+//     password: process.env.POSTGRES_PASSWORD,
+//     entities: [
+//       User,
+//       Product,
+//       Image,
+//       Profile,
+//       Follow,
+//       Conversation,
+//       Message,
+//       Avatar,
+//       Notification,
+//       ProductNotification,
+//     ],
+//     synchronize: true,
+//   };
+// }
+
+export const config: PostgresConnectionOptions = {
+  type: 'postgres',
+  database: process.env.POSTGRES_DB,
+  host: 'localhost',
+  port: 5432,
+  username: process.env.POSTGRES_USER,
+  password: process.env.POSTGRES_PASSWORD,
+  entities: [
+    User,
+    Product,
+    Image,
+    Profile,
+    Follow,
+    Conversation,
+    Message,
+    Avatar,
+    Notification,
+    ProductNotification,
+  ],
+  synchronize: true,
+};

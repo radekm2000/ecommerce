@@ -47,7 +47,6 @@ export const AddProduct = () => {
   const formDataToBackend = new FormData();
   const [success, setSuccess] = useState(false);
   const { user } = useUserContext();
-  console.log(user);
   const productMutation = useMutation({
     mutationFn: addProduct,
     mutationKey: ["products/upload"],
@@ -283,6 +282,7 @@ export const AddProduct = () => {
 
             <TextField
               name="title"
+              spellCheck={false}
               value={formData.title}
               onChange={(e) => handleFormChange(e)}
               fullWidth={below700 ? true : false}
@@ -326,6 +326,7 @@ export const AddProduct = () => {
             name="description"
             value={formData.description}
             onChange={handleFormChange}
+            spellCheck={false}
             multiline={true}
             error={formErrors.descriptionError}
             helperText={
@@ -361,6 +362,7 @@ export const AddProduct = () => {
               </Typography>
               <TextField
                 name="category"
+                spellCheck={false}
                 id="standard-select-currency4"
                 select
                 error={formErrors.categoryError}
@@ -387,6 +389,7 @@ export const AddProduct = () => {
                 id="standard-select-currency3"
                 select
                 name="category"
+                spellCheck={false}
                 error={formErrors.categoryError}
                 helperText={
                   formErrors.categoryError ? "Fill in category" : null

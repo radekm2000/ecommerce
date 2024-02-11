@@ -110,18 +110,19 @@ export const InboxSidebar = ({
                   recipientsOfSidebarConversation.notifications.some(
                     (notification) => !notification.isRead
                   ) ? (
-                    <Badge
-                      color="error"
-                      badgeContent={
-                        recipientsOfSidebarConversation.notifications.filter(
-                          (notification) => !notification.isRead
-                        ).length
-                      }
-                    >
+                    <>
                       <Typography sx={{ fontSize: "16px" }}>
                         {recipientsOfSidebarConversation.username}
                       </Typography>
-                    </Badge>
+                      <Badge
+                        color="error"
+                        badgeContent={
+                          recipientsOfSidebarConversation.notifications.filter(
+                            (notification) => !notification.isRead
+                          ).length
+                        }
+                      ></Badge>
+                    </>
                   ) : (
                     <Typography sx={{ fontSize: "16px" }}>
                       {recipientsOfSidebarConversation.username}

@@ -58,7 +58,7 @@ export class ProductNotificationService {
 
   public async markProductNotificationsAsRead(userId: number) {
     return await this.productNotificationRepository.update(
-      { receiverId: userId },
+      { receiverId: userId, isRead: false },
       { isRead: true },
     );
   }
@@ -82,5 +82,11 @@ export class ProductNotificationService {
       }),
     );
     return updatedNotifications;
+  }
+
+  async deleteProductNotifications(userId: number) {
+    return await this.productNotificationRepository.delete({
+      receiverId: userId,
+    });
   }
 }

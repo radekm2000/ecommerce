@@ -14,7 +14,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
 import {
   Avatar,
@@ -142,15 +142,15 @@ export const Navbar = () => {
   if (!notificationsReceived) {
     return "Notifications not received yet";
   }
-  setNotifications(notificationsReceived);
 
   if (!productNotificationsReceived) {
     return "Product notifications not received yet";
   }
-  setProductNotifications(productNotificationsReceived);
   if (isProductNotificationsLoading) {
     return "isProductNotificationsLoading...";
   }
+  setNotifications(notificationsReceived);
+  setProductNotifications(productNotificationsReceived);
   const handleSearchTextClick = () => {
     const params = new URLSearchParams();
     if (searchInputValue) {

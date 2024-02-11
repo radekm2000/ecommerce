@@ -80,7 +80,6 @@ function App() {
                     <PaymentSuccess />
                   </Route>
                   <Route path="/cancel">
-                    <Navbar />
                     <PaymentCancel />
                   </Route>
 

@@ -15,7 +15,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
 import {
   Avatar,
@@ -23,8 +23,6 @@ import {
   Card,
   CardActionArea,
   CardContent,
-  CardMedia,
-  Popover,
   Tabs,
 } from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
@@ -33,8 +31,6 @@ import { useNotificationsContext } from "../contexts/ChatNotificationsContext";
 import { useNotifications } from "../hooks/useNotifications";
 import { useProductNotifications } from "../hooks/useProductNotifications";
 import { useProductNotificationsContext } from "../contexts/ProductNotificationContext";
-import PopupState, { bindTrigger, bindPopover } from "material-ui-popup-state";
-import { ProductNotification } from "../types/types";
 import { useMarkProductNotificationAsRead } from "../hooks/useMarkProductNotificationAsRead";
 import PopoverPopupState from "./PopoverPopupState";
 
@@ -144,16 +140,18 @@ export const Navbar = () => {
   if (isNotificationsLoading) {
     return "isNotificationsLoading...";
   }
-  if (notificationsReceived) {
-    setNotifications(notificationsReceived);
+  if (!notificationsReceived) {
+    return "Notifications not received yet";
   }
-  if (productNotificationsReceived) {
-    setProductNotifications(productNotificationsReceived);
+  setNotifications(notificationsReceived);
+
+  if (!productNotificationsReceived) {
+    return "Product notifications not received yet";
   }
+  setProductNotifications(productNotificationsReceived);
   if (isProductNotificationsLoading) {
     return "isProductNotificationsLoading...";
   }
-  console.log(productNotifications);
   const handleSearchTextClick = () => {
     const params = new URLSearchParams();
     if (searchInputValue) {
@@ -164,6 +162,7 @@ export const Navbar = () => {
   };
   const handleMobileMenuClose = () => {
     setMobileMoreAnchorEl(null);
+    return <Redirect to="/inbox" />;
   };
 
   const handleMenuClose = () => {
@@ -376,8 +375,9 @@ export const Navbar = () => {
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 <Link to="/inbox">
                   <IconButton
+                    disableFocusRipple
                     size="large"
-                    aria-label="show 4 new mails"
+                    aria-label="show  new mails"
                     color="primary"
                   >
                     <Badge
@@ -388,7 +388,15 @@ export const Navbar = () => {
                     </Badge>
                   </IconButton>
                 </Link>
-                <IconButton onClick={handleProductNotificationsIconClick}>
+                <IconButton
+                  disableFocusRipple
+                  sx={{
+                    "&:hover": {
+                      backgroundColor: "transparent",
+                    },
+                  }}
+                  onClick={handleProductNotificationsIconClick}
+                >
                   <PopoverPopupState
                     productNotifications={productNotifications}
                   />

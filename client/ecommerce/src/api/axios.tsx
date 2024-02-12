@@ -219,3 +219,12 @@ export const deleteProductNotifications = async () => {
   const response = await axiosApi.delete(`product-notifications`);
   return response.data;
 };
+
+export const fetchUserInfo = async (accessToken: string) => {
+  const response = await axiosApi.get(`auth/getUserInfo`, {
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+    },
+  });
+  return response.data as User;
+};

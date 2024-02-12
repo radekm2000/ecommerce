@@ -11,7 +11,7 @@ export const useDeleteProductNotificationsMutation = () => {
       queryClient.invalidateQueries({ queryKey: ["productNotifications"] });
       toast.success("Notifications cleared");
     },
-    onError: (err) => {
+    onError: () => {
       toast.error("Something went wrong");
     },
   });

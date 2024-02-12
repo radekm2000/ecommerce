@@ -19,6 +19,8 @@ import {
 import { Request, Response } from 'express';
 import { GoogleAuthGuard } from './utils/GoogleGuard';
 import { User } from 'src/utils/entities/user.entity';
+import { AuthGuard } from './auth.guard';
+import { AuthUser } from 'src/decorators/user.decorator';
 
 @Controller('auth')
 export class AuthController {
@@ -62,5 +64,12 @@ export class AuthController {
       maxAge: 60 * 60 * 1000,
     });
     response.redirect('http://localhost:5173');
+  }
+
+  @Get('getUserInfo')
+  @UseGuards(AuthGuard)
+  async refetchUserInfo(@AuthUser() authUser: AuthUser) {
+    console.log(authUser);
+    return await this.authService.refetchUserInfo(authUser.sub);
   }
 }

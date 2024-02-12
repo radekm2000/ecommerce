@@ -1,12 +1,35 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
 import { useLocation } from "wouter";
+import { useEffect, useState } from "react";
+import { useUserContext } from "../../contexts/UserContext";
+import { useUserFromAccessToken } from "../../hooks/useUserFromAccessToken";
 export const PaymentSuccess = () => {
   const [, setLocation] = useLocation();
-  const handleButtonClick = () => {
-    setLocation("/");
-  };
+  const { user, setUser } = useUserContext();
+  const [aT, setAt] = useState("");
 
+  useEffect(() => {
+    const accessToken = localStorage.getItem("accessToken");
+    if (accessToken) {
+      setAt(accessToken);
+    }
+  }, []);
+  const { data: userData, isLoading, isSuccess } = useUserFromAccessToken(aT);
+
+  useEffect(() => {
+    if (isSuccess) {
+      setUser(userData);
+    }
+  }, [user, isSuccess]);
+  if (isLoading) {
+    return "user info is loading...";
+  }
+  const handleButtonClick = () => {
+    if (user) {
+      setLocation("/");
+    }
+  };
   return (
     <Box
       sx={{

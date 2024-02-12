@@ -14,7 +14,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
 import {
   Avatar,
@@ -27,10 +27,8 @@ import {
 } from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Link, Redirect, useLocation } from "wouter";
-import { useNotificationsContext } from "../contexts/ChatNotificationsContext";
 import { useNotifications } from "../hooks/useNotifications";
 import { useProductNotifications } from "../hooks/useProductNotifications";
-import { useProductNotificationsContext } from "../contexts/ProductNotificationContext";
 import { useMarkProductNotificationAsRead } from "../hooks/useMarkProductNotificationAsRead";
 import PopoverPopupState from "./PopoverPopupState";
 
@@ -77,7 +75,6 @@ export const theme = createTheme({
     primary: {
       main: "#757575",
       light: alpha("#757575", 0.2),
-      // dark: alpha("#757575", 0.9),
     },
   },
 });
@@ -110,7 +107,6 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
   color: "primary.dark",
   "& .MuiInputBase-input": {
     padding: theme.spacing(1, 1, 1, 0),
-    // vertical padding + font size from searchIcon
     paddingLeft: `calc(1em + ${theme.spacing(4)})`,
     transition: theme.transitions.create("width"),
     width: "100%",
@@ -127,14 +123,12 @@ export const Navbar = () => {
   const [value, setValue] = useState(0);
   const below800 = useMediaQuery(800);
   const { user } = useUserContext();
-  // const { productNotifications, setProductNotifications } =
-  //   useProductNotificationsContext();
+
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
   const [, setLocation] = useLocation();
   const isMenuOpen = Boolean(anchorEl);
-  // const { notifications, setNotifications } = useNotificationsContext();
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -169,8 +163,6 @@ export const Navbar = () => {
     return "isProductNotificationsLoading...";
   }
 
-  // setNotifications(notificationsReceived);
-  // setProductNotifications(productNotificationsReceived);
   const handleSearchTextClick = () => {
     const params = new URLSearchParams();
     if (searchInputValue) {

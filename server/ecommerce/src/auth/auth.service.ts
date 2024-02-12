@@ -80,4 +80,17 @@ export class AuthService {
     );
     return refreshToken;
   }
+
+  async refetchUserInfo(userId: number) {
+    const user = await this.usersService.findUserById(userId);
+
+    if (!user) {
+      throw new HttpException(
+        'Cant refetch user info, user doesnt exist',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    console.log(user);
+    return user;
+  }
 }

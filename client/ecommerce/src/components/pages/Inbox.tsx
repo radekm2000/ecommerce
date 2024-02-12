@@ -4,17 +4,15 @@ import AddCommentOutlinedIcon from "@mui/icons-material/AddCommentOutlined";
 import { InboxSidebar } from "../InboxSidebar";
 import { InboxChatNavbar } from "../InboxChatNavbar";
 import { InboxChatContent } from "../InboxChatContent";
-import { Redirect, Route, Switch, useLocation, useParams } from "wouter";
+import { Route, Switch, useLocation, useParams } from "wouter";
 import { InboxChatInput } from "../InboxChatInput";
 import { useAllConversations } from "../../hooks/useAllConversations";
 import { useUserContext } from "../../contexts/UserContext";
 import { getRecipientFromConversation } from "../../utils/getRecipientFromConversation";
-import { useEffect, useState } from "react";
-import { useUserInfo } from "../../hooks/useUserInfo";
+import { useState } from "react";
 import { useUserConversations } from "../../hooks/useUserConversations";
 import { ConversationDetailsNavbar } from "../conversation-details/ConversationDetailsNavbar";
 import { ConversationDetailsContent } from "../conversation-details/ConversationDetailsContent";
-import { useNotificationsContext } from "../../contexts/ChatNotificationsContext";
 import { useNotifications } from "../../hooks/useNotifications";
 
 export const Inbox = () => {

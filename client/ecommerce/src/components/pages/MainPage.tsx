@@ -1,5 +1,5 @@
 import { useUserContext } from "../../contexts/UserContext";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useProfileInfo } from "../../hooks/useProfileInfo";
 import {
   Avatar,
@@ -21,21 +21,20 @@ export const MainPage = () => {
   const below700 = useMediaQuery(700);
   const { user, setUser } = useUserContext();
   const { data: products, isLoading: isProductsDataLoading } = useAllProducts();
-  const {
-    data: userInfo,
-    isLoading: isUserInfoLoading,
-    isSuccess,
-  } = useProfileInfo(user.id);
+  // const {
+  //   data: userInfo,
+  //   isLoading: isUserInfoLoading,
+  //   isSuccess,
+  // } = useProfileInfo(user.id);
+  // useEffect(() => {
+  //   if (isSuccess) {
+  //     setUser(userInfo);
+  //   }
+  // }, [isSuccess, setUser, userInfo]);
 
-  useEffect(() => {
-    if (isSuccess) {
-      setUser(userInfo);
-    }
-  }, [isSuccess, setUser, userInfo]);
-
-  if (isUserInfoLoading) {
-    return "userInfo loading...";
-  }
+  // if (isUserInfoLoading) {
+  //   return "userInfo loading...";
+  // }
   if (isProductsDataLoading) {
     return "products data loading...";
   }

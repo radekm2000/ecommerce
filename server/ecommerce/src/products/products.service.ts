@@ -7,11 +7,14 @@ import { GetObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3 } from 'src/main';
 import { Brand, Order, QueryParams } from 'src/utils/dtos/types';
+import { ProductNotification } from 'src/utils/entities/product-notification.entity';
 
 @Injectable()
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
+    @InjectRepository(ProductNotification)
+    private productNotificationRepository: Repository<ProductNotification>,
   ) {}
 
   async findProduct(productId: number) {
@@ -259,6 +262,12 @@ export class ProductsService {
   }
 
   async deleteProduct(productId: number) {
-    return await this.productRepository.delete({ id: productId });
+    await this.productRepository.delete({ id: productId });
+    await this.productNotificationRepository.delete({
+      product: {
+        id: productId,
+      },
+    });
+    return;
   }
 }

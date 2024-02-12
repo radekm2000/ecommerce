@@ -74,7 +74,7 @@ export class ProductNotificationService {
     const updatedNotifications = await Promise.all(
       notifications.map(async (notification) => {
         const product = await this.productsService.findProduct(
-          notification.product.id,
+          notification.product?.id,
         );
         notification.product = product;
 

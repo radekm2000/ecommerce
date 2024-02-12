@@ -22,6 +22,7 @@ import {
   Card,
   CardActionArea,
   CardContent,
+  Container,
   Tabs,
 } from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
@@ -33,6 +34,21 @@ import { useProductNotificationsContext } from "../contexts/ProductNotificationC
 import { useMarkProductNotificationAsRead } from "../hooks/useMarkProductNotificationAsRead";
 import PopoverPopupState from "./PopoverPopupState";
 
+export const NotAuthed = () => {
+  return (
+    <Container>
+      <Box
+        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
+      >
+        <Link to="/login">
+          <Button sx={{ textTransform: "none" }}>
+            Sign in or log in to access the content
+          </Button>
+        </Link>
+      </Box>
+    </Container>
+  );
+};
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,
@@ -111,14 +127,14 @@ export const Navbar = () => {
   const [value, setValue] = useState(0);
   const below800 = useMediaQuery(800);
   const { user } = useUserContext();
-  const { productNotifications, setProductNotifications } =
-    useProductNotificationsContext();
+  // const { productNotifications, setProductNotifications } =
+  //   useProductNotificationsContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
   const [, setLocation] = useLocation();
   const isMenuOpen = Boolean(anchorEl);
-  const { notifications, setNotifications } = useNotificationsContext();
+  // const { notifications, setNotifications } = useNotificationsContext();
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -136,6 +152,9 @@ export const Navbar = () => {
   const { mutate: markProductNotificationsAsRead } = mutation;
   const { data: notificationsReceived, isLoading: isNotificationsLoading } =
     useNotifications(user.id);
+  if (!user.username && !user.id) {
+    return;
+  }
   if (isNotificationsLoading) {
     return "isNotificationsLoading...";
   }
@@ -149,8 +168,9 @@ export const Navbar = () => {
   if (isProductNotificationsLoading) {
     return "isProductNotificationsLoading...";
   }
-  setNotifications(notificationsReceived);
-  setProductNotifications(productNotificationsReceived);
+
+  // setNotifications(notificationsReceived);
+  // setProductNotifications(productNotificationsReceived);
   const handleSearchTextClick = () => {
     const params = new URLSearchParams();
     if (searchInputValue) {
@@ -174,7 +194,7 @@ export const Navbar = () => {
   };
 
   const menuId = "primary-search-account-menu";
-  const shownNotificationsInboxNumber = notifications.filter(
+  const shownNotificationsInboxNumber = notificationsReceived.filter(
     (notification) => notification.isRead !== true
   );
   const renderMenu = (
@@ -273,27 +293,28 @@ export const Navbar = () => {
                 margin: below800 ? "0px 10px" : "0px 150px",
               }}
             >
-              <Typography
-                onClick={() => setLocation("/", { replace: true })}
-                color="#26a69a"
-                variant="h6"
-                noWrap
-                component="div"
-                sx={{
-                  cursor: "pointer",
-                  display: {
-                    xs: "none",
-                    sm: "block",
-                    fontFamily: "Maison Neue",
-                    fontWeight: "800",
-                    fontSize: "24px",
-                    marginRight: 15,
-                    marginLeft: "auto",
-                  },
-                }}
-              >
-                Vetted
-              </Typography>
+              <Link to="/">
+                <Typography
+                  color="#26a69a"
+                  variant="h6"
+                  noWrap
+                  component="div"
+                  sx={{
+                    cursor: "pointer",
+                    display: {
+                      xs: "none",
+                      sm: "block",
+                      fontFamily: "Maison Neue",
+                      fontWeight: "800",
+                      fontSize: "24px",
+                      marginRight: 15,
+                      marginLeft: "auto",
+                    },
+                  }}
+                >
+                  Vetted
+                </Typography>
+              </Link>
               <Box
                 sx={{
                   width: "50%",
@@ -342,6 +363,18 @@ export const Navbar = () => {
                 )}
               </Box>
               <Box sx={{ flexGrow: 1 }} />
+              {!user && (
+                <Button
+                  variant="outlined"
+                  sx={{
+                    textTransform: "none",
+                    color: "#007782",
+                    border: "1px solid #007782",
+                  }}
+                >
+                  Login
+                </Button>
+              )}
               <Button
                 sx={{
                   borderRadius: "6px",
@@ -390,7 +423,7 @@ export const Navbar = () => {
                   onClick={handleProductNotificationsIconClick}
                 >
                   <PopoverPopupState
-                    productNotifications={productNotifications}
+                    productNotifications={productNotificationsReceived}
                   />
                 </IconButton>
 

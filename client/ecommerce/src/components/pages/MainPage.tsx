@@ -14,6 +14,7 @@ import { useAllProducts } from "../../hooks/useAllProducts";
 import { AccountCircle } from "@mui/icons-material";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { Link } from "wouter";
+import { NotAuthed } from "../Navbar";
 
 export const MainPage = () => {
   const below1200 = useMediaQuery(1200);
@@ -24,7 +25,7 @@ export const MainPage = () => {
     data: userInfo,
     isLoading: isUserInfoLoading,
     isSuccess,
-  } = useProfileInfo();
+  } = useProfileInfo(user.id);
 
   useEffect(() => {
     if (isSuccess) {
@@ -40,6 +41,9 @@ export const MainPage = () => {
   }
   if (!products) {
     return "No products to display";
+  }
+  if (!user.id && !user.username) {
+    return <NotAuthed />;
   }
   return (
     <Box

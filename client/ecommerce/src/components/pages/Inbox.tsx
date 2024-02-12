@@ -15,6 +15,7 @@ import { useUserConversations } from "../../hooks/useUserConversations";
 import { ConversationDetailsNavbar } from "../conversation-details/ConversationDetailsNavbar";
 import { ConversationDetailsContent } from "../conversation-details/ConversationDetailsContent";
 import { useNotificationsContext } from "../../contexts/ChatNotificationsContext";
+import { useNotifications } from "../../hooks/useNotifications";
 
 export const Inbox = () => {
   const params = useParams();
@@ -30,8 +31,8 @@ export const Inbox = () => {
   const { data: conversations, isLoading: isConversationsLoading } =
     useAllConversations();
 
-  const { data: selectedUserData, isLoading: isSelectedUserDataLoading } =
-    useUserInfo(selectedUserId);
+  const { data: notificationsReceived, isLoading: isNotificationsLoading } =
+    useNotifications(user.id);
 
   const {
     data: selectedUserConversation,
@@ -41,8 +42,11 @@ export const Inbox = () => {
   if (isSelectedUserConversationsLoading) {
     return "isLoading...";
   }
-  if (isSelectedUserDataLoading) {
-    return "isLoading...";
+  if (isNotificationsLoading) {
+    return "notifications loading...";
+  }
+  if (!notificationsReceived) {
+    return "no Notifications";
   }
 
   if (isConversationsLoading) {
@@ -131,6 +135,7 @@ export const Inbox = () => {
                 recipientsOfSidebarConversations={
                   recipientsOfSidebarConversations
                 }
+                notifications={notificationsReceived}
               />
             </Box>
           )}
@@ -142,7 +147,6 @@ export const Inbox = () => {
               flexDirection: "column",
             }}
           >
-            {/* check if userId is valid (find user with that userId) */}
             {userId && (
               <>
                 {isConversationDetailsOpen ? (
@@ -244,6 +248,7 @@ export const Inbox = () => {
                 recipientsOfSidebarConversations={
                   recipientsOfSidebarConversations
                 }
+                notifications={notificationsReceived}
               />
             </Box>
           )}

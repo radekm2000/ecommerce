@@ -104,7 +104,10 @@ export default function PopoverPopupState({
               {productNotifications.length >= 1 && (
                 <Button
                   component="span"
-                  onClick={handleClearNotificationsClick}
+                  onClick={() => {
+                    handleClearNotificationsClick();
+                    popupState.close();
+                  }}
                   variant="outlined"
                   sx={{
                     textTransform: "none",

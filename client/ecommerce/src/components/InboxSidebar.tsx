@@ -1,7 +1,7 @@
 import { Avatar, Badge, Box, Typography } from "@mui/material";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useLocation, useParams } from "wouter";
-import { RecipientOfSidebarConversation } from "../types/types";
+import { FetchedNotifications, RecipientOfSidebarConversation } from "../types/types";
 import { useNotificationsContext } from "../contexts/ChatNotificationsContext";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { markNotificationsAsRead } from "../api/axios";
@@ -15,13 +15,15 @@ const displayLastMessage = (message: string) => {
 export const InboxSidebar = ({
   recipientsOfSidebarConversations,
   setSelectedUserId,
+  notifications
 }: {
   setSelectedUserId: React.Dispatch<React.SetStateAction<number>>;
   recipientsOfSidebarConversations:
     | RecipientOfSidebarConversation[]
-    | undefined;
+    | undefined,
+    notifications: FetchedNotifications[]
 }) => {
-  const { notifications } = useNotificationsContext();
+  // const { notifications } = useNotificationsContext();
   const [, setLocation] = useLocation();
   const params = useParams();
   const userId = params?.userId;

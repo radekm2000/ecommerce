@@ -24,5 +24,6 @@ import { Product } from 'src/utils/entities/product.entity';
   ],
   controllers: [ProductNotificationController],
   providers: [ProductNotificationService, UsersService, ProductsService],
+  exports: [ProductNotificationService],
 })
 export class ProductNotificationModule {}

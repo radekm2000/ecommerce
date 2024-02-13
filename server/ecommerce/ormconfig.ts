@@ -45,6 +45,7 @@ export const config: PostgresConnectionOptions = {
   username: process.env.POSTGRES_USER,
   password: process.env.POSTGRES_PASSWORD,
   entities: [
+    Avatar,
     User,
     Product,
     Image,
@@ -52,7 +53,6 @@ export const config: PostgresConnectionOptions = {
     Follow,
     Conversation,
     Message,
-    Avatar,
     Notification,
     ProductNotification,
   ],

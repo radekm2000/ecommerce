@@ -3,7 +3,6 @@ import { UsersService } from 'src/users/users.service';
 import { RegisterUserDto } from 'src/utils/dtos/user.dto';
 
 describe('Users findUser method ', () => {
-  jest.mock('ormconfig', () => ({}));
   it('should throw error when user is not found ', async () => {
     const userDto = {
       username: 'usermock',

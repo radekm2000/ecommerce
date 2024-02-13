@@ -33,6 +33,7 @@
     "cookie-parser": "^1.4.6",
     "dotenv": "^16.3.1",
     "jsonwebtoken": "^9.0.2",
+    "madge": "^6.1.0",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "pg": "^8.11.3",
@@ -87,7 +88,8 @@
     "coverageDirectory": "../coverage",
     "testEnvironment": "node",
     "moduleNameMapper": {
-      "^src/(.*)": "<rootDir>/../src/$1"
+      "^src/(.*)$": "<rootDir>/$1",
+      "^ormconfig$": "<rootDir>/../ormconfig"
     }
   }
 }

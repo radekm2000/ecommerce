@@ -54,7 +54,12 @@ export class ProductsController {
   async getProducts() {
     return await this.productsService.getAllProducts();
   }
-
+  @Get('/checkout/sessions/:id')
+  async retrieveStiripeSession(@Param('id') stripeId: string) {
+    const session = await stripe.checkout.sessions.retrieve(stripeId);
+    console.log(session);
+    return session;
+  }
   @Get('/filtered')
   async getFilteredProducts(@Query() queryParams: QueryParams) {
     console.log(queryParams);
@@ -98,6 +103,15 @@ export class ProductsController {
     @Body() dto: ProductWithImageAndUser,
     @Res() res: Response,
   ) {
+    const user = await this.usersService.findUserById(authUser.sub);
+    const customer = await stripe.customers.create({
+      name: user.username,
+      email: user.email,
+    });
+    const coupon20PercentOffId = 'TUi3TVN3';
+    const promotionCode = await stripe.promotionCodes.retrieve(
+      'promo_1OjPdSDf8SPGlaVh4SXjWIu1',
+    );
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
@@ -113,17 +127,21 @@ export class ProductsController {
           quantity: 1,
         },
       ],
+      customer: customer.id,
 
       payment_method_types: ['card'],
       mode: 'payment',
-      success_url: 'http://localhost:5173/success',
+      allow_promotion_codes: true,
+      success_url:
+        'http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}',
       cancel_url: 'http://localhost:5173/cancel',
       custom_text: {
         submit: {
-          message: 'Card number 4242 4242 4242 4242 for succesfull payment ',
+          message: `Card number 4242 4242 4242 4242 for succesfull payment and feel free to use 20% off coupon with code: ${promotionCode.code} `,
         },
       },
     });
+
     res.json({
       url: session.url,
     });

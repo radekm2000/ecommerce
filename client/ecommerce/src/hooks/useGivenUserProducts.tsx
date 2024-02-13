@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import React from "react";
 import { getGivenUserProducts } from "../api/axios";
 import { ProductWithImageAndUser } from "../types/types";
 

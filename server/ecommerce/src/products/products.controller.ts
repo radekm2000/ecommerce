@@ -38,12 +38,14 @@ import { QueryParams } from 'src/utils/dtos/types';
 import { ZodValidationPipe } from 'src/utils/pipes/ZodValidationPipe';
 import { Response } from 'express';
 import { ProductNotificationService } from 'src/product-notification/product-notification.service';
+import { NodemailerService } from 'src/nodemailer/nodemailer.service';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 @Controller('products')
 export class ProductsController {
   constructor(
     private usersService: UsersService,
+    private nodemailerService: NodemailerService,
     @InjectRepository(Product) private productRepository: Repository<Product>,
     @InjectRepository(Image) private imageRepository: Repository<Image>,
     private productsService: ProductsService,
@@ -57,7 +59,15 @@ export class ProductsController {
   @Get('/checkout/sessions/:id')
   async retrieveStiripeSession(@Param('id') stripeId: string) {
     const session = await stripe.checkout.sessions.retrieve(stripeId);
-    console.log(session);
+    const customerEmail = session.customer_details.email;
+    const lineItems = await stripe.checkout.sessions.listLineItems(stripeId);
+    const itemDescription = lineItems.data.map((item) => {
+      return item.description;
+    });
+    if (session.payment_status === 'paid') {
+      await this.nodemailerService.sendEmail(customerEmail, itemDescription);
+      return session;
+    }
     return session;
   }
   @Get('/filtered')
@@ -108,7 +118,6 @@ export class ProductsController {
       name: user.username,
       email: user.email,
     });
-    const coupon20PercentOffId = 'TUi3TVN3';
     const promotionCode = await stripe.promotionCodes.retrieve(
       'promo_1OjPdSDf8SPGlaVh4SXjWIu1',
     );

@@ -12,10 +12,16 @@ import { Profile } from 'src/utils/entities/profile.entity';
 import { Avatar } from 'src/utils/entities/avatar.entity';
 import { ProductNotificationService } from 'src/product-notification/product-notification.service';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
+import { NodemailerService } from 'src/nodemailer/nodemailer.service';
 
 @Module({
   controllers: [ProductsController],
-  providers: [ProductsService, UsersService, ProductNotificationService],
+  providers: [
+    ProductsService,
+    UsersService,
+    ProductNotificationService,
+    NodemailerService,
+  ],
   imports: [
     TypeOrmModule.forFeature([
       Image,

@@ -58,6 +58,7 @@ export const PaymentSuccess = () => {
     name: sessionObj?.customer_details?.name,
     email: sessionObj?.customer_details?.email,
   };
+  console.log(sessionObj)
   return (
     <>
       {customerInfo && (

@@ -52,6 +52,11 @@ export class AuthController {
     //empty method, passport takes care of google flow
   }
 
+  @Get('getUserInfo')
+  @UseGuards(AuthGuard)
+  async refetchUserInfo(@AuthUser() authUser: AuthUser) {
+    return await this.authService.refetchUserInfo(authUser.sub);
+  }
   @UseGuards(GoogleAuthGuard)
   @Get('google/redirect')
   async googleAuthRedirect(@Req() request: Request, @Res() response: Response) {
@@ -64,12 +69,5 @@ export class AuthController {
       maxAge: 60 * 60 * 1000,
     });
     response.redirect('http://localhost:5173');
-  }
-
-  @Get('getUserInfo')
-  @UseGuards(AuthGuard)
-  async refetchUserInfo(@AuthUser() authUser: AuthUser) {
-    console.log(authUser);
-    return await this.authService.refetchUserInfo(authUser.sub);
   }
 }

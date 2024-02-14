@@ -13,6 +13,7 @@ import { MessagesModule } from './messages/messages.module';
 import { AvatarsModule } from './avatars/avatars.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { ProductNotificationModule } from './product-notification/product-notification.module';
+import { NodemailerModule } from './nodemailer/nodemailer.module';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { ProductNotificationModule } from './product-notification/product-notifi
     AvatarsModule,
     NotificationsModule,
     ProductNotificationModule,
+    NodemailerModule,
   ],
   controllers: [AppController],
   providers: [AppService],

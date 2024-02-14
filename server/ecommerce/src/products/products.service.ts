@@ -8,6 +8,8 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3 } from 'src/main';
 import { Brand, Order, QueryParams } from 'src/utils/dtos/types';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
+import Stripe from 'stripe';
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
 
 @Injectable()
 export class ProductsService {

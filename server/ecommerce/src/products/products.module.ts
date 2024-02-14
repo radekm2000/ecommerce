@@ -12,6 +12,7 @@ import { Profile } from 'src/utils/entities/profile.entity';
 import { Avatar } from 'src/utils/entities/avatar.entity';
 import { ProductNotificationService } from 'src/product-notification/product-notification.service';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
+import { StripeService } from 'src/stripe/stripe.service';
 import { NodemailerService } from 'src/nodemailer/nodemailer.service';
 
 @Module({
@@ -20,6 +21,7 @@ import { NodemailerService } from 'src/nodemailer/nodemailer.service';
     ProductsService,
     UsersService,
     ProductNotificationService,
+    StripeService,
     NodemailerService,
   ],
   imports: [

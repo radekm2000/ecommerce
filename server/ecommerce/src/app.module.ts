@@ -14,6 +14,7 @@ import { AvatarsModule } from './avatars/avatars.module';
 import { NotificationsModule } from './notifications/notifications.module';
 import { ProductNotificationModule } from './product-notification/product-notification.module';
 import { NodemailerModule } from './nodemailer/nodemailer.module';
+import { StripeModule } from './stripe/stripe.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { NodemailerModule } from './nodemailer/nodemailer.module';
     NotificationsModule,
     ProductNotificationModule,
     NodemailerModule,
+    StripeModule,
   ],
   controllers: [AppController],
   providers: [AppService],

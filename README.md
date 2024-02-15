@@ -24,6 +24,7 @@ This app is a simplified version of **Vinted**, following a similar layout. Belo
 - **Notifications**
   - Receiving notifications about new products from followed users
   - Notifications about unread messages in the navbar
+  - Confirmation email is sent after a successful purchase
 
 ## Technologies
 

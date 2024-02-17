@@ -11,10 +11,11 @@ import { useUserContext } from "../../contexts/UserContext";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { AccountCircle } from "@mui/icons-material";
 import { ChangeEvent, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProfile } from "../../api/axios";
 import toast from "react-hot-toast";
 import { Redirect, useLocation } from "wouter";
+import { User } from "../../types/types";
 
 type FormData = {
   country: string;
@@ -24,7 +25,7 @@ type FormData = {
 const countries = ["Poland", "England"] as const;
 
 export const EditProfile = () => {
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const formDataToBackend = new FormData();
   const [, setLocation] = useLocation();
   const [selectedFile, setSelectedFile] = useState<File | "">("");
@@ -33,7 +34,7 @@ export const EditProfile = () => {
     country: "",
     aboutYou: "",
   });
-
+  const queryClient = useQueryClient();
   const handleAvatarChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -47,7 +48,8 @@ export const EditProfile = () => {
   const mutation = useMutation({
     mutationKey: ["profile", "update"],
     mutationFn: updateProfile,
-    onSuccess: () => {
+    onSuccess: (user: User) => {
+      setUser(user);
       toast.success("Profile updated");
       setLocation("/");
     },
@@ -111,6 +113,7 @@ export const EditProfile = () => {
           >
             <Typography sx={{ width: "100%" }}>Your photo</Typography>
             <Box
+              gap={2}
               sx={{
                 display: "flex",
                 justifyContent: "flex-end",
@@ -124,7 +127,6 @@ export const EditProfile = () => {
                   sx={{
                     width: "64px",
                     height: "64px",
-                    paddingRight: "16px",
                   }}
                 />
               ) : selectedFile ? (

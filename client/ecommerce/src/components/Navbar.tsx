@@ -123,7 +123,6 @@ export const Navbar = () => {
   const [value, setValue] = useState(0);
   const below800 = useMediaQuery(800);
   const { user } = useUserContext();
-
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -133,7 +132,6 @@ export const Navbar = () => {
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-
   const handleProductNotificationsIconClick = () => {
     markProductNotificationsAsRead();
   };

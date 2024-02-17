@@ -94,4 +94,12 @@ export class ProductNotificationService {
       receiverId: userId,
     });
   }
+
+  async deleteProductNotificationsOfSelectedProduct(productId: number) {
+    return await this.productNotificationRepository.delete({
+      product: {
+        id: productId,
+      },
+    });
+  }
 }

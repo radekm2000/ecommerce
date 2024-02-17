@@ -23,6 +23,12 @@ export const RegisterUserDtoSchema = z
       return values.confirmPassword === values.password;
     },
     { message: 'Passwords must match', path: ['confirmPassword'] },
+  )
+  .refine(
+    (values) => {
+      return values.password !== '';
+    },
+    { message: 'Password cannot be empty', path: ['password'] },
   );
 
 export type RegisterUserDto = z.infer<typeof RegisterUserDtoSchema>;

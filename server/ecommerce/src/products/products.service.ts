@@ -11,8 +11,6 @@ import {
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3 } from 'src/main';
 import { Brand, Order, QueryParams } from 'src/utils/dtos/types';
-import { ProductNotification } from 'src/utils/entities/product-notification.entity';
-import Stripe from 'stripe';
 import { ProductNotificationService } from 'src/product-notification/product-notification.service';
 import { Image } from 'src/utils/entities/image.entity';
 import { createProductFromJson } from 'src/utils/dtos/product.dto';
@@ -24,8 +22,6 @@ import { UsersService } from 'src/users/users.service';
 export class ProductsService {
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
-    @InjectRepository(ProductNotification)
-    private productNotificationRepository: Repository<ProductNotification>,
     private productsNotificationService: ProductNotificationService,
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
@@ -278,11 +274,9 @@ export class ProductsService {
 
   async deleteProduct(productId: number) {
     await this.productRepository.delete({ id: productId });
-    await this.productNotificationRepository.delete({
-      product: {
-        id: productId,
-      },
-    });
+    await this.productsNotificationService.deleteProductNotificationsOfSelectedProduct(
+      productId,
+    );
     return;
   }
 

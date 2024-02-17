@@ -48,13 +48,12 @@ export class UsersService {
 
   async register(dto: RegisterUserDto): Promise<User> {
     const existingUser = await this.usersRepository.findOne({
-      where: { username: dto.username, email: dto.email },
+      where: [{ username: dto.username }, { email: dto.email }],
     });
-
     if (existingUser) {
       if (existingUser.username === dto.username) {
         throw new HttpException(
-          `username ${dto.username} already exists`,
+          `Username ${dto.username} already exists`,
           HttpStatus.CONFLICT,
         );
       } else if (existingUser.email === dto.email) {

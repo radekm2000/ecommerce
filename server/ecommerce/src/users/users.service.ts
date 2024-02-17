@@ -2,6 +2,7 @@ import {
   GetObjectCommand,
   PutObjectCommand,
   PutObjectCommandInput,
+  S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
@@ -9,14 +10,20 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'crypto';
 import { Profile } from 'passport-google-oauth20';
 import * as sharp from 'sharp';
-import { s3 } from 'src/main';
+import 'dotenv/config';
 import { RegisterUserDto } from 'src/utils/dtos/user.dto';
 import { Avatar } from 'src/utils/entities/avatar.entity';
 import { Follow } from 'src/utils/entities/followers.entity';
 import { Profile as userProfile } from 'src/utils/entities/profile.entity';
 import { User } from 'src/utils/entities/user.entity';
 import { Repository } from 'typeorm';
-
+const s3 = new S3Client({
+  region: process.env.BUCKET_REGION,
+  credentials: {
+    accessKeyId: process.env.BUCKET_ACCESS_KEY,
+    secretAccessKey: process.env.BUCKET_SECRET_ACCESS_KEY,
+  },
+});
 @Injectable()
 export class UsersService {
   constructor(
@@ -280,7 +287,6 @@ export class UsersService {
 
         user.avatar = url;
         await this.usersRepository.save(user);
-        console.log(user);
         return user;
       } catch (error) {
         return 'Failed uploading avatar to s3 bucket';

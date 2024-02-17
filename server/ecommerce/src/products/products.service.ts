@@ -7,9 +7,9 @@ import {
   GetObjectCommand,
   PutObjectCommand,
   PutObjectCommandInput,
+  S3Client,
 } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
-import { s3 } from 'src/main';
 import { Brand, Order, QueryParams } from 'src/utils/dtos/types';
 import { ProductNotificationService } from 'src/product-notification/product-notification.service';
 import { Image } from 'src/utils/entities/image.entity';
@@ -17,7 +17,15 @@ import { createProductFromJson } from 'src/utils/dtos/product.dto';
 import * as sharp from 'sharp';
 import { randomUUID } from 'crypto';
 import { UsersService } from 'src/users/users.service';
+import 'dotenv/config';
 
+const s3 = new S3Client({
+  region: process.env.BUCKET_REGION,
+  credentials: {
+    accessKeyId: process.env.BUCKET_ACCESS_KEY,
+    secretAccessKey: process.env.BUCKET_SECRET_ACCESS_KEY,
+  },
+});
 @Injectable()
 export class ProductsService {
   constructor(

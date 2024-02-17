@@ -33,8 +33,6 @@ export const RegisterUserDtoSchema = z
 
 export type RegisterUserDto = z.infer<typeof RegisterUserDtoSchema>;
 
-const Country = z.enum(['Poland', 'England']);
-
 export const ProfileChangeSchema = z.object({
   aboutYou: z.string().default('Default about you').optional(),
   country: z.enum(['Poland', 'England']).default('Poland').optional(),

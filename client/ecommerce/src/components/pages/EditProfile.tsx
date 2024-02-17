@@ -11,10 +11,10 @@ import { useUserContext } from "../../contexts/UserContext";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { AccountCircle } from "@mui/icons-material";
 import { ChangeEvent, useState } from "react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { updateProfile } from "../../api/axios";
 import toast from "react-hot-toast";
-import { Redirect, useLocation } from "wouter";
+import { useLocation } from "wouter";
 import { User } from "../../types/types";
 
 type FormData = {
@@ -34,7 +34,6 @@ export const EditProfile = () => {
     country: "",
     aboutYou: "",
   });
-  const queryClient = useQueryClient();
   const handleAvatarChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {

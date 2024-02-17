@@ -6,7 +6,6 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { User } from './user.entity';
-import { forwardRef } from '@nestjs/common';
 @Entity()
 export class Avatar {
   @PrimaryGeneratedColumn()

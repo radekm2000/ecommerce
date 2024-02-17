@@ -1,6 +1,6 @@
 import { Box, Button, Card, CardContent, Typography } from "@mui/material";
 import PaidRoundedIcon from "@mui/icons-material/PaidRounded";
-import { useLocation, useParams, useRoute } from "wouter";
+import { useLocation } from "wouter";
 import { useEffect, useState } from "react";
 import { useUserContext } from "../../contexts/UserContext";
 import { useUserFromAccessToken } from "../../hooks/useUserFromAccessToken";

@@ -1,5 +1,5 @@
 import { useUserContext } from "../../contexts/UserContext";
-import { useEffect, useRef, useState } from "react";
+import { useEffect } from "react";
 import { useProfileInfo } from "../../hooks/useProfileInfo";
 import {
   Avatar,

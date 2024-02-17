@@ -10,6 +10,7 @@ import { Profile } from 'src/utils/entities/profile.entity';
 import { Avatar } from 'src/utils/entities/avatar.entity';
 import { ProductsService } from 'src/products/products.service';
 import { Product } from 'src/utils/entities/product.entity';
+import { Image } from 'src/utils/entities/image.entity';
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { Product } from 'src/utils/entities/product.entity';
       Profile,
       Avatar,
       Product,
+      Image,
     ]),
   ],
   controllers: [ProductNotificationController],

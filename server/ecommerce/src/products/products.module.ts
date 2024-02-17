@@ -26,9 +26,9 @@ import { NodemailerService } from 'src/nodemailer/nodemailer.service';
   ],
   imports: [
     TypeOrmModule.forFeature([
+      Product,
       Image,
       User,
-      Product,
       Follow,
       Profile,
       Avatar,

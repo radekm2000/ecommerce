@@ -1,4 +1,10 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Inject,
+  Injectable,
+  forwardRef,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductsService } from 'src/products/products.service';
 import { UsersService } from 'src/users/users.service';
@@ -12,6 +18,7 @@ export class ProductNotificationService {
     @InjectRepository(ProductNotification)
     private productNotificationRepository: Repository<ProductNotification>,
     private usersService: UsersService,
+    @Inject(forwardRef(() => ProductsService))
     private productsService: ProductsService,
   ) {}
   async notifyFollowersAboutNewProduct(product: Product) {

@@ -3,13 +3,22 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/utils/entities/product.entity';
 import { ILike, Repository } from 'typeorm';
 import 'dotenv/config';
-import { GetObjectCommand } from '@aws-sdk/client-s3';
+import {
+  GetObjectCommand,
+  PutObjectCommand,
+  PutObjectCommandInput,
+} from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { s3 } from 'src/main';
 import { Brand, Order, QueryParams } from 'src/utils/dtos/types';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
 import Stripe from 'stripe';
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+import { ProductNotificationService } from 'src/product-notification/product-notification.service';
+import { Image } from 'src/utils/entities/image.entity';
+import { createProductFromJson } from 'src/utils/dtos/product.dto';
+import * as sharp from 'sharp';
+import { randomUUID } from 'crypto';
+import { UsersService } from 'src/users/users.service';
 
 @Injectable()
 export class ProductsService {
@@ -17,6 +26,10 @@ export class ProductsService {
     @InjectRepository(Product) private productRepository: Repository<Product>,
     @InjectRepository(ProductNotification)
     private productNotificationRepository: Repository<ProductNotification>,
+    private productsNotificationService: ProductNotificationService,
+    @InjectRepository(Image)
+    private readonly imageRepository: Repository<Image>,
+    private usersService: UsersService,
   ) {}
 
   async findProduct(productId: number) {
@@ -270,6 +283,45 @@ export class ProductsService {
         id: productId,
       },
     });
+    return;
+  }
+
+  async uploadProduct(body: any, file: Express.Multer.File, userId: number) {
+    const productBody = createProductFromJson(body.data);
+    const buffer = await sharp(file.buffer)
+      .resize({
+        height: 500,
+        width: 500,
+        fit: 'contain',
+      })
+      .toBuffer();
+    const productImageName = `${randomUUID()}${file.originalname}`;
+
+    const existingUser = await this.usersService.findUserById(userId);
+    const newProduct = this.productRepository.create(productBody);
+    newProduct.user = existingUser;
+    await this.productRepository.save(newProduct);
+    const image = this.imageRepository.create({
+      imageName: productImageName,
+      product: newProduct,
+    });
+    await this.imageRepository.save(image);
+    const paramsToS3 = {
+      Bucket: process.env.BUCKET_NAME,
+      Key: productImageName,
+      Body: buffer,
+      ContentType: file.mimetype,
+    } as PutObjectCommandInput;
+    await this.productsNotificationService.notifyFollowersAboutNewProduct(
+      newProduct,
+    );
+    const command = new PutObjectCommand(paramsToS3);
+
+    try {
+      await s3.send(command);
+    } catch (error) {
+      return 'Failed uploading image to s3 bucket';
+    }
     return;
   }
 }

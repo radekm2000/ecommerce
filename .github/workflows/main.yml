@@ -1,0 +1,17 @@
+name: Backend build CI
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      APP_PATH: server/ecommerce
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+      - name: Installing dependencies
+        run: cd $APP_PATH && npm i
+      - name: Run tests
+        run: cd $APP_PATH && npm test

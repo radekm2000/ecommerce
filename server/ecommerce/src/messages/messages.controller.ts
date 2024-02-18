@@ -13,7 +13,6 @@ import { NewMessageDto, NewMessageDtoSchema } from 'src/utils/dtos/message.dto';
 import { ZodValidationPipe } from 'src/utils/pipes/ZodValidationPipe';
 import { MessagesService } from './messages.service';
 import { ConversationsService } from 'src/conversations/conversations.service';
-import { Conversation } from 'src/utils/entities/conversation.entity';
 
 @Controller('messages')
 export class MessagesController {

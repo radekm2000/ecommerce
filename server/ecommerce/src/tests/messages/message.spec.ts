@@ -1,8 +1,5 @@
-describe('1 + 1 shuld equal 2', () => {
-  it('should return true', () => {
-    const x = 2;
-    const y = 2;
-
-    expect(x + y).toEqual(4);
+describe('empty test', () => {
+  it('should return 4', () => {
+    expect(2 + 2).toEqual(4);
   });
 });

@@ -261,7 +261,7 @@ export class ProductsService {
     return products.filter((product) => product.brand === brand);
   }
 
-  private isValidBrand(brand: any): boolean {
+  public isValidBrand(brand: any): boolean {
     const validBrands: Brand[] = [
       'Zara',
       'Reserved',
@@ -274,7 +274,7 @@ export class ProductsService {
     return validBrands.includes(brand);
   }
 
-  private isValidOrder(order: string): boolean {
+  public isValidOrder(order: string): boolean {
     console.log(order);
     const validOrders: Order[] = ['price_high_to_low', 'price_low_to_high'];
     return validOrders.includes(order as Order);

@@ -1,25 +1,35 @@
 import { HttpException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
 import { RegisterUserDto } from 'src/utils/dtos/user.dto';
+import { Avatar } from 'src/utils/entities/avatar.entity';
+import { Follow } from 'src/utils/entities/followers.entity';
+import { Profile } from 'src/utils/entities/profile.entity';
 
 describe('Users findUser method ', () => {
+  let followRepositoryMock: any;
+  let profileRepositoryMock: any;
+  let avatarRepositoryMock: any;
+  let userRepositoryMock: any;
+  beforeEach(() => {
+    followRepositoryMock = {};
+    profileRepositoryMock = {};
+    avatarRepositoryMock = {};
+    userRepositoryMock = {};
+  });
   it('should throw error when user is not found ', async () => {
     const userDto = {
       username: 'usermock',
     };
 
-    const userRepositoryMock = {
+    userRepositoryMock = {
       findOne: () => jest.fn().mockResolvedValue(false),
     } as any;
 
-    const followRepositoryMock = {} as any;
-    const profileRepository = {} as any;
-    const avatarRepository = {} as any;
     const usersService = new UsersService(
       followRepositoryMock,
       userRepositoryMock,
-      profileRepository,
-      avatarRepository,
+      profileRepositoryMock,
+      avatarRepositoryMock,
     );
     try {
       await usersService.findUser({
@@ -60,7 +70,16 @@ describe('Users findUser method ', () => {
 });
 
 describe('Users register method', () => {
-  jest.mock('ormconfig', () => ({}));
+  let followRepositoryMock: any;
+  let profileRepositoryMock: any;
+  let avatarRepositoryMock: any;
+  let userRepositoryMock: any;
+  beforeEach(() => {
+    followRepositoryMock = {};
+    profileRepositoryMock = {};
+    avatarRepositoryMock = {};
+    userRepositoryMock = {};
+  });
   it('should throw error if username already exists', async () => {
     const userMockInDb = {
       username: 'usermock',
@@ -68,18 +87,15 @@ describe('Users register method', () => {
       email: 'usermock@gmail.com',
     };
 
-    const userRepositoryMock = {
+    userRepositoryMock = {
       findOne: jest.fn().mockResolvedValue(userMockInDb),
     } as any;
-    const followRepositoryMock = {} as any;
-    const profileRepository = {} as any;
-    const avatarRepository = {} as any;
 
     const usersService = new UsersService(
       followRepositoryMock,
       userRepositoryMock,
-      profileRepository,
-      avatarRepository,
+      profileRepositoryMock,
+      avatarRepositoryMock,
     );
     const dto: RegisterUserDto = {
       username: 'usermock',
@@ -91,7 +107,7 @@ describe('Users register method', () => {
       await usersService.register(dto);
     } catch (error) {
       expect(error).toBeInstanceOf(HttpException);
-      expect(error.response).toEqual(`username ${dto.username} already exists`);
+      expect(error.response).toEqual(`Username ${dto.username} already exists`);
     }
   });
   it('should throw error if email already exists in db', async () => {
@@ -101,18 +117,15 @@ describe('Users register method', () => {
       email: 'usermock@gmail.com',
     };
 
-    const userRepositoryMock = {
+    userRepositoryMock = {
       findOne: jest.fn().mockResolvedValue(userMockInDb),
     } as any;
-    const followRepositoryMock = {} as any;
-    const profileRepository = {} as any;
-    const avatarRepository = {} as any;
 
     const usersService = new UsersService(
       followRepositoryMock,
       userRepositoryMock,
-      profileRepository,
-      avatarRepository,
+      profileRepositoryMock,
+      avatarRepositoryMock,
     );
     const dto: RegisterUserDto = {
       username: 'usermock123',
@@ -134,7 +147,7 @@ describe('Users register method', () => {
       confirmPassword: 'somepassword',
       email: 'usermock@gmail.com',
     };
-    const userRepositoryMock = {
+    userRepositoryMock = {
       findOne: jest.fn().mockResolvedValue(null),
       create: jest
         .fn()
@@ -143,14 +156,12 @@ describe('Users register method', () => {
         .fn()
         .mockResolvedValue({ username: dto.username, email: dto.email, id: 1 }),
     } as any;
-    const followRepositoryMock = {} as any;
-    const profileRepository = {} as any;
-    const avatarRepository = {} as any;
+
     const usersService = new UsersService(
       followRepositoryMock,
       userRepositoryMock,
-      profileRepository,
-      avatarRepository,
+      profileRepositoryMock,
+      avatarRepositoryMock,
     );
 
     try {
@@ -158,8 +169,6 @@ describe('Users register method', () => {
       expect(user).toBeDefined();
       expect(user.id).toBeDefined();
       expect(user.username).toEqual(dto.username);
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   });
 });

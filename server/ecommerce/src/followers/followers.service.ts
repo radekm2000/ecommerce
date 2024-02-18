@@ -36,8 +36,6 @@ export class FollowersService {
       },
     });
     if (existingRelationship) {
-      console.log('existing relationship');
-      console.log(existingRelationship);
       return await this.followersRepository.remove(existingRelationship);
     }
 

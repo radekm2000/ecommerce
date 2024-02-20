@@ -18,7 +18,7 @@ import {
 } from "../types/types";
 import { RequestAccessTokenInterceptor } from "./request-access-token.interceptor";
 import { ResponseOAuthInterceptor } from "./response-auth.interceptor";
-
+const LIMIT = 5;
 const BASE_URL = "http://localhost:3000";
 
 export const axiosApi = axios.create({
@@ -227,4 +227,29 @@ export const fetchUserInfo = async (accessToken: string) => {
     },
   });
   return response.data as User;
+};
+
+export const fetchPaginatedProducts = async ({
+  pageParam,
+}: {
+  pageParam: number;
+}): Promise<{
+  data: ProductWithImageAndUser[];
+  currentPage: number;
+  nextPage: number | null;
+}> => {
+  try {
+    const response = await axiosApi.get(
+      `/products/paginated/?limit=${LIMIT}&offset=${pageParam}`
+    );
+    const data = response.data;
+
+    return {
+      data,
+      currentPage: pageParam,
+      nextPage: data.length === LIMIT ? pageParam + LIMIT : null,
+    };
+  } catch (error) {
+    throw new Error("Failed to fetch items from the server.");
+  }
 };

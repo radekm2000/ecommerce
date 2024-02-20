@@ -326,4 +326,25 @@ export class ProductsService {
     }
     return;
   }
+
+  async getPaginatedProducts(limit: number, offset: number) {
+    const products = await this.productRepository.find({
+      relations: ['user', 'images'],
+      take: limit,
+      skip: offset,
+    });
+    for (const product of products) {
+      for (const image of product.images) {
+        const getObjectParams = {
+          Bucket: process.env.BUCKET_NAME,
+          Key: image.imageName,
+        };
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+
+        image.imageUrl = url;
+      }
+    }
+    return products;
+  }
 }

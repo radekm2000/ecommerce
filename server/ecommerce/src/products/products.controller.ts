@@ -39,6 +39,18 @@ export class ProductsController {
   async getProducts() {
     return await this.productsService.getAllProducts();
   }
+
+  @Get('/paginated')
+  async getPaginatedProducts(
+    @Query('limit') limit: number,
+    @Query('offset') offset: number,
+  ) {
+    const products = await this.productsService.getPaginatedProducts(
+      limit,
+      offset,
+    );
+    return products;
+  }
   @Get('/checkout/sessions/:id')
   async retrieveStiripeSession(@Param('id') stripeId: string) {
     return await this.stripeService.retrieveStripeSession(stripeId);

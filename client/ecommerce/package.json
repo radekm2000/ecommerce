@@ -25,6 +25,7 @@
     "react-dom": "^18.2.0",
     "react-google-button": "^0.7.2",
     "react-hot-toast": "^2.4.1",
+    "react-intersection-observer": "^9.8.0",
     "wouter": "^2.12.1"
   },
   "devDependencies": {

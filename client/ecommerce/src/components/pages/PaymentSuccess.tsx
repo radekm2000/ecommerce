@@ -13,7 +13,6 @@ export const PaymentSuccess = () => {
   const { user, setUser } = useUserContext();
   const [aT, setAt] = useState("");
   const [stripeSessionId, setStripeSessionId] = useState("");
-  console.log(stripeSessionId);
   useEffect(() => {
     const urlSearchParams = new URLSearchParams(window.location.search);
     const sessionId = urlSearchParams.get("session_id");

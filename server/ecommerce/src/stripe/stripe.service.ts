@@ -42,7 +42,7 @@ export class StripeService {
       line_items: [
         {
           price_data: {
-            currency: 'usd',
+            currency: 'pln',
             product_data: {
               name: `${dto.title}`,
               images: [dto.images[0].imageUrl],
@@ -53,9 +53,10 @@ export class StripeService {
           quantity: 1,
         },
       ],
+
       customer: customer.id,
 
-      payment_method_types: ['card'],
+      payment_method_types: ['card', 'blik'],
       mode: 'payment',
       allow_promotion_codes: true,
       success_url:

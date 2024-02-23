@@ -1,10 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  ProductWithImageAndUser,
-  User,
-  UserWithFollows,
-  UserWithoutProductsRelation,
-} from "../../types/types";
+import { ProductWithImageAndUser, UserWithFollows } from "../../types/types";
 import { Avatar, Box, Button, Typography } from "@mui/material";
 import { IsProductsOwnerMeUser } from "../../utils/checkIfProductsOwnerIsMe";
 import { useUserContext } from "../../contexts/UserContext";
@@ -43,7 +38,6 @@ export const DisplayUserInfo = ({
     return;
   }
   const { mutate } = mutation;
-  console.log(user);
   const handleFollowButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {

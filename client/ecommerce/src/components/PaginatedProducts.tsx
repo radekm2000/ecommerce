@@ -12,6 +12,7 @@ import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
 import { fetchPaginatedProducts } from "../api/axios";
 import { useMediaQuery } from "../hooks/useMediaQuery";
+import { Link } from "wouter";
 
 export const PaginatedProducts = () => {
   const below1200 = useMediaQuery(1200);
@@ -26,9 +27,7 @@ export const PaginatedProducts = () => {
   const { ref, inView } = useInView();
   useEffect(() => {
     data?.pages.map((page) => {
-      page.data.map((item) => {
-        console.log(item);
-      });
+      page.data.map((item) => {});
     });
   });
   useEffect(() => {
@@ -63,49 +62,53 @@ export const PaginatedProducts = () => {
                       padding: "8px",
                     }}
                   >
-                    <CardContent
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {item.user.avatar ? (
-                        <Avatar
-                          sx={{ width: "24px", height: "24px" }}
-                          alt="user-avatar"
-                          src={item.user.avatar}
-                        />
-                      ) : (
-                        <AccountCircle
-                          sx={{
-                            color: "grey",
-                            width: "24px",
-                            height: "24px",
-                          }}
-                        />
-                      )}
-                      <Typography
+                    <Link href={`/members/${item.user.id}`}>
+                      <CardContent
                         sx={{
-                          fontSize: "12px",
-                          color: "#757575",
-                          paddingLeft: "8px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "flex-start",
+                          cursor: "pointer",
                         }}
                       >
-                        {item.user.username}
-                      </Typography>
-                    </CardContent>
-                    <CardMedia
-                      alt={item.title}
-                      component="img"
-                      sx={{
-                        width: "100%",
-                        height: "330px",
-                        cursor: "pointer",
-                      }}
-                      image={item.images[0].imageUrl}
-                    ></CardMedia>
+                        {item.user.avatar ? (
+                          <Avatar
+                            sx={{ width: "24px", height: "24px" }}
+                            alt="user-avatar"
+                            src={item.user.avatar}
+                          />
+                        ) : (
+                          <AccountCircle
+                            sx={{
+                              color: "grey",
+                              width: "24px",
+                              height: "24px",
+                            }}
+                          />
+                        )}
+                        <Typography
+                          sx={{
+                            fontSize: "12px",
+                            color: "#757575",
+                            paddingLeft: "8px",
+                          }}
+                        >
+                          {item.user.username}
+                        </Typography>
+                      </CardContent>
+                    </Link>
+                    <Link href={`products/${item.id}-${item.title}`}>
+                      <CardMedia
+                        alt={item.title}
+                        component="img"
+                        sx={{
+                          width: "100%",
+                          height: "330px",
+                          cursor: "pointer",
+                        }}
+                        image={item.images[0].imageUrl}
+                      ></CardMedia>
+                    </Link>
                     <CardContent>
                       <Typography sx={{ fontSize: "14px", color: "#171717" }}>
                         PLN {item.price}.00

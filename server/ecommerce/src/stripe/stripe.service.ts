@@ -16,15 +16,23 @@ export class StripeService {
   public async retrieveStripeSession(stripeId: string) {
     const session = await stripe.checkout.sessions.retrieve(stripeId);
     const customerEmail = session.customer_details.email;
-    const lineItems = await stripe.checkout.sessions.listLineItems(stripeId);
+    const lineItems = await stripe.checkout.sessions.listLineItems(stripeId, {
+      expand: ['data.price.product'],
+    });
+    const itemOwnerId = lineItems.data.map((lineItem) => {
+      return parseInt(
+        (lineItem.price.product as Stripe.Product).metadata.owner,
+      );
+    });
+
     const itemDescription = lineItems.data.map((item) => {
       return item.description;
     });
     if (session.payment_status === 'paid') {
       await this.nodemailerService.sendEmail(customerEmail, itemDescription);
-      return session;
+      return { ...session, itemOwnerId: itemOwnerId };
     }
-    return session;
+    return { ...session, itemOwnerId: itemOwnerId };
   }
   public async createStripeCheckoutSession(
     authUser: AuthUser,
@@ -46,7 +54,12 @@ export class StripeService {
             product_data: {
               name: `${dto.title}`,
               images: [dto.images[0].imageUrl],
+
+              metadata: {
+                owner: dto.user.id,
+              },
             },
+
             unit_amount: dto.price * 100,
           },
 

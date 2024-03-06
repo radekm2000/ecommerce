@@ -7,6 +7,7 @@ import { ProductWithImageAndUser } from "../types/types";
 import { Card, CardContent, CardMedia, Grid, Link } from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
+import { BasicRating } from "./ratingSystem/BasicRating";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;

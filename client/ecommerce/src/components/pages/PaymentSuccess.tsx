@@ -7,6 +7,8 @@ import { useUserFromAccessToken } from "../../hooks/useUserFromAccessToken";
 import { useQuery } from "@tanstack/react-query";
 import { axiosApi } from "../../api/axios";
 import { SessionObjLoadingLayout } from "../stripe-payment/sessionObjLoadingLayout";
+import { useGetBasicUserInfo } from "../../hooks/useGetBasicUserInfo";
+import { ReviewForm } from "../ratingSystem/ReviewForm";
 
 export const PaymentSuccess = () => {
   const [location, setLocation] = useLocation();
@@ -37,7 +39,15 @@ export const PaymentSuccess = () => {
     },
     enabled: !!stripeSessionId,
   });
+  const itemOwnerId = sessionObj?.itemOwnerId as number;
 
+  const { data: ownerData, isLoading: isOwnerDataLoading } =
+    useGetBasicUserInfo(itemOwnerId);
+  if (isOwnerDataLoading) {
+    console.log("Item owner data loading...");
+  }
+  console.log("owner data");
+  console.log(ownerData);
   useEffect(() => {
     if (isSuccess) {
       setUser(userData);
@@ -61,7 +71,7 @@ export const PaymentSuccess = () => {
 
   return (
     <>
-      {customerInfo && (
+      {customerInfo && ownerData && (
         <Box
           sx={{
             backgroundColor: "rgba(37,44,51,0.08)",
@@ -70,6 +80,7 @@ export const PaymentSuccess = () => {
             padding: "16px 30px",
             alignItems: "center",
             justifyContent: "center",
+            gap: "200px",
           }}
         >
           <Card
@@ -127,6 +138,7 @@ export const PaymentSuccess = () => {
               </Button>
             </CardContent>
           </Card>
+          <ReviewForm user={ownerData} />
         </Box>
       )}
     </>

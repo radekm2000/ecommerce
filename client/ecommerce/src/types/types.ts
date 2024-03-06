@@ -33,6 +33,14 @@ export type User = {
   products?: Product[];
 };
 
+export type UserWithAvatar = {
+  id: number;
+  username: string;
+  googleId?: string;
+  email: string;
+  role: "admin" | "user";
+  avatar: string;
+};
 export type Product = {
   id: number;
   brand: string;

@@ -31,6 +31,11 @@ export class UsersController {
     return await this.usersService.getUserInfo(userId);
   }
 
+  @Get('/basic/:id')
+  async getBasicUserInfo(@Param('id', ParseIntPipe) userId: number) {
+    return await this.usersService.findUserById(userId);
+  }
+
   @Post('profile/update')
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))

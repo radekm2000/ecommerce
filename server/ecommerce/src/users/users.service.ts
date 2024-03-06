@@ -195,6 +195,39 @@ export class UsersService {
     return updatedUser;
   }
 
+  async getBasicUser(userId: number) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: userId,
+      },
+      relations: ['avatarEntity'],
+    });
+
+    if (!user) {
+      throw new HttpException(
+        'User with given id not found',
+        HttpStatus.NOT_FOUND,
+      );
+    }
+    const userAvatar = user.avatarEntity;
+    if (userAvatar) {
+      const getObjectParams = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: userAvatar.avatarName,
+      };
+      const command = new GetObjectCommand(getObjectParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 360000 });
+
+      user.avatar = url;
+      await this.usersRepository.save(user);
+    }
+    return user;
+  }
+
+  async getBasicUserInfo(userId: number) {
+    return await this.getBasicUser(userId);
+  }
+
   async updateUserProfile(
     userProfileInfo: {
       aboutYou?: string;

@@ -14,6 +14,7 @@ import {
   RegisterInput,
   SimpleNotification,
   User,
+  UserWithAvatar,
   UserWithFollows,
 } from "../types/types";
 import { RequestAccessTokenInterceptor } from "./request-access-token.interceptor";
@@ -252,4 +253,9 @@ export const fetchPaginatedProducts = async ({
   } catch (error) {
     throw new Error("Failed to fetch items from the server.");
   }
+};
+
+export const getUserBasicInfo = async (userId: number) => {
+  const response = await axiosApi.get(`users/basic/${userId}`);
+  return response.data as UserWithAvatar;
 };

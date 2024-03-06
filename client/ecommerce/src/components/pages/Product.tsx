@@ -10,7 +10,6 @@ import { sendProductInfoToCheckout } from "../../api/axios";
 import { useStripe } from "@stripe/react-stripe-js";
 import { useMutation } from "@tanstack/react-query";
 import { useUserContext } from "../../contexts/UserContext";
-import { useEffect, useState } from "react";
 import { useDeleteProduct } from "../../hooks/useDeleteProduct";
 
 export const Product = () => {

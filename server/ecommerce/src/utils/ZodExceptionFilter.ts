@@ -18,7 +18,5 @@ export class ZodExceptionFilter extends BaseExceptionFilter {
     });
   }
 
-  private isZodError = (err: any): err is ZodError => {
-    return err.name === 'ZodError';
-  };
+  private isZodError = (err: any): err is ZodError => err.name === 'ZodError';
 }

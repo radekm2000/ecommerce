@@ -4,6 +4,8 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  Tab,
+  Tabs,
   Typography,
 } from "@mui/material";
 import { Link, useParams } from "wouter";
@@ -11,12 +13,13 @@ import { ProfileInfo } from "../ProfileInfo";
 import { useAllProducts } from "../../hooks/useAllProducts";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { useUserInfo } from "../../hooks/useUserInfo";
+import BasicTabs from "../TabPanel";
 
 export const Member = () => {
   const below700 = useMediaQuery(700);
   const below1200 = useMediaQuery(1200);
   const params = useParams();
-  
+
   const userId = params?.userId;
   const { data: user, isLoading: isUserLoading } = useUserInfo(
     parseInt(userId!)
@@ -61,17 +64,19 @@ export const Member = () => {
         sx={{
           maxWidth: "1260px",
           width: "100%",
-          display: "flex",
+          display: "column",
           padding: "20x",
         }}
       >
-        <Typography
+        <BasicTabs memberProducts={memberProducts} />
+
+        {/* <Typography
           sx={{ fontSize: "16px", color: "#171717", padding: "16px" }}
         >
           {memberProducts.length} items
-        </Typography>
+        </Typography> */}
       </Box>
-      <Box
+      {/* <Box
         sx={{
           maxWidth: "1260px",
           width: "100%",
@@ -114,7 +119,7 @@ export const Member = () => {
             </Grid>
           ))}
         </Grid>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

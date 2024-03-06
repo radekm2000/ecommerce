@@ -30,10 +30,7 @@ export const MenCatalog = () => {
   const [order, setOrder] = useState("");
   const { user } = useUserContext();
   const [category] = useState<string>("Men");
-  console.log("chosen brand");
-  console.log(brand);
-  console.log(user);
-  console.log(order);
+
   useEffect(() => {
     const params = new URLSearchParams();
     if (brand && order) {
@@ -52,7 +49,7 @@ export const MenCatalog = () => {
   const { data: products, isLoading: isProductsLoading } = useFilteredProducts(
     brand,
     order,
-    category,
+    category
   );
 
   if (isProductsLoading) {
@@ -61,7 +58,6 @@ export const MenCatalog = () => {
   if (!products) {
     return;
   }
-  console.log(products);
   const handlePriceSelected = (price: string) => {
     setOrder(price);
   };

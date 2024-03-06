@@ -92,9 +92,6 @@ export const ProfileInfo = ({ user }: { user: ExtendedUserWithProfile }) => {
             <Typography sx={{ fontSize: "24px", color: "#171717" }}>
               {user.username}
             </Typography>
-            <Typography sx={{ color: "#4D4D4D", fontSize: "16px" }}>
-              good reputation
-            </Typography>
           </Box>
         </Box>
       ) : (

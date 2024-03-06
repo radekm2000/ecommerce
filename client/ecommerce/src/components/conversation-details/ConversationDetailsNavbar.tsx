@@ -1,7 +1,4 @@
 import { Box, Button, Typography } from "@mui/material";
-import { Conversation } from "../../types/types";
-import { useUserContext } from "../../contexts/UserContext";
-import { getRecipientFromConversation } from "../../utils/getRecipientFromConversation";
 import ClearIcon from "@mui/icons-material/Clear";
 export const ConversationDetailsNavbar = ({
   setIsConversationDetailsOpen,

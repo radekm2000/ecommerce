@@ -245,7 +245,6 @@ export class ProductsService {
 
   async sortByPrice(order: Order, products: Product[]) {
     const sortedProducts = [...products];
-    console.log(order);
 
     if (order === 'price_high_to_low') {
       sortedProducts.sort((a, b) => b.price - a.price);
@@ -261,7 +260,7 @@ export class ProductsService {
     return products.filter((product) => product.brand === brand);
   }
 
-  public isValidBrand(brand: any): boolean {
+  public isValidBrand(brand: any): brand is Brand {
     const validBrands: Brand[] = [
       'Zara',
       'Reserved',
@@ -274,9 +273,10 @@ export class ProductsService {
     return validBrands.includes(brand);
   }
 
-  public isValidOrder(order: string): boolean {
+  public isValidOrder(order: string): order is Order {
     console.log(order);
     const validOrders: Order[] = ['price_high_to_low', 'price_low_to_high'];
+
     return validOrders.includes(order as Order);
   }
 

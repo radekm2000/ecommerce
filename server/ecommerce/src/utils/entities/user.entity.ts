@@ -13,6 +13,7 @@ import { Profile } from './profile.entity';
 import { Follow } from './followers.entity';
 import { Message } from './message.entity';
 import { Avatar } from './avatar.entity';
+import { Review } from './review.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -55,6 +56,10 @@ export class User {
 
   @OneToMany(() => Message, (message) => message.author)
   messages: Message[];
+
+  @OneToMany(() => Review, (review) => review.reviewRecipient)
+  reviews: Review[];
+
 
   @BeforeInsert()
   async hashPassword() {

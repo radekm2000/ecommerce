@@ -185,3 +185,9 @@ export const ProductWithImageAndUserSchema = z.object({
 });
 
 export type ProductType = z.infer<typeof ProductWithImageAndUserSchema>;
+
+
+export type ReviewFormFields = {
+  comment: string;
+  rating: number;
+}

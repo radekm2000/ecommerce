@@ -4,21 +4,40 @@ import {
   Button,
   Card,
   CardContent,
+  Rating,
   TextField,
   Typography,
 } from "@mui/material";
-import { BasicRating } from "./BasicRating";
-import { useState } from "react";
 import { UserWithAvatar } from "../../types/types";
 import { AccountCircle } from "@mui/icons-material";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { useAddReview } from "../../hooks/useAddReview";
+
+type FormFields = {
+  rating: number;
+  comment: string;
+};
 
 export const ReviewForm = ({ user }: { user: UserWithAvatar }) => {
-  const [value, setValue] = useState<number | null>(0);
-  const [comment, setComment] = useState("");
-
-  const handleSubmit = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
-    e.preventDefault();
-    console.log(value, comment);
+  const [hasSubmittedOnce, setHasSubmittedOnce] = useState(false);
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<FormFields>();
+  const postMutation = useAddReview(user.id);
+  const { mutate } = postMutation;
+  const onSubmit: SubmitHandler<FormFields> = (data) => {
+    console.log(data);
+    // mutate({
+    //   data: {
+    //     ...data,
+    //     reviewRecipientId: user.id,
+    //   },
+    // });
+    setHasSubmittedOnce(true);
   };
 
   return (
@@ -57,32 +76,61 @@ export const ReviewForm = ({ user }: { user: UserWithAvatar }) => {
             <Typography sx={{ marginLeft: "5px" }}>{user.username}</Typography>
           </Box>
           <Box sx={{ marginTop: "10px" }}>
-            <BasicRating value={value} setValue={setValue} />
+            <Controller
+              name="rating"
+              control={control}
+              defaultValue={0}
+              rules={{ required: true, min: 1 }}
+              render={(props) => <Rating ref={props.field.ref} name="rating" />}
+            />
+            {errors.rating && (
+              <Typography sx={{ color: "red", fontSize: "14px" }}>
+                Rating is required
+              </Typography>
+            )}
           </Box>
-
-          <TextField
-            sx={{
-              marginTop: "10px",
-              "& fieldset.MuiOutlinedInput-notchedOutline": {
-                borderColor: "#007782",
-              },
-              "& .MuiOutlinedInput-root": {
-                "&.Mui-focused fieldset": {
-                  borderColor: "#007782",
-                },
-              },
-            }}
-            multiline
-            maxRows={2}
-            spellCheck="false"
-            id="review-comment"
-            onChange={(e) => setComment(e.target.value)}
-            value={comment}
-            label={"Review"}
-          ></TextField>
+          <Controller
+            name="comment"
+            control={control}
+            defaultValue=""
+            rules={{ maxLength: 100 }}
+            render={({ field: { ref, ...field } }) => (
+              <TextField
+                inputRef={ref}
+                {...field}
+                InputProps={{
+                  readOnly: hasSubmittedOnce,
+                }}
+                sx={{
+                  marginTop: "10px",
+                  "& fieldset.MuiOutlinedInput-notchedOutline": {
+                    borderColor: "#007782",
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    "&.Mui-focused fieldset": {
+                      borderColor: "#007782",
+                    },
+                  },
+                }}
+                multiline
+                maxRows={2}
+                error={!!errors.comment}
+                spellCheck="false"
+                id="review-comment"
+                label={"Review"}
+              ></TextField>
+            )}
+          ></Controller>
+          {errors.comment && (
+            <Typography sx={{ color: "red" }}>
+              This comment is too long.
+            </Typography>
+          )}
           <Button
-            onClick={(e) => handleSubmit(e)}
+            onClick={handleSubmit(onSubmit)}
+            type="submit"
             fullWidth
+            // disabled={hasSubmittedOnce}
             variant="contained"
             sx={{
               textTransform: "none",
@@ -93,7 +141,11 @@ export const ReviewForm = ({ user }: { user: UserWithAvatar }) => {
               },
             }}
           >
-            Submit
+            {hasSubmittedOnce ? (
+              <Typography>Thanks for review!</Typography>
+            ) : (
+              <Typography>Submit</Typography>
+            )}
           </Button>
         </Box>
       </CardContent>

@@ -10,6 +10,7 @@ import { Message } from 'src/utils/entities/message.entity';
 import { Avatar } from 'src/utils/entities/avatar.entity';
 import { Notification } from 'src/utils/entities/notification.entity';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
+import { Review } from 'src/utils/entities/review.entity';
 
 // export let config: PostgresConnectionOptions;
 // if (process.env.IS_PRODUCTION === 'true') {
@@ -55,6 +56,7 @@ export const config: PostgresConnectionOptions = {
     Message,
     Notification,
     ProductNotification,
+    Review,
   ],
   synchronize: true,
 };

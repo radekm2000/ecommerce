@@ -12,6 +12,7 @@ import {
   ProductWithImageAndUser,
   ProductWithImageAndUserSchema,
   RegisterInput,
+  ReviewFormFields,
   SimpleNotification,
   User,
   UserWithAvatar,
@@ -258,4 +259,13 @@ export const fetchPaginatedProducts = async ({
 export const getUserBasicInfo = async (userId: number) => {
   const response = await axiosApi.get(`users/basic/${userId}`);
   return response.data as UserWithAvatar;
+};
+
+export const addReview = async ({
+  data,
+}: {
+  data: ReviewFormFields & { reviewRecipientId: number };
+}) => {
+  const response = await axiosApi.post(`reviews`, data);
+  return response.data;
 };

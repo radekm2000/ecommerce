@@ -9,8 +9,11 @@ import { axiosApi } from "../../api/axios";
 import { SessionObjLoadingLayout } from "../stripe-payment/sessionObjLoadingLayout";
 import { useGetBasicUserInfo } from "../../hooks/useGetBasicUserInfo";
 import { ReviewForm } from "../ratingSystem/ReviewForm";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 export const PaymentSuccess = () => {
+  const below960 = useMediaQuery(960);
+
   const [location, setLocation] = useLocation();
   const { user, setUser } = useUserContext();
   const [aT, setAt] = useState("");
@@ -76,16 +79,17 @@ export const PaymentSuccess = () => {
           sx={{
             backgroundColor: "rgba(37,44,51,0.08)",
             display: "flex",
+            flexDirection: below960 ? "column" : "row",
             height: "95vh",
             padding: "16px 30px",
             alignItems: "center",
             justifyContent: "center",
-            gap: "200px",
+            gap: below960 ? "10px" : "200px",
           }}
         >
           <Card
             sx={{
-              width: "300px",
+              width: below960 ? '500px' : '300px',
               height: "300px",
               padding: "20px",
             }}

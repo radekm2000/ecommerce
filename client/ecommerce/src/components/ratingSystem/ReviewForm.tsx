@@ -14,6 +14,7 @@ import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useAddReview } from "../../hooks/useAddReview";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 type FormFields = {
   rating: number;
@@ -21,27 +22,39 @@ type FormFields = {
 };
 
 export const ReviewForm = ({ user }: { user: UserWithAvatar }) => {
+  const below960 = useMediaQuery(960);
   const [hasSubmittedOnce, setHasSubmittedOnce] = useState(false);
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<FormFields>();
   const postMutation = useAddReview(user.id);
   const { mutate } = postMutation;
   const onSubmit: SubmitHandler<FormFields> = (data) => {
     console.log(data);
-    // mutate({
-    //   data: {
-    //     ...data,
-    //     reviewRecipientId: user.id,
-    //   },
-    // });
+    mutate({
+      data: {
+        ...data,
+        reviewRecipientId: user.id,
+      },
+    });
     setHasSubmittedOnce(true);
   };
-
+  const handleRatingChange = (event, value: number | null) => {
+    if (typeof value === "number") {
+      setValue("rating", value);
+    }
+  };
   return (
-    <Card sx={{ width: "300px", height: "300px", padding: "20px" }}>
+    <Card
+      sx={{
+        width: below960 ? "500px" : "300px",
+        height: "300px",
+        padding: "20px",
+      }}
+    >
       <CardContent
         sx={{
           display: "flex",
@@ -79,9 +92,15 @@ export const ReviewForm = ({ user }: { user: UserWithAvatar }) => {
             <Controller
               name="rating"
               control={control}
-              defaultValue={0}
-              rules={{ required: true, min: 1 }}
-              render={(props) => <Rating ref={props.field.ref} name="rating" />}
+              defaultValue={1}
+              rules={{ min: 1, required: true }}
+              render={({ field }) => (
+                <Rating
+                  readOnly={hasSubmittedOnce}
+                  {...field}
+                  onChange={handleRatingChange}
+                />
+              )}
             />
             {errors.rating && (
               <Typography sx={{ color: "red", fontSize: "14px" }}>
@@ -130,7 +149,7 @@ export const ReviewForm = ({ user }: { user: UserWithAvatar }) => {
             onClick={handleSubmit(onSubmit)}
             type="submit"
             fullWidth
-            // disabled={hasSubmittedOnce}
+            disabled={hasSubmittedOnce}
             variant="contained"
             sx={{
               textTransform: "none",

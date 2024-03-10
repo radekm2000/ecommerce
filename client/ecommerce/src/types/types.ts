@@ -82,8 +82,16 @@ export type UserProfile = {
   aboutYou: string;
 };
 
-export type ExtendedUserWithProfile = UserWithFollows & {
+export type Review = {
+  id: number;
+  comment: string;
+  rating: number;
+  reviewCreator: User;
+};
+
+export type ExtendedUserWithProfileAndReviews = UserWithFollows & {
   profile?: UserProfile;
+  reviews: Review[];
 };
 
 export type SingleProduct = {
@@ -186,8 +194,7 @@ export const ProductWithImageAndUserSchema = z.object({
 
 export type ProductType = z.infer<typeof ProductWithImageAndUserSchema>;
 
-
 export type ReviewFormFields = {
   comment: string;
   rating: number;
-}
+};

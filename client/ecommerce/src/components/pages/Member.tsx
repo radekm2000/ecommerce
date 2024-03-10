@@ -1,31 +1,32 @@
-import {
-  Box,
-  Card,
-  CardContent,
-  CardMedia,
-  Grid,
-  Tab,
-  Tabs,
-  Typography,
-} from "@mui/material";
-import { Link, useParams } from "wouter";
+import { Box } from "@mui/material";
+import { useLocation, useParams } from "wouter";
 import { ProfileInfo } from "../ProfileInfo";
 import { useAllProducts } from "../../hooks/useAllProducts";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { useUserInfo } from "../../hooks/useUserInfo";
 import BasicTabs from "../TabPanel";
+import { useEffect, useState } from "react";
 
 export const Member = () => {
+  const [tab, setTab] = useState("");
   const below700 = useMediaQuery(700);
   const below1200 = useMediaQuery(1200);
   const params = useParams();
-
+  const [location, setLocation] = useLocation();
   const userId = params?.userId;
   const { data: user, isLoading: isUserLoading } = useUserInfo(
     parseInt(userId!)
   );
   console.log(user);
   const { data: products, isLoading: isProductsDataLoading } = useAllProducts();
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (tab) {
+      params.set("tab", tab);
+      setLocation(`${location}?tab=${tab}`);
+    }
+  });
   if (isUserLoading) {
     return "isLoading...";
   }
@@ -47,6 +48,7 @@ export const Member = () => {
   if (!products) {
     return "No products to display";
   }
+  const reviews = user.reviews
   return (
     <Box
       sx={{
@@ -62,13 +64,14 @@ export const Member = () => {
       <ProfileInfo user={user} />
       <Box
         sx={{
+          
           maxWidth: "1260px",
           width: "100%",
           display: "column",
           padding: "20x",
         }}
       >
-        <BasicTabs memberProducts={memberProducts} />
+        <BasicTabs reviews={reviews} setTab={setTab} memberproducts={memberProducts} />
 
         {/* <Typography
           sx={{ fontSize: "16px", color: "#171717", padding: "16px" }}

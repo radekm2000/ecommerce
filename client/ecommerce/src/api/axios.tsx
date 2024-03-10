@@ -2,7 +2,7 @@ import axios from "axios";
 import {
   Brand,
   Conversation,
-  ExtendedUserWithProfile,
+  ExtendedUserWithProfileAndReviews,
   FetchedNotifications,
   LoginInput,
   LoginResponseData,
@@ -100,7 +100,7 @@ export const getProducts = async (): Promise<ProductWithImageAndUser[]> => {
 
 export const getUserData = async (
   userId: number
-): Promise<ExtendedUserWithProfile> => {
+): Promise<ExtendedUserWithProfileAndReviews> => {
   const response = await axiosApi.get(`users/${userId}`);
   return response.data;
 };

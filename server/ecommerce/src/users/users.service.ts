@@ -130,6 +130,9 @@ export class UsersService {
         followers: true,
         followings: true,
         avatarEntity: true,
+        reviews: {
+          reviewCreator: true,
+        },
       },
     });
     if (!user) {

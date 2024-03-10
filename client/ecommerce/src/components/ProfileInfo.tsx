@@ -1,18 +1,29 @@
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Button, Rating, Typography } from "@mui/material";
 import { AccountCircle } from "@mui/icons-material";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
 import LocationOnOutlinedIcon from "@mui/icons-material/LocationOnOutlined";
 import CreateOutlinedIcon from "@mui/icons-material/CreateOutlined";
 import { useMediaQuery } from "../hooks/useMediaQuery";
-import { ExtendedUserWithProfile, User, UserWithFollows } from "../types/types";
+import {
+  ExtendedUserWithProfileAndReviews,
+  User,
+  UserWithFollows,
+} from "../types/types";
 import { useUserContext } from "../contexts/UserContext";
 import RssFeedIcon from "@mui/icons-material/RssFeed";
 import { useEffect, useState } from "react";
 import { useFollowUser } from "../utils/followUser";
 import { Link, useLocation } from "wouter";
-export const ProfileInfo = ({ user }: { user: ExtendedUserWithProfile }) => {
+import { calculateMedian } from "../utils/calculateMedian";
+export const ProfileInfo = ({
+  user,
+}: {
+  user: ExtendedUserWithProfileAndReviews;
+}) => {
   const { user: meUser } = useUserContext();
   const [, setLocation] = useLocation();
+  const ratings = user.reviews.map((review) => review.rating);
+  const calculatedRatingValue = calculateMedian(ratings);
 
   const isFollowed = (member: UserWithFollows) => {
     return (member.followings ?? []).some((following) => {
@@ -20,7 +31,6 @@ export const ProfileInfo = ({ user }: { user: ExtendedUserWithProfile }) => {
     });
   };
   const [followButonClicked, setFollowButtonClicked] = useState(false);
-
   useEffect(() => {
     setFollowButtonClicked(isFollowed(user));
   }, [user]);
@@ -132,7 +142,24 @@ export const ProfileInfo = ({ user }: { user: ExtendedUserWithProfile }) => {
                 <Typography sx={{ fontSize: "24px" }}>
                   {user.username}
                 </Typography>
-                <Typography color={"#4D4D4D"}>No reviews yet</Typography>
+                <Box
+                  sx={{ display: "flex", gap: "10px", alignItems: "center" }}
+                >
+                  <Rating size="small" value={calculatedRatingValue} readOnly />
+
+                  {user.reviews.length > 0 ? (
+                    user.reviews.length == 1 ? (
+                      <Typography>{user.reviews.length} review</Typography>
+                    ) : (
+                      <Typography sx={{ fontSize: "16px" }} color={"#4D4D4D"}>
+                        {user.reviews.length} reviews
+                      </Typography>
+                    )
+                  ) : (
+                    <Typography color={"#4D4D4D"}>No reviews yet</Typography>
+                  )}
+                </Box>
+
                 {user.id === meUser.id && below900 ? (
                   <Box
                     sx={{

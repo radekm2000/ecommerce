@@ -3,17 +3,27 @@ import Tab from "@mui/material/Tab";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import { useState } from "react";
-import { ProductWithImageAndUser } from "../types/types";
-import { Card, CardContent, CardMedia, Grid, Link } from "@mui/material";
+import { ProductWithImageAndUser, Review } from "../types/types";
+import {
+  Avatar,
+  Card,
+  CardContent,
+  CardMedia,
+  Divider,
+  Grid,
+  Rating,
+} from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import { BasicRating } from "./ratingSystem/BasicRating";
+import { AccountCircle } from "@mui/icons-material";
+import { Link } from "wouter";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
   value: number;
-  memberProducts?: ProductWithImageAndUser[];
-  reviews?: unknown[];
+  memberproducts?: ProductWithImageAndUser[];
+  reviews?: Review[];
 }
 
 function CustomTabPanel(props: TabPanelProps) {
@@ -29,7 +39,7 @@ function CustomTabPanel(props: TabPanelProps) {
       aria-labelledby={`simple-tab-${index}`}
       {...other}
     >
-      {value === index && props.memberProducts && (
+      {value === index && props.memberproducts && (
         <Box
           sx={{
             maxWidth: "1260px",
@@ -38,15 +48,15 @@ function CustomTabPanel(props: TabPanelProps) {
             padding: "20x",
           }}
         >
-          {props.memberProducts && (
+          {props.memberproducts && (
             <Typography
               sx={{ fontSize: "16px", color: "#171717", padding: "16px" }}
             >
-              {props.memberProducts?.length} items
+              {props.memberproducts?.length} items
             </Typography>
           )}
           <Grid container>
-            {props.memberProducts?.map((product, index) => (
+            {props.memberproducts?.map((product, index) => (
               <Grid
                 item
                 key={index}
@@ -105,9 +115,54 @@ function CustomTabPanel(props: TabPanelProps) {
           </Typography>
         </Box>
       ) : (
-        <Box sx={{ marginTop: "20px" }}>
+        <Box
+          sx={{
+            maxWidth: "1260px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            justifyContent: "center",
+          }}
+        >
           {props.reviews?.map((review) => (
-            <Typography>{review?.description}</Typography>
+            <Box
+              sx={{
+                gap: "5px",
+                width: "100%",
+                display: "flex",
+                borderBottom: "1px solid rgba(23, 23, 23, 0.1)",
+                marginTop: "10px",
+              }}
+            >
+              {review.reviewCreator.avatar ? (
+                <Avatar
+                  src={review.reviewCreator.avatar}
+                  sx={{ width: "48px", height: "48px" }}
+                />
+              ) : (
+                <AccountCircle
+                  sx={{ width: "48px", height: "48px", color: "grey" }}
+                />
+              )}
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Link href={`/members/${review.reviewCreator.id}`}>
+                  <Typography
+                    sx={{
+                      color: "#007782",
+                      fontSize: "16px",
+                      cursor: "pointer",
+                    }}
+                  >
+                    {review.reviewCreator.username}
+                  </Typography>
+                </Link>
+                <Rating value={review.rating} size="small" readOnly />
+                <Typography sx={{ color: "#4D4D4D", fontSize: "16px" }}>
+                  {review.comment}
+                </Typography>
+                <Divider sx={{ my: 2, borderColor: "white" }} />
+              </Box>
+            </Box>
           ))}
         </Box>
       )}
@@ -123,15 +178,19 @@ function a11yProps(index: number) {
 }
 
 export default function BasicTabs({
-  memberProducts,
+  memberproducts,
+  setTab,
+  reviews,
 }: {
-  memberProducts: ProductWithImageAndUser[];
+  reviews: Review[];
+  setTab: React.Dispatch<React.SetStateAction<string>>;
+  memberproducts: ProductWithImageAndUser[];
 }) {
   const [value, setValue] = useState(0);
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
+  console.log(reviews);
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
@@ -147,6 +206,7 @@ export default function BasicTabs({
           aria-label="basic tabs example"
         >
           <Tab
+            onClick={() => setTab("wardrobe")}
             sx={{
               textTransform: "none",
             }}
@@ -154,6 +214,7 @@ export default function BasicTabs({
             {...a11yProps(0)}
           />
           <Tab
+            onClick={() => setTab("reviews")}
             sx={{ textTransform: "none" }}
             label="Reviews"
             {...a11yProps(1)}
@@ -163,19 +224,10 @@ export default function BasicTabs({
       <CustomTabPanel
         value={value}
         index={0}
-        memberProducts={memberProducts}
+        memberproducts={memberproducts}
       ></CustomTabPanel>
       <CustomTabPanel
-        reviews={
-          [
-            //   {
-            //     description: "very good",
-            //   },
-            //   {
-            //     description: "very bad user",
-            //   },
-          ]
-        }
+        reviews={reviews}
         value={value}
         index={1}
       ></CustomTabPanel>

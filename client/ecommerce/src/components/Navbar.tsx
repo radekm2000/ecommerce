@@ -31,6 +31,8 @@ import { useNotifications } from "../hooks/useNotifications";
 import { useProductNotifications } from "../hooks/useProductNotifications";
 import { useMarkProductNotificationAsRead } from "../hooks/useMarkProductNotificationAsRead";
 import PopoverPopupState from "./PopoverPopupState";
+import { useUserInfo } from "../hooks/useUserInfo";
+import { useFetchUserInfo } from "../hooks/useFetchUserInfo";
 
 export const NotAuthed = () => {
   return (
@@ -122,7 +124,7 @@ export const Navbar = () => {
   const [searchInputValue, setSearchInputValue] = useState("");
   const [value, setValue] = useState(0);
   const below800 = useMediaQuery(800);
-  const { user } = useUserContext();
+  const { user, setUser } = useUserContext();
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
@@ -136,6 +138,15 @@ export const Navbar = () => {
     markProductNotificationsAsRead();
   };
   const {
+    data: userData,
+    isLoading: isUserLoading,
+    isSuccess: isFetchedUserSuccess,
+  } = useFetchUserInfo(user.id);
+  if (isFetchedUserSuccess && !isUserLoading) {
+    setUser(userData);
+  }
+  console.log(user);
+  const {
     data: productNotificationsReceived,
     isLoading: isProductNotificationsLoading,
   } = useProductNotifications(user.id);
@@ -144,6 +155,7 @@ export const Navbar = () => {
   const { mutate: markProductNotificationsAsRead } = mutation;
   const { data: notificationsReceived, isLoading: isNotificationsLoading } =
     useNotifications(user.id);
+
   if (!user.username && !user.id) {
     return;
   }

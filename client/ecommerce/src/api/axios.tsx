@@ -269,3 +269,8 @@ export const addReview = async ({
   const response = await axiosApi.post(`reviews`, data);
   return response.data;
 };
+
+export const fetchUserInfoWhenLostContext = async () => {
+  const response = await axiosApi.get("users/profile");
+  return response.data as User;
+};

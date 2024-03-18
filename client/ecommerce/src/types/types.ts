@@ -87,6 +87,7 @@ export type Review = {
   comment: string;
   rating: number;
   reviewCreator: User;
+  createdAt: string
 };
 
 export type ExtendedUserWithProfileAndReviews = UserWithFollows & {

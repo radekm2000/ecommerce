@@ -4,6 +4,7 @@ import {
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { User } from './user.entity';
 
@@ -24,4 +25,7 @@ export class Review {
   @ManyToOne(() => User)
   @JoinColumn()
   reviewCreator: User;
+
+  @UpdateDateColumn()
+  createdAt: Date;
 }

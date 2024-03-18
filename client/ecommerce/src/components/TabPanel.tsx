@@ -124,8 +124,9 @@ function CustomTabPanel(props: TabPanelProps) {
             justifyContent: "center",
           }}
         >
-          {props.reviews?.map((review) => (
+          {props.reviews?.map((review, index) => (
             <Box
+              key={index}
               sx={{
                 gap: "5px",
                 width: "100%",
@@ -134,33 +135,40 @@ function CustomTabPanel(props: TabPanelProps) {
                 marginTop: "10px",
               }}
             >
-              {review.reviewCreator.avatar ? (
-                <Avatar
-                  src={review.reviewCreator.avatar}
-                  sx={{ width: "48px", height: "48px" }}
-                />
-              ) : (
-                <AccountCircle
-                  sx={{ width: "48px", height: "48px", color: "grey" }}
-                />
-              )}
-              <Box sx={{ display: "flex", flexDirection: "column" }}>
-                <Link href={`/members/${review.reviewCreator.id}`}>
-                  <Typography
-                    sx={{
-                      color: "#007782",
-                      fontSize: "16px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {review.reviewCreator.username}
+              <Box sx={{ display: "flex" }}>
+                {review.reviewCreator.avatar ? (
+                  <Avatar
+                    src={review.reviewCreator.avatar}
+                    sx={{ width: "48px", height: "48px" }}
+                  />
+                ) : (
+                  <AccountCircle
+                    sx={{ width: "48px", height: "48px", color: "grey" }}
+                  />
+                )}
+                <Box sx={{ display: "flex", flexDirection: "column" }}>
+                  <Link href={`/members/${review.reviewCreator.id}`}>
+                    <Typography
+                      sx={{
+                        color: "#007782",
+                        fontSize: "16px",
+                        cursor: "pointer",
+                      }}
+                    >
+                      {review.reviewCreator.username}
+                    </Typography>
+                  </Link>
+                  <Rating value={review.rating} size="small" readOnly />
+                  <Typography sx={{ color: "#4D4D4D", fontSize: "16px" }}>
+                    {review.comment}
                   </Typography>
-                </Link>
-                <Rating value={review.rating} size="small" readOnly />
-                <Typography sx={{ color: "#4D4D4D", fontSize: "16px" }}>
-                  {review.comment}
+                  <Divider sx={{ my: 2, borderColor: "white" }} />
+                </Box>
+              </Box>
+              <Box sx={{ marginLeft: "auto" }}>
+                <Typography sx={{ color: "#1212125A", fontSize: "14px" }}>
+                  {review.createdAt}
                 </Typography>
-                <Divider sx={{ my: 2, borderColor: "white" }} />
               </Box>
             </Box>
           ))}

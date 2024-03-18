@@ -6,6 +6,14 @@ import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { useUserInfo } from "../../hooks/useUserInfo";
 import BasicTabs from "../TabPanel";
 import { useEffect, useState } from "react";
+import {
+  compareAsc,
+  compareDesc,
+  format,
+  formatDistanceToNowStrict,
+  parseISO,
+} from "date-fns";
+import { string } from "zod";
 
 export const Member = () => {
   const [tab, setTab] = useState("");
@@ -48,7 +56,22 @@ export const Member = () => {
   if (!products) {
     return "No products to display";
   }
-  const reviews = user.reviews
+  const reviews = user.reviews;
+
+  const sortedReviewsByCreateTime = reviews.sort((a, b) =>
+    compareDesc(a.createdAt, b.createdAt)
+  );
+
+  const timeFormattedReviews = sortedReviewsByCreateTime.map((review) => {
+    const formattedDistance = formatDistanceToNowStrict(review.createdAt, {
+      addSuffix: true,
+    });
+    return {
+      ...review,
+      createdAt: formattedDistance,
+    };
+  });
+
   return (
     <Box
       sx={{
@@ -64,14 +87,17 @@ export const Member = () => {
       <ProfileInfo user={user} />
       <Box
         sx={{
-          
           maxWidth: "1260px",
           width: "100%",
           display: "column",
           padding: "20x",
         }}
       >
-        <BasicTabs reviews={reviews} setTab={setTab} memberproducts={memberProducts} />
+        <BasicTabs
+          reviews={timeFormattedReviews}
+          setTab={setTab}
+          memberproducts={memberProducts}
+        />
 
         {/* <Typography
           sx={{ fontSize: "16px", color: "#171717", padding: "16px" }}

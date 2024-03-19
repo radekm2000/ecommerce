@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ProductWithImageAndUser, UserWithFollows } from "../../types/types";
-import { Avatar, Box, Button, Typography } from "@mui/material";
+import { Avatar, Box, Button, Rating, Typography } from "@mui/material";
 import { IsProductsOwnerMeUser } from "../../utils/checkIfProductsOwnerIsMe";
 import { useUserContext } from "../../contexts/UserContext";
 import { AccountCircle } from "@mui/icons-material";
@@ -8,6 +8,7 @@ import { useFollowUser } from "../../utils/followUser";
 import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Link, useLocation } from "wouter";
 import { useUserInfo } from "../../hooks/useUserInfo";
+import { calculateMedian } from "../../utils/calculateMedian";
 export const DisplayUserInfo = ({
   userId,
   product,
@@ -23,11 +24,17 @@ export const DisplayUserInfo = ({
       return following.follower.id === meUser.id;
     });
   };
+  const { data: meUserInfo, isLoading: isMeUserInfoLoading } = useUserInfo(
+    meUser.id
+  );
   const { data: user, isLoading: isUserLoading } = useUserInfo(userId);
   useEffect(() => {
     setFollowButtonClicked(isFollowed(user));
   }, [user]);
   const mutation = useFollowUser(user?.id);
+  if (isMeUserInfoLoading) {
+    return "isLoading...";
+  }
   if (!product) {
     return;
   }
@@ -35,6 +42,9 @@ export const DisplayUserInfo = ({
     return "userLoading...";
   }
   if (!user) {
+    return;
+  }
+  if (!meUserInfo) {
     return;
   }
   const { mutate } = mutation;
@@ -45,7 +55,11 @@ export const DisplayUserInfo = ({
     setFollowButtonClicked(!followButonClicked);
     mutate(user!.id);
   };
+  const meUserRatings = meUserInfo?.reviews.map((review) => review.rating);
+  const calculatedMeUserRatingValue = calculateMedian(meUserRatings);
   IsProductsOwnerMeUser(meUser.username, product);
+  const ratings = user.reviews.map((review) => review.rating);
+  const calculatedRatingValue = calculateMedian(ratings);
   return (
     <Box sx={{ width: "100%" }}>
       {IsProductsOwnerMeUser(meUser.username, product) ? (
@@ -60,7 +74,7 @@ export const DisplayUserInfo = ({
               alignItems: "center",
               justifyContent: "flex-start",
               "&:hover": {
-                backgroundColor: "rgba(23, 23, 23, 0.04)",
+                backgroundColor: "rgba(23, 23,23, 0.04)",
               },
               cursor: "pointer",
             }}
@@ -75,11 +89,27 @@ export const DisplayUserInfo = ({
                 sx={{ width: "48px", height: "48px", color: "grey" }}
               />
             )}
-            <Typography
-              sx={{ fontSize: "16px", color: "#171717", marginLeft: "8px" }}
-            >
-              {meUser.username}
-            </Typography>
+            <Box sx={{ display: "flex", flexDirection: "column" }}>
+              <Typography
+                sx={{ fontSize: "16px", color: "#171717", marginLeft: "8px" }}
+              >
+                {meUser.username}
+                {user.reviews.length > 0 && (
+                  <>
+                    <Box sx={{ display: "flex" }}>
+                      <Rating
+                        size="small"
+                        value={calculatedMeUserRatingValue}
+                        readOnly
+                      />
+                      <Typography sx={{ color: "#4D4D4D", fontSize: "11px" }}>
+                        {user.reviews.length}
+                      </Typography>
+                    </Box>
+                  </>
+                )}
+              </Typography>
+            </Box>
             <KeyboardArrowRightIcon
               sx={{
                 width: "24px",
@@ -107,6 +137,7 @@ export const DisplayUserInfo = ({
                 flexDirection: "row",
                 padding: "16px",
                 backgroundColor: "white",
+
                 alignItems: "center",
                 justifyContent: "flex-start",
                 borderBottom: "1px solid rgba(23, 23, 23, 0.15)",
@@ -124,14 +155,29 @@ export const DisplayUserInfo = ({
                   sx={{ width: "48px", height: "48px", color: "grey" }}
                 />
               )}
-              <Typography sx={{ fontSize: "16px", color: "#171717" }}>
-                {user?.username}
-              </Typography>
+              <Box sx={{ display: "flex", flexDirection: "column" }}>
+                <Typography sx={{ fontSize: "16px", color: "#171717" }}>
+                  {user?.username}
+                </Typography>
+                {user.reviews.length > 0 && (
+                  <>
+                    <Box sx={{ display: "flex" }}>
+                      <Rating
+                        size="small"
+                        value={calculatedRatingValue}
+                        readOnly
+                      />
+                      <Typography sx={{ color: "#4D4D4D", fontSize: "11px" }}>
+                        {user.reviews.length}
+                      </Typography>
+                    </Box>
+                  </>
+                )}
+              </Box>
               <KeyboardArrowRightIcon
                 sx={{
                   width: "24px",
                   height: "24px",
-                  color: "black",
                   marginLeft: "auto",
                 }}
               />

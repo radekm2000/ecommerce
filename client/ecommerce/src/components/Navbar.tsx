@@ -33,6 +33,7 @@ import { useMarkProductNotificationAsRead } from "../hooks/useMarkProductNotific
 import PopoverPopupState from "./PopoverPopupState";
 import { useUserInfo } from "../hooks/useUserInfo";
 import { useFetchUserInfo } from "../hooks/useFetchUserInfo";
+import { isAdmin } from "../utils/isAdmin";
 
 export const NotAuthed = () => {
   return (
@@ -120,7 +121,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 
 export const Navbar = () => {
   const below1000 = useMediaQuery(1000);
-
+  const below900 = useMediaQuery(900);
   const [searchInputValue, setSearchInputValue] = useState("");
   const [value, setValue] = useState(0);
   const below800 = useMediaQuery(800);
@@ -137,6 +138,7 @@ export const Navbar = () => {
   const handleProductNotificationsIconClick = () => {
     markProductNotificationsAsRead();
   };
+
   const {
     data: userData,
     isLoading: isUserLoading,
@@ -365,18 +367,34 @@ export const Navbar = () => {
                 )}
               </Box>
               <Box sx={{ flexGrow: 1 }} />
-              {!user && (
-                <Button
-                  variant="outlined"
-                  sx={{
-                    textTransform: "none",
-                    color: "#007782",
-                    border: "1px solid #007782",
-                  }}
-                >
-                  Login
-                </Button>
-              )}
+
+              {isAdmin(user.role) &&
+                (below900 ? null : (
+                  <Button
+                    sx={{
+                      marginRight: "20px",
+                      borderRadius: "6px",
+                      background: "#007782",
+                      width: "90px",
+                      height: "38px",
+                      "&:hover": {
+                        background: "#007782",
+                      },
+                      textTransform: "none",
+                      display: below800 ? "none" : null,
+                    }}
+                  >
+                    <Link href="/dashboard">
+                      <Typography
+                        color="white"
+                        fontFamily="Maison Neue"
+                        fontSize="14px"
+                      >
+                        Dashboard
+                      </Typography>
+                    </Link>
+                  </Button>
+                ))}
               <Button
                 sx={{
                   borderRadius: "6px",
@@ -399,6 +417,7 @@ export const Navbar = () => {
                   </Typography>
                 </Link>
               </Button>
+
               <Box sx={{ display: { xs: "none", md: "flex" } }}>
                 <Link to="/inbox">
                   <IconButton

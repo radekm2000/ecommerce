@@ -1,5 +1,6 @@
 import axios from "axios";
 import {
+  AdminNotification,
   Brand,
   Conversation,
   ExtendedUserWithProfileAndReviews,
@@ -273,4 +274,14 @@ export const addReview = async ({
 export const fetchUserInfoWhenLostContext = async () => {
   const response = await axiosApi.get("users/profile");
   return response.data as User;
+};
+
+export const addAdminNotification = async (dto: AdminNotification) => {
+  const response = await axiosApi.post("admin-notifications", dto);
+  return response.data;
+};
+
+export const getAdminNotifications = async () => {
+  const response = await axiosApi.get("admin-notifications");
+  return response.data as AdminNotification[];
 };

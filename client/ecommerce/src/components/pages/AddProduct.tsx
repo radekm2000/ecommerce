@@ -12,11 +12,12 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { ChangeEvent, useState } from "react";
-import { addProduct } from "../../api/axios";
+import { addAdminNotification, addProduct } from "../../api/axios";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Redirect } from "wouter";
 import { useUserContext } from "../../contexts/UserContext";
+import { useAddAdminNotification } from "../../hooks/useAddAdminNotification";
 
 //important note --------------
 // change button component prop to label if you want to upload files
@@ -58,7 +59,8 @@ export const AddProduct = () => {
       toast.error("Try again");
     },
   });
-
+  const adminNotificationMutation = useAddAdminNotification();
+  const { mutate: mutateAdminNotification } = adminNotificationMutation;
   const { mutate } = productMutation;
   const handlePhotoInputChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -131,6 +133,10 @@ export const AddProduct = () => {
     formDataToBackend.append("data", JSON.stringify(formData));
 
     mutate(formDataToBackend);
+    mutateAdminNotification({
+      username: user.username,
+      action: `added new product ${formData.title} for ${formData.price} USD `,
+    });
   };
   const below700 = useMediaQuery(700);
   if (success) {

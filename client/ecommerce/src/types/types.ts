@@ -199,3 +199,9 @@ export type ReviewFormFields = {
   comment: string;
   rating: number;
 };
+
+
+export type AdminNotification = {
+  username: string;
+  action: string;
+}

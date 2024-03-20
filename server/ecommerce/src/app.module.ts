@@ -16,6 +16,7 @@ import { ProductNotificationModule } from './product-notification/product-notifi
 import { NodemailerModule } from './nodemailer/nodemailer.module';
 import { StripeModule } from './stripe/stripe.module';
 import { ReviewsModule } from './reviews/reviews.module';
+import { AdminNotificationsModule } from './admin-notifications/admin-notifications.module';
 
 @Module({
   imports: [
@@ -33,6 +34,7 @@ import { ReviewsModule } from './reviews/reviews.module';
     NodemailerModule,
     StripeModule,
     ReviewsModule,
+    AdminNotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

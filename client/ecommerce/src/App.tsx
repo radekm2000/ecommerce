@@ -5,7 +5,6 @@ import { Redirect, Route, Switch } from "wouter";
 import { MainPage } from "./components/pages/MainPage";
 import { UserProvider } from "./contexts/UserContext";
 import { AddProduct } from "./components/pages/AddProduct";
-import { Navbar } from "./components/Navbar";
 import { Product } from "./components/pages/Product";
 import { Member } from "./components/pages/Member";
 import { Followers } from "./components/pages/Followers";
@@ -23,6 +22,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { ChatNotificationsProvider } from "./contexts/ChatNotificationsContext";
 import { ProductNotificationProvider } from "./contexts/ProductNotificationContext";
 import { Layout } from "./components/Layout";
+import { AdminDashboard } from "./components/pages/AdminDashboard";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
@@ -144,6 +144,9 @@ function App() {
                     </Route>
                     <Route path="/inbox/:userId*">
                       <Inbox />
+                    </Route>
+                    <Route path="/dashboard">
+                      <AdminDashboard />
                     </Route>
                     <Route path="/members/:userId/followings">
                       <Followings />

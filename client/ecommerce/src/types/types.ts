@@ -87,7 +87,7 @@ export type Review = {
   comment: string;
   rating: number;
   reviewCreator: User;
-  createdAt: string
+  createdAt: string;
 };
 
 export type ExtendedUserWithProfileAndReviews = UserWithFollows & {
@@ -200,8 +200,9 @@ export type ReviewFormFields = {
   rating: number;
 };
 
-
 export type AdminNotification = {
+  id: number;
   username: string;
   action: string;
-}
+  createdAt: string;
+};

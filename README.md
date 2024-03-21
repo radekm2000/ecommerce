@@ -7,8 +7,9 @@ This app is a simplified version of **Vinted**, following a similar layout. Belo
 - **Filtering:**
 
   - Ability to filter products by price, brand, and gender
-  
+
 - **Review system:**
+
   - After a successful payment, triger a process that allows the buyer to leave a review before proceeding to main page
   - For each review, display the rating, review comment and user info of the reviewer
 
@@ -26,9 +27,13 @@ This app is a simplified version of **Vinted**, following a similar layout. Belo
   - Sending messages to other users
 
 - **Notifications**
+
   - Receiving notifications about new products from followed users
   - Notifications about unread messages in the navbar
   - Confirmation email is sent after a successful purchase
+
+- **Admin Dashboard**
+  - Dashboard provides insights into user activites such as product additions and deletions.
 
 ## Technologies
 

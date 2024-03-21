@@ -11,6 +11,8 @@ import { useStripe } from "@stripe/react-stripe-js";
 import { useMutation } from "@tanstack/react-query";
 import { useUserContext } from "../../contexts/UserContext";
 import { useDeleteProduct } from "../../hooks/useDeleteProduct";
+import { useAddAdminNotification } from "../../hooks/useAddAdminNotification";
+import { useEffect } from "react";
 
 export const Product = () => {
   const stripe = useStripe();
@@ -36,6 +38,8 @@ export const Product = () => {
       console.log(err);
     },
   });
+  const adminNotificationMutation = useAddAdminNotification();
+  const { mutate: mutateAdminNotification } = adminNotificationMutation;
   const { mutate: deleteProductMutate } = useDeleteProduct(product?.id);
   const { mutate } = mutation;
   const { data: userProducts, isLoading: isUserProductsLoading } =
@@ -75,6 +79,12 @@ export const Product = () => {
   ) => {
     e.preventDefault();
     deleteProductMutate(product.id);
+
+    mutateAdminNotification({
+      username: user.username,
+      action: `deleted product ${product.title}`,
+      createdAt: "",
+    });
   };
   return (
     <Box

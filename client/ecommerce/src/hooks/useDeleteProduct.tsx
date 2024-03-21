@@ -11,6 +11,7 @@ export const useDeleteProduct = (productId: number | undefined) => {
     mutationFn: deleteProduct,
     mutationKey: ["product", productId, "delete"],
     onSuccess: () => {
+      
       toast.success("Product deleted");
       setLocation("/");
       queryClient.setQueryData(

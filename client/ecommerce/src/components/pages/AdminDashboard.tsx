@@ -40,9 +40,13 @@ export const AdminDashboard = () => {
             display: "flex",
             height: "90%",
             position: "relative",
+            overflowY: "scroll",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
           }}
         >
-          <CardContent sx={{ width: "100%" }}>
+          <CardContent sx={{ width: "100%", orientation: "vertical" }}>
             <Typography
               sx={{ color: color, fontSize: "28px", fontWeight: "600" }}
             >

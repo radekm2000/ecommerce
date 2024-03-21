@@ -1,6 +1,7 @@
 import { AdminNotification } from "../types/types";
 import { Box, Divider, Typography } from "@mui/material";
 import { formatDistanceToNowStrict } from "date-fns";
+import { Link } from "wouter";
 
 const DisplayAdminNotifications = ({
   adminNotifications,
@@ -34,7 +35,12 @@ const DisplayAdminNotifications = ({
             }}
           >
             <Typography>
-              {notification.username} {notification.action}
+              <Link href={`/members/${notification.userId}`}>
+                <Typography sx={{ color: "#007782", cursor: "pointer" }}>
+                  {notification.username}
+                </Typography>
+              </Link>
+              {notification.action}
             </Typography>
             <Typography
               sx={{

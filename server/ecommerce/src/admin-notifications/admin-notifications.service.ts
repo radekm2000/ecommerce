@@ -10,11 +10,15 @@ export class AdminNotificationsService {
     @InjectRepository(AdminNotifications)
     private readonly adminNotificationsRepository: Repository<AdminNotifications>,
   ) {}
-  async create(dto: adminNotificationDto) {
+
+  async create(dto: adminNotificationDto, userId: number) {
+    console.log(dto);
     const newAdminNotification = this.adminNotificationsRepository.create({
       action: dto.action,
       username: dto.username,
+      userId,
     });
+    console.log(newAdminNotification);
 
     return await this.adminNotificationsRepository.save(newAdminNotification);
   }

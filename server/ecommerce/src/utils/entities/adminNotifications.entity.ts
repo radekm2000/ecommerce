@@ -14,6 +14,9 @@ export class AdminNotifications {
   username: string;
 
   @Column()
+  userId: number;
+
+  @Column()
   action: string;
 
   @UpdateDateColumn()

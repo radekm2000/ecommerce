@@ -201,8 +201,8 @@ export type ReviewFormFields = {
 };
 
 export type AdminNotification = {
-  id: number;
   username: string;
   action: string;
   createdAt: string;
+  userId?: number;
 };

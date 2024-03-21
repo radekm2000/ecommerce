@@ -29,7 +29,10 @@ export class AdminNotificationsController {
   @Post()
   @UsePipes(new ZodValidationPipe(AdminNotificationDtoSchema))
   @UseGuards(AuthGuard)
-  async create(@Body() dto: adminNotificationDto) {
-    return await this.adminNotificationsService.create(dto);
+  async create(
+    @AuthUser() authUser: AuthUser,
+    @Body() dto: adminNotificationDto,
+  ) {
+    return await this.adminNotificationsService.create(dto, authUser.sub);
   }
 }

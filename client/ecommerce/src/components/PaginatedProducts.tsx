@@ -25,11 +25,7 @@ export const PaginatedProducts = () => {
       getNextPageParam: (lastPage) => lastPage.nextPage,
     });
   const { ref, inView } = useInView();
-  useEffect(() => {
-    data?.pages.map((page) => {
-      page.data.map((item) => {});
-    });
-  });
+
   useEffect(() => {
     if (inView) {
       fetchNextPage();

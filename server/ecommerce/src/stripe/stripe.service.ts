@@ -24,15 +24,34 @@ export class StripeService {
         (lineItem.price.product as Stripe.Product).metadata.owner,
       );
     });
-
+    lineItems.data.map((item) => {
+      console.log(item.price.currency);
+      console.log(item.price.unit_amount);
+    });
     const itemDescription = lineItems.data.map((item) => {
       return item.description;
     });
+    const itemPrice = lineItems.data.map((item) => {
+      return {
+        unit: item.price.currency,
+        amount: item.price.unit_amount,
+      };
+    });
     if (session.payment_status === 'paid') {
       await this.nodemailerService.sendEmail(customerEmail, itemDescription);
-      return { ...session, itemOwnerId: itemOwnerId };
+      return {
+        ...session,
+        itemOwnerId: itemOwnerId,
+        itemDescription: itemDescription,
+        itemPrice: itemPrice,
+      };
     }
-    return { ...session, itemOwnerId: itemOwnerId };
+    return {
+      ...session,
+      itemOwnerId: itemOwnerId,
+      itemDescription: itemDescription,
+      itemPrice: itemPrice,
+    };
   }
   public async createStripeCheckoutSession(
     authUser: AuthUser,

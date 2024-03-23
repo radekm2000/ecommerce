@@ -6,10 +6,10 @@ import { useUserContext } from "../../contexts/UserContext";
 import { useUserFromAccessToken } from "../../hooks/useUserFromAccessToken";
 import { useQuery } from "@tanstack/react-query";
 import { axiosApi } from "../../api/axios";
-import { SessionObjLoadingLayout } from "../stripe-payment/sessionObjLoadingLayout";
 import { useGetBasicUserInfo } from "../../hooks/useGetBasicUserInfo";
 import { ReviewForm } from "../ratingSystem/ReviewForm";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
+import { PaymentSuccessSkeleton } from "../PaymentSuccessSkeleton";
 
 export const PaymentSuccess = () => {
   const below960 = useMediaQuery(960);
@@ -59,8 +59,9 @@ export const PaymentSuccess = () => {
   if (isLoading) {
     return "user info is loading...";
   }
-  if (isSessionObjLoading) {
-    return <SessionObjLoadingLayout />;
+
+  if (isSessionObjLoading && !ownerData) {
+    return <PaymentSuccessSkeleton />;
   }
   const handleButtonClick = () => {
     if (user) {
@@ -89,7 +90,7 @@ export const PaymentSuccess = () => {
         >
           <Card
             sx={{
-              width: below960 ? '500px' : '300px',
+              width: below960 ? "500px" : "300px",
               height: "300px",
               padding: "20px",
             }}

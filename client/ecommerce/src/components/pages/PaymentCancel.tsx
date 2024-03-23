@@ -6,6 +6,7 @@ import { useUserContext } from "../../contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 import { axiosApi } from "../../api/axios";
 import { useUserFromAccessToken } from "../../hooks/useUserFromAccessToken";
+import { PaymentCancelSkeleton } from "../PaymentCancelSkeleton";
 export const PaymentCancel = () => {
   const [, setLocation] = useLocation();
   const { user, setUser } = useUserContext();
@@ -25,7 +26,7 @@ export const PaymentCancel = () => {
     }
   }, [user, isSuccess]);
   if (isLoading) {
-    return "user info is loading...";
+    return <PaymentCancelSkeleton />;
   }
   const handleButtonClick = () => {
     if (user) {

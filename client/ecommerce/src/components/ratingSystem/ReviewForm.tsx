@@ -78,7 +78,7 @@ export const ReviewForm = ({ user }: { user: UserWithAvatar }) => {
           >
             {user.avatar ? (
               <Avatar
-                sx={{ width: "32px", height: "32px" }}
+                sx={{ width: "64px", height: "64px" }}
                 src={user.avatar}
               />
             ) : (

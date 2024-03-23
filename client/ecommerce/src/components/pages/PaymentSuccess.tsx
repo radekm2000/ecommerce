@@ -6,10 +6,11 @@ import { useUserContext } from "../../contexts/UserContext";
 import { useUserFromAccessToken } from "../../hooks/useUserFromAccessToken";
 import { useQuery } from "@tanstack/react-query";
 import { axiosApi } from "../../api/axios";
-import { SessionObjLoadingLayout } from "../stripe-payment/sessionObjLoadingLayout";
 import { useGetBasicUserInfo } from "../../hooks/useGetBasicUserInfo";
 import { ReviewForm } from "../ratingSystem/ReviewForm";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
+import { PaymentSuccessSkeleton } from "../PaymentSuccessSkeleton";
+import { useAddAdminNotification } from "../../hooks/useAddAdminNotification";
 
 export const PaymentSuccess = () => {
   const below960 = useMediaQuery(960);
@@ -43,24 +44,37 @@ export const PaymentSuccess = () => {
     enabled: !!stripeSessionId,
   });
   const itemOwnerId = sessionObj?.itemOwnerId as number;
-
+  const itemDescription = sessionObj?.itemDescription as string[];
+  const itemPrice = sessionObj?.itemPrice as { unit: string; amount: number }[];
+  console.log(itemPrice);
+  const adminNotificationMutation = useAddAdminNotification();
+  const { mutate: mutateAdminNotification } = adminNotificationMutation;
   const { data: ownerData, isLoading: isOwnerDataLoading } =
     useGetBasicUserInfo(itemOwnerId);
-  if (isOwnerDataLoading) {
-    console.log("Item owner data loading...");
-  }
-  console.log("owner data");
-  console.log(ownerData);
+
   useEffect(() => {
     if (isSuccess) {
       setUser(userData);
     }
   }, [user, isSuccess]);
+  useEffect(() => {
+    if (ownerData && user && itemDescription && itemPrice.length > 0) {
+      mutateAdminNotification({
+        username: user.username,
+        userId: user.id,
+        createdAt: "",
+        action: `purchased a product ${itemDescription[0]} for ${
+          itemPrice[0].amount / 100
+        } ${itemPrice[0].unit}`,
+      });
+    }
+  }, [ownerData, user, itemPrice, mutateAdminNotification]);
   if (isLoading) {
     return "user info is loading...";
   }
-  if (isSessionObjLoading) {
-    return <SessionObjLoadingLayout />;
+
+  if (isSessionObjLoading && !ownerData) {
+    return <PaymentSuccessSkeleton />;
   }
   const handleButtonClick = () => {
     if (user) {
@@ -71,7 +85,6 @@ export const PaymentSuccess = () => {
     name: sessionObj?.customer_details?.name,
     email: sessionObj?.customer_details?.email,
   };
-
   return (
     <>
       {customerInfo && ownerData && (
@@ -89,7 +102,7 @@ export const PaymentSuccess = () => {
         >
           <Card
             sx={{
-              width: below960 ? '500px' : '300px',
+              width: below960 ? "500px" : "300px",
               height: "300px",
               padding: "20px",
             }}

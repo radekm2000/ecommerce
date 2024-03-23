@@ -12,53 +12,32 @@ import { Notification } from 'src/utils/entities/notification.entity';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
 import { Review } from 'src/utils/entities/review.entity';
 import { AdminNotifications } from 'src/utils/entities/adminNotifications.entity';
+import { DataSource } from 'typeorm';
 
-// export let config: PostgresConnectionOptions;
-// if (process.env.IS_PRODUCTION === 'true') {
-// } else {
-//   config = {
-//     type: 'postgres',
-//     database: process.env.POSTGRES_DB,
-//     host: 'localhost',
-//     port: 5432,
-//     username: process.env.POSTGRES_USER,
-//     password: process.env.POSTGRES_PASSWORD,
-//     entities: [
-//       User,
-//       Product,
-//       Image,
-//       Profile,
-//       Follow,
-//       Conversation,
-//       Message,
-//       Avatar,
-//       Notification,
-//       ProductNotification,
-//     ],
-//     synchronize: true,
-//   };
-// }
+export let config: PostgresConnectionOptions;
+if (process.env.IS_PRODUCTION === 'true') {
+  config = {
+    type: 'postgres',
+    database: process.env.EXTERNAL_POSTGRES_DB,
+    host: process.env.EXTERNAL_POSTGRES_HOST,
+    port: 5432,
+    username: process.env.EXTERNAL_POSTGRES_DB_USERNAME,
+    password: process.env.EXTERNAL_POSTGRES_DB_PASSWORD,
+    entities: ['dist/**/*.entity.js'],
+    migrations: ['dist/db/migrations/*.js'],
+  };
+} else {
+  config = {
+    type: 'postgres',
+    database: process.env.POSTGRES_DB,
+    host: 'localhost',
+    port: 5432,
+    username: process.env.POSTGRES_USER,
+    password: process.env.POSTGRES_PASSWORD,
+    entities: ['dist/**/*.entity.js'],
+    migrations: ['dist/db/migrations/*.js'],
 
-export const config: PostgresConnectionOptions = {
-  type: 'postgres',
-  database: process.env.POSTGRES_DB,
-  host: 'localhost',
-  port: 5432,
-  username: process.env.POSTGRES_USER,
-  password: process.env.POSTGRES_PASSWORD,
-  entities: [
-    Avatar,
-    User,
-    Product,
-    Image,
-    Profile,
-    Follow,
-    Conversation,
-    Message,
-    Notification,
-    ProductNotification,
-    Review,
-    AdminNotifications,
-  ],
-  synchronize: true,
-};
+    synchronize: true,
+  };
+}
+export const dataSource = new DataSource(config);

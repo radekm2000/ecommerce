@@ -9,11 +9,15 @@ async function bootstrap() {
   app.use(cookieParser());
 
   app.enableCors({
-    origin: ['http://localhost:5173', 'https://checkout.stripe.com'],
+    origin: [
+      'http://localhost:5173',
+      'https://checkout.stripe.com',
+      'https://exquisite-pasca-338883.netlify.app',
+    ],
     credentials: true,
   });
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new ZodExceptionFilter(httpAdapter));
-  await app.listen(3000);
+  await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

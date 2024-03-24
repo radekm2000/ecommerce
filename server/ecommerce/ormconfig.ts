@@ -15,25 +15,28 @@ import { AdminNotifications } from 'src/utils/entities/adminNotifications.entity
 import { DataSource } from 'typeorm';
 
 export let config: PostgresConnectionOptions;
-if (process.env.IS_PRODUCTION === 'true') {
+if (process.env.IS_PRODUCTION == 'true') {
   config = {
     type: 'postgres',
-    database: process.env.EXTERNAL_POSTGRES_DB,
-    host: process.env.EXTERNAL_POSTGRES_HOST,
-    port: 5432,
-    username: process.env.EXTERNAL_POSTGRES_DB_USERNAME,
-    password: process.env.EXTERNAL_POSTGRES_DB_PASSWORD,
+    url: process.env.EXTERNAL_POSTGRES_DB_URL,
+    ssl: {
+      rejectUnauthorized: false,
+    },
     entities: ['dist/**/*.entity.js'],
     migrations: ['dist/db/migrations/*.js'],
   };
 } else {
   config = {
     type: 'postgres',
-    database: process.env.POSTGRES_DB,
-    host: 'localhost',
-    port: 5432,
-    username: process.env.POSTGRES_USER,
-    password: process.env.POSTGRES_PASSWORD,
+    // database: process.env.POSTGRES_DB,
+    // host: 'localhost',
+    url: 'postgres://ecommerce_postgresql_db_user:CDU8Anc5t3lUy8gXtrXD71l1oHuMFr0C@dpg-cnu7cr21hbls73fcag40-a.oregon-postgres.render.com/ecommerce_postgresql_db',
+    ssl: {
+      rejectUnauthorized: false,
+    },
+    // port: 5432,
+    // username: process.env.POSTGRES_USER,
+    // password: process.env.POSTGRES_PASSWORD,
     entities: ['dist/**/*.entity.js'],
     migrations: ['dist/db/migrations/*.js'],
 

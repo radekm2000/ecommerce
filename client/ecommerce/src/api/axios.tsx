@@ -22,10 +22,15 @@ import {
 import { RequestAccessTokenInterceptor } from "./request-access-token.interceptor";
 import { ResponseOAuthInterceptor } from "./response-auth.interceptor";
 const LIMIT = 5;
-const BASE_URL = "http://localhost:3000";
+let baseUrl;
+if (import.meta.env.VITE_PRODU == "false") {
+  baseUrl = "http://localhost:3000";
+} else {
+  baseUrl = "https://ecommerce-mtkw.onrender.com";
+}
 
 export const axiosApi = axios.create({
-  baseURL: BASE_URL,
+  baseURL: baseUrl,
   withCredentials: true,
 });
 RequestAccessTokenInterceptor(axiosApi);

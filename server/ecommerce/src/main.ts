@@ -18,6 +18,7 @@ async function bootstrap() {
   });
   const { httpAdapter } = app.get(HttpAdapterHost);
   app.useGlobalFilters(new ZodExceptionFilter(httpAdapter));
+
   await app.listen(process.env.PORT || 3000);
 }
 bootstrap();

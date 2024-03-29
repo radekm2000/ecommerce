@@ -12,13 +12,11 @@ export class AdminNotificationsService {
   ) {}
 
   async create(dto: adminNotificationDto, userId: number) {
-    console.log(dto);
     const newAdminNotification = this.adminNotificationsRepository.create({
       action: dto.action,
       username: dto.username,
       userId,
     });
-    console.log(newAdminNotification);
 
     return await this.adminNotificationsRepository.save(newAdminNotification);
   }

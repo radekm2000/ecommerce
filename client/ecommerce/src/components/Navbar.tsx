@@ -31,7 +31,6 @@ import { useNotifications } from "../hooks/useNotifications";
 import { useProductNotifications } from "../hooks/useProductNotifications";
 import { useMarkProductNotificationAsRead } from "../hooks/useMarkProductNotificationAsRead";
 import PopoverPopupState from "./PopoverPopupState";
-import { useUserInfo } from "../hooks/useUserInfo";
 import { useFetchUserInfo } from "../hooks/useFetchUserInfo";
 import { isAdmin } from "../utils/isAdmin";
 
@@ -159,7 +158,7 @@ export const Navbar = () => {
     useNotifications(user.id);
 
   if (!user.username && !user.id) {
-    return;
+    return <NotAuthed />;
   }
   if (isNotificationsLoading) {
     return "isNotificationsLoading...";

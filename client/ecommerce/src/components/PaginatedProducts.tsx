@@ -48,7 +48,13 @@ export const PaginatedProducts = () => {
                   lg={below1200 ? 3 : 12 / 5}
                   md={below1200 ? 3 : 3}
                   xs={below700 ? 6 : 4}
-                  xl={12 / 5}
+                  xl={
+                    page.data.length == 2 || page.data.length == 1
+                      ? 6
+                      : page.data.length >= 4
+                      ? 3
+                      : 4
+                  }
                 >
                   <Card
                     elevation={0}

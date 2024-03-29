@@ -50,6 +50,10 @@ export class UsersController {
       aboutYou?: string;
       country?: 'Poland' | 'England';
     };
-    await this.usersService.updateUserProfile(userInfo, file, authUser.sub);
+    return await this.usersService.updateUserProfile(
+      userInfo,
+      file,
+      authUser.sub,
+    );
   }
 }

@@ -114,7 +114,7 @@ export const Product = () => {
             alignItems: "flex-start",
             gap: "20px",
             height:
-              userProducts?.length == 1 ? (below800 ? "auto" : "78vh") : "",
+              userProducts?.length == 1 ? (below800 ? "auto" : "auto") : "",
           }}
         >
           <Box

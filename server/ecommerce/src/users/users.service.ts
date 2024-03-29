@@ -323,7 +323,8 @@ export class UsersService {
 
         user.avatar = url;
         await this.usersRepository.save(user);
-        return user;
+
+        return user.avatar;
       } catch (error) {
         return 'Failed uploading avatar to s3 bucket';
       }

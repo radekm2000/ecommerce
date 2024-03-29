@@ -11,11 +11,12 @@ import { useUserContext } from "../../contexts/UserContext";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { AccountCircle } from "@mui/icons-material";
 import { ChangeEvent, useState } from "react";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProfile } from "../../api/axios";
 import toast from "react-hot-toast";
 import { useLocation } from "wouter";
 import { User } from "../../types/types";
+import { useFetchUserInfo } from "../../hooks/useFetchUserInfo";
 
 type FormData = {
   country: string;
@@ -28,6 +29,7 @@ export const EditProfile = () => {
   const { user, setUser } = useUserContext();
   const formDataToBackend = new FormData();
   const [, setLocation] = useLocation();
+  const queryClient = useQueryClient();
   const [selectedFile, setSelectedFile] = useState<File | "">("");
   const below960 = useMediaQuery(960);
   const [formData, setFormData] = useState<FormData>({
@@ -44,12 +46,17 @@ export const EditProfile = () => {
     const file = uploadedFiles[0];
     setSelectedFile(file);
   };
+  const { refetch } = useFetchUserInfo(user.id);
   const mutation = useMutation({
     mutationKey: ["profile", "update"],
     mutationFn: updateProfile,
-    onSuccess: (user: User) => {
-      setUser(user);
+
+    onSuccess: (userAvatar: string) => {
+      if (typeof userAvatar === "string") {
+        setUser((prevUser) => ({ ...prevUser, avatar: userAvatar }));
+      }
       toast.success("Profile updated");
+      refetch();
       setLocation("/");
     },
     onError: (err) => {
@@ -120,18 +127,18 @@ export const EditProfile = () => {
                 alignItems: "center",
               }}
             >
-              {user.avatar ? (
+              {selectedFile ? (
+                <Avatar
+                  src={URL.createObjectURL(selectedFile)}
+                  sx={{ height: "64px", width: "64px", marginRight: "16px" }}
+                />
+              ) : user.avatar ? (
                 <Avatar
                   src={user.avatar}
                   sx={{
                     width: "64px",
                     height: "64px",
                   }}
-                />
-              ) : selectedFile ? (
-                <Avatar
-                  sx={{ height: "64px", width: "64px", marginRight: "16px" }}
-                  src={URL.createObjectURL(selectedFile)}
                 />
               ) : (
                 <AccountCircle
@@ -144,6 +151,7 @@ export const EditProfile = () => {
                   }}
                 />
               )}
+
               <Button
                 component="label"
                 size="small"

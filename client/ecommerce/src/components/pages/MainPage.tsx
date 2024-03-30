@@ -5,6 +5,7 @@ import { Box, Typography } from "@mui/material";
 import { useAllProducts } from "../../hooks/useAllProducts";
 import { NotAuthed } from "../Navbar";
 import { PaginatedProducts } from "../PaginatedProducts";
+import { MainPageSkeleton } from "../MainPageSkeleton";
 
 export const MainPage = () => {
   const { user, setUser } = useUserContext();
@@ -20,11 +21,8 @@ export const MainPage = () => {
     }
   }, [isSuccess, setUser, userInfo]);
 
-  if (isUserInfoLoading) {
-    return "userInfo loading...";
-  }
-  if (isProductsDataLoading) {
-    return "products data loading...";
+  if (isUserInfoLoading || isProductsDataLoading) {
+    return <MainPageSkeleton />;
   }
   if (!products) {
     return "No products to display";

@@ -14,9 +14,11 @@ export const Member = () => {
   const params = useParams();
   const [location, setLocation] = useLocation();
   const userId = params?.userId;
-  const { data: user } = useUserInfo(parseInt(userId!));
+  const { data: user, isLoading: isUserInfoLoading } = useUserInfo(
+    parseInt(userId!)
+  );
   console.log(user);
-  const { data: products } = useAllProducts();
+  const { data: products, isLoading: isUserProductsLoading } = useAllProducts();
 
   useEffect(() => {
     const params = new URLSearchParams();
@@ -26,11 +28,32 @@ export const Member = () => {
     }
   });
 
-  if (!user) {
-    return;
-  }
-  if (!userId) {
-    return;
+  if (isUserInfoLoading || isUserProductsLoading || !user || !userId) {
+    return (
+      <Box
+        sx={{
+          height: "100%",
+          minHeight: "calc(100vh - 81px)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          padding: "20px",
+          maxWidth: "100%",
+        }}
+      >
+        <UserProfileSkeleton />
+        <Box
+          sx={{
+            maxWidth: "1260px",
+            width: "100%",
+            display: "column",
+            padding: "20x",
+          }}
+        >
+          <MemberProductsSkeleton />
+        </Box>
+      </Box>
+    );
   }
 
   const memberProducts = products?.filter(
@@ -67,39 +90,21 @@ export const Member = () => {
         maxWidth: "100%",
       }}
     >
-      {!user.username && products === undefined ? (
-        <>
-          <UserProfileSkeleton />
-          <Box
-            sx={{
-              maxWidth: "1260px",
-              width: "100%",
-              display: "column",
-              padding: "20x",
-            }}
-          >
-            <MemberProductsSkeleton />
-          </Box>
-        </>
-      ) : (
-        <>
-          <ProfileInfo user={user} />
-          <Box
-            sx={{
-              maxWidth: "1260px",
-              width: "100%",
-              display: "column",
-              padding: "20x",
-            }}
-          >
-            <BasicTabs
-              reviews={timeFormattedReviews}
-              setTab={setTab}
-              memberproducts={memberProducts}
-            />
-          </Box>
-        </>
-      )}
+      <ProfileInfo user={user} />
+      <Box
+        sx={{
+          maxWidth: "1260px",
+          width: "100%",
+          display: "column",
+          padding: "20x",
+        }}
+      >
+        <BasicTabs
+          reviews={timeFormattedReviews}
+          setTab={setTab}
+          memberproducts={memberProducts}
+        />
+      </Box>
     </Box>
   );
 };

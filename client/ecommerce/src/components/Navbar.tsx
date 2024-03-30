@@ -33,6 +33,7 @@ import { useMarkProductNotificationAsRead } from "../hooks/useMarkProductNotific
 import PopoverPopupState from "./PopoverPopupState";
 import { useFetchUserInfo } from "../hooks/useFetchUserInfo";
 import { isAdmin } from "../utils/isAdmin";
+import { NavbarSkeleton } from "./NavbarSkeleton";
 
 export const NotAuthed = () => {
   return (
@@ -160,18 +161,16 @@ export const Navbar = () => {
   if (!user.username && !user.id) {
     return <NotAuthed />;
   }
-  if (isNotificationsLoading) {
-    return "isNotificationsLoading...";
+  if (isNotificationsLoading || isProductNotificationsLoading) {
+    return <NavbarSkeleton />;
   }
+
   if (!notificationsReceived) {
     return "Notifications not received yet";
   }
 
   if (!productNotificationsReceived) {
     return "Product notifications not received yet";
-  }
-  if (isProductNotificationsLoading) {
-    return "isProductNotificationsLoading...";
   }
 
   const handleSearchTextClick = () => {

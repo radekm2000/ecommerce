@@ -11,10 +11,10 @@ import {
 import { UserWithAvatar } from "../../types/types";
 import { AccountCircle } from "@mui/icons-material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { useEffect, useState } from "react";
 import { useAddReview } from "../../hooks/useAddReview";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
+import { z } from "zod";
 
 type FormFields = {
   rating: number;

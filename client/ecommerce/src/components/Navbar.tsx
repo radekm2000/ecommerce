@@ -1,4 +1,5 @@
 import Box from "@mui/material/Box";
+import FeedbackIcon from "@mui/icons-material/Feedback";
 import { styled, alpha, ThemeProvider } from "@mui/material/styles";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
@@ -23,6 +24,7 @@ import {
   CardActionArea,
   CardContent,
   Container,
+  Dialog,
   Tabs,
 } from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
@@ -34,6 +36,7 @@ import PopoverPopupState from "./PopoverPopupState";
 import { useFetchUserInfo } from "../hooks/useFetchUserInfo";
 import { isAdmin } from "../utils/isAdmin";
 import { NavbarSkeleton } from "./NavbarSkeleton";
+import { FeedbackDialog } from "./FeedbackDialog";
 
 export const NotAuthed = () => {
   return (
@@ -130,6 +133,7 @@ export const Navbar = () => {
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
   const [, setLocation] = useLocation();
+  const [openDialogContent, setOpenDialogContent] = useState<boolean>(false);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
   const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -138,7 +142,12 @@ export const Navbar = () => {
   const handleProductNotificationsIconClick = () => {
     markProductNotificationsAsRead();
   };
-
+  const handleClickOpen = () => {
+    setOpenDialogContent(true);
+  };
+  const handleClose = () => {
+    setOpenDialogContent(false);
+  };
   const {
     data: userData,
     isLoading: isUserLoading,
@@ -393,6 +402,7 @@ export const Navbar = () => {
                     </Link>
                   </Button>
                 ))}
+
               <Button
                 sx={{
                   borderRadius: "6px",
@@ -416,7 +426,15 @@ export const Navbar = () => {
                 </Link>
               </Button>
 
-              <Box sx={{ display: { xs: "none", md: "flex" } }}>
+              <Box sx={{ display: { xs: "none", md: "flex", gap: "5px" } }}>
+                <IconButton onClick={handleClickOpen}>
+                  <FeedbackIcon />
+                </IconButton>
+                <FeedbackDialog
+                  open={openDialogContent}
+                  onClose={handleClose}
+                ></FeedbackDialog>
+
                 <Link to="/inbox">
                   <IconButton
                     disableFocusRipple

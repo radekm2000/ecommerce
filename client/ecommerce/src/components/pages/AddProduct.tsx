@@ -201,7 +201,7 @@ export const AddProduct = () => {
             sx={{
               border: "1px dashed rgba(37,44,51,0.1)",
               display: "flex",
-              justifyContent: "center",
+              justifyent: "center",
               alignItems: "center",
               minHeight: "170px",
             }}

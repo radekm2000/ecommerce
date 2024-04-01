@@ -78,9 +78,11 @@ export const FeedbackDialog = ({
       <DialogTitle
         sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
       >
-        <Typography sx={{ color: "#007782" }} variant="h4">
-          Feedback
-        </Typography>
+        <div>
+          <Typography sx={{ color: "#007782" }} variant="h4">
+            Feedback
+          </Typography>
+        </div>
       </DialogTitle>
       <DialogContent>
         <Stack spacing={4} margin={2}>

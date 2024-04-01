@@ -1,7 +1,7 @@
-import { Control, Controller, FieldValues } from "react-hook-form";
+import { Control, Controller } from "react-hook-form";
 import TextField from "@mui/material/TextField";
 import { ReactNode } from "react";
-import { FeedbackFormData, featureType } from "../FeedbackDialog";
+import { FeedbackFormData } from "../FeedbackDialog";
 export const FormInputText = ({
   name,
   control,
@@ -25,6 +25,7 @@ export const FormInputText = ({
             helperText={error ? error.message : null}
             error={!!error}
             maxRows={maxRows}
+            spellCheck="false"
             multiline={multiline}
             onChange={onChange}
             value={value}

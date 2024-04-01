@@ -24,7 +24,6 @@ import {
   CardActionArea,
   CardContent,
   Container,
-  Dialog,
   Tabs,
 } from "@mui/material";
 import { useMediaQuery } from "../hooks/useMediaQuery";
@@ -427,7 +426,10 @@ export const Navbar = () => {
               </Button>
 
               <Box sx={{ display: { xs: "none", md: "flex", gap: "5px" } }}>
-                <IconButton onClick={handleClickOpen}>
+                <IconButton
+                  disableFocusRipple
+                  onClick={handleClickOpen}
+                >
                   <FeedbackIcon />
                 </IconButton>
                 <FeedbackDialog

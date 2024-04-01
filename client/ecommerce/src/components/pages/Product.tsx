@@ -12,7 +12,6 @@ import { useMutation } from "@tanstack/react-query";
 import { useUserContext } from "../../contexts/UserContext";
 import { useDeleteProduct } from "../../hooks/useDeleteProduct";
 import { useAddAdminNotification } from "../../hooks/useAddAdminNotification";
-import { useEffect } from "react";
 
 export const Product = () => {
   const stripe = useStripe();

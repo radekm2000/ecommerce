@@ -1,5 +1,3 @@
-import { User } from '../entities/user.entity';
-
 export type Order = 'price_high_to_low' | 'price_low_to_high';
 
 export type Brand =
@@ -25,3 +23,4 @@ export type Notification = {
   senderId: number;
   receiverId: number;
 };
+export type FeatureType = 'other' | 'enhancement' | 'bug' | 'new feature';

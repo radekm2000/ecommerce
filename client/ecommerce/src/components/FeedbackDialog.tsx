@@ -4,19 +4,17 @@ import {
   Dialog,
   DialogContent,
   DialogTitle,
-  MenuItem,
   Stack,
   SxProps,
-  TextField,
   Typography,
 } from "@mui/material";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { FormInputText } from "./form-component/FormInputText";
 import { FormInputDropdown } from "./form-component/FormInputDropdown";
+import { useAddFeedback } from "../hooks/useAddFeedback";
 
 const featureTypes = ["other", "enhancement", "bug", "new feature"] as const;
 export type featureType = (typeof featureTypes)[number];
@@ -46,24 +44,22 @@ export const FeedbackDialog = ({
       alignItems: "flex-start",
     },
   };
-  const {
-    handleSubmit,
-    control,
-    setValue,
-    clearErrors,
-    formState: { errors },
-  } = useForm<FeedbackFormData>({
-    defaultValues: {
-      contactName: "",
-      description: "",
-      email: "",
-      featureType: "other",
-    },
-    resolver: zodResolver(FeedbackSchema),
-  });
+  const feedbackMutation = useAddFeedback();
+  const { mutate } = feedbackMutation;
+  const { handleSubmit, control, setValue, clearErrors } =
+    useForm<FeedbackFormData>({
+      defaultValues: {
+        contactName: "",
+        description: "",
+        email: "",
+        featureType: "other",
+      },
+      resolver: zodResolver(FeedbackSchema),
+    });
 
   const onSubmit: SubmitHandler<FeedbackFormData> = (data) => {
-    console.log(data);
+    mutate(data);
+    onClose();
   };
   const handleClose = () => {
     setValue("contactName", "");

@@ -4,6 +4,7 @@ import {
   Brand,
   Conversation,
   ExtendedUserWithProfileAndReviews,
+  Feedback,
   FetchedNotifications,
   LoginInput,
   LoginResponseData,
@@ -21,6 +22,7 @@ import {
 } from "../types/types";
 import { RequestAccessTokenInterceptor } from "./request-access-token.interceptor";
 import { ResponseOAuthInterceptor } from "./response-auth.interceptor";
+import { FeedbackFormData } from "../components/FeedbackDialog";
 const LIMIT = 5;
 let baseUrl;
 if (import.meta.env.VITE_PRODU == "false") {
@@ -289,4 +291,14 @@ export const addAdminNotification = async (dto: AdminNotification) => {
 export const getAdminNotifications = async () => {
   const response = await axiosApi.get("admin-notifications");
   return response.data as AdminNotification[];
+};
+
+export const addFeedback = async (dto: FeedbackFormData) => {
+  const response = await axiosApi.post("feedbacks", dto);
+  return response.data;
+};
+
+export const getFeedbacks = async () => {
+  const response = await axiosApi.get("feedbacks");
+  return response.data as Feedback[];
 };

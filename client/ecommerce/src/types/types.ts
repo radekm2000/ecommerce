@@ -1,5 +1,6 @@
 import { Message } from "@mui/icons-material";
 import { z } from "zod";
+import { FeedbackFormData } from "../components/FeedbackDialog";
 
 export type RegisterInput = {
   username: string;
@@ -207,3 +208,4 @@ export type AdminNotification = {
   userId?: number;
 };
 
+export type Feedback = FeedbackFormData & { createdAt: string };

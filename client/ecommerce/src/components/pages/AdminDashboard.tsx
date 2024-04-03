@@ -1,15 +1,17 @@
 import {
   Box,
-  Button,
   Card,
   CardContent,
-  Divider,
+  Tab,
+  Tabs,
   Typography,
   styled,
 } from "@mui/material";
 import { useFetchAdminNotifications } from "../../hooks/useFetchAdminNotifications";
 import DisplayAdminNotifications from "../DisplayAdminNotifications";
-const color = "#30313D";
+import { SyntheticEvent, useState } from "react";
+import { FeedbackNotifications } from "../AdminDashboard/FeedbackNotifications";
+import { AdminDashboardSkeleton } from "../AdminDashboard/AdminDashboardSkeleton";
 const Container = styled(Box)({
   backgroundColor: "rgba(37,44,51,0.05)",
   display: "flex",
@@ -26,9 +28,13 @@ const Sidebar = styled(Box)({
 
 export const AdminDashboard = () => {
   const { data: adminNotifications, isLoading } = useFetchAdminNotifications();
+  const [tabValue, setTabValue] = useState("notifications");
+  const handleTabChange = (e: SyntheticEvent, newValue: string) => {
+    setTabValue(newValue);
+  };
 
   if (isLoading) {
-    return "isLoading...";
+    return <AdminDashboardSkeleton />;
   }
 
   return (
@@ -47,19 +53,40 @@ export const AdminDashboard = () => {
           }}
         >
           <CardContent sx={{ width: "100%", orientation: "vertical" }}>
-            <Typography
-              sx={{ color: color, fontSize: "28px", fontWeight: "600" }}
-            >
-              Notifications
-            </Typography>
-            <Divider />
-
-            {adminNotifications && adminNotifications.length > 0 ? (
-              <DisplayAdminNotifications
-                adminNotifications={adminNotifications}
-              />
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <Tabs
+                value={tabValue}
+                onChange={handleTabChange}
+                aria-label="tabs"
+                sx={{
+                  "&& .Mui-selected": {
+                    color: "black",
+                  },
+                }}
+                TabIndicatorProps={{ style: { background: "#007782" } }}
+              >
+                <Tab
+                  sx={{ textTransform: "none" }}
+                  label="Notifications"
+                  value="notifications"
+                ></Tab>
+                <Tab
+                  sx={{ textTransform: "none" }}
+                  label="Feedbacks"
+                  value="feedbacks"
+                ></Tab>
+              </Tabs>
+            </Box>
+            {tabValue === "notifications" ? (
+              adminNotifications && adminNotifications.length > 0 ? (
+                <DisplayAdminNotifications
+                  adminNotifications={adminNotifications}
+                />
+              ) : (
+                <Typography>No notifications</Typography>
+              )
             ) : (
-              <Typography>No notifications</Typography>
+              <FeedbackNotifications />
             )}
           </CardContent>
         </Card>

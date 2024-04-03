@@ -19,7 +19,7 @@ const MemberProductsSkeleton = () => {
         {Array(5)
           .fill(5)
           .map((card, index) => (
-            <Skeleton sx={{ width: "220px", height: "500px" }}></Skeleton>
+            <Skeleton key={index} sx={{ width: "220px", height: "500px" }}></Skeleton>
           ))}
       </Box>
     </Box>

@@ -111,7 +111,7 @@ export const FeedbackDialog = ({
 
           <FormInputText
             multiline={true}
-            maxRows={3}
+            maxRows={5}
             name="description"
             label="Description"
             control={control}

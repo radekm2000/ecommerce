@@ -20,7 +20,6 @@ const Container = styled(Box)({
   alignItems: "center",
   justifyContent: "center",
 });
-
 const Sidebar = styled(Box)({
   width: "300px",
   display: "flex",
@@ -69,12 +68,15 @@ export const AdminDashboard = () => {
                   sx={{ textTransform: "none" }}
                   label="Notifications"
                   value="notifications"
-                ></Tab>
+                >
+
+                </Tab>
                 <Tab
                   sx={{ textTransform: "none" }}
                   label="Feedbacks"
                   value="feedbacks"
-                ></Tab>
+                >
+                </Tab>
               </Tabs>
             </Box>
             {tabValue === "notifications" ? (

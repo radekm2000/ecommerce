@@ -426,7 +426,7 @@ export const Navbar = () => {
               </Button>
 
               <Box sx={{ display: { xs: "none", md: "flex", gap: "5px" } }}>
-                <IconButton
+                <IconButton size="large"
                   disableFocusRipple
                   onClick={handleClickOpen}
                 >

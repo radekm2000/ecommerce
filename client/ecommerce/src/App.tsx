@@ -23,6 +23,7 @@ import { ChatNotificationsProvider } from "./contexts/ChatNotificationsContext";
 import { ProductNotificationProvider } from "./contexts/ProductNotificationContext";
 import { Layout } from "./components/Layout";
 import { AdminDashboard } from "./components/pages/AdminDashboard";
+import { FeedbackNotifications } from "./components/AdminDashboard/FeedbackNotifications";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
@@ -148,6 +149,7 @@ function App() {
                     <Route path="/dashboard">
                       <AdminDashboard />
                     </Route>
+
                     <Route path="/members/:userId/followings">
                       <Followings />
                     </Route>

@@ -9,9 +9,11 @@ import {
 } from "@mui/material";
 import { useFetchAdminNotifications } from "../../hooks/useFetchAdminNotifications";
 import DisplayAdminNotifications from "../DisplayAdminNotifications";
-import { SyntheticEvent, useState } from "react";
+import { SyntheticEvent, useEffect, useState } from "react";
 import { FeedbackNotifications } from "../AdminDashboard/FeedbackNotifications";
 import { AdminDashboardSkeleton } from "../AdminDashboard/AdminDashboardSkeleton";
+import { useLocation } from "wouter";
+import { CatchingPokemonSharp } from "@mui/icons-material";
 const Container = styled(Box)({
   backgroundColor: "rgba(37,44,51,0.05)",
   display: "flex",
@@ -28,6 +30,7 @@ const Sidebar = styled(Box)({
 export const AdminDashboard = () => {
   const { data: adminNotifications, isLoading } = useFetchAdminNotifications();
   const [tabValue, setTabValue] = useState("notifications");
+
   const handleTabChange = (e: SyntheticEvent, newValue: string) => {
     setTabValue(newValue);
   };
@@ -68,15 +71,12 @@ export const AdminDashboard = () => {
                   sx={{ textTransform: "none" }}
                   label="Notifications"
                   value="notifications"
-                >
-
-                </Tab>
+                ></Tab>
                 <Tab
                   sx={{ textTransform: "none" }}
                   label="Feedbacks"
                   value="feedbacks"
-                >
-                </Tab>
+                ></Tab>
               </Tabs>
             </Box>
             {tabValue === "notifications" ? (

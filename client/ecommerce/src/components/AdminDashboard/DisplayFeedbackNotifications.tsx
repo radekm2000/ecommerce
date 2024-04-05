@@ -2,6 +2,7 @@ import { Box, Divider, Typography } from "@mui/material";
 import { Feedback } from "../../types/types";
 import { useState } from "react";
 import { DisplayFeedbackDialog } from "./DisplayFeedbackDialog";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 export const DisplayFeedbackNotifications = ({
   feedbackNotifications,
@@ -11,10 +12,9 @@ export const DisplayFeedbackNotifications = ({
   const [selectedFeedback, setSelectedFeedback] = useState<Feedback | null>(
     null
   );
-
+  const below700 = useMediaQuery(700);
   const handleCloseDialog = () => {
     setSelectedFeedback(null);
-    console.log("zamykanie okna");
   };
   return (
     <Box sx={{ display: "flex", flexDirection: "column", marginTop: "10px" }}>
@@ -33,16 +33,18 @@ export const DisplayFeedbackNotifications = ({
             <Typography sx={{ color: "#007782" }}>
               {notification.contactName}
             </Typography>
-            <Typography sx={{ ml: "10px" }}>
-              added a feedback {notification.createdAt}
-            </Typography>
+            {below700 ? null : (
+              <Typography sx={{ ml: "10px" }}>
+                added a feedback {notification.createdAt}
+              </Typography>
+            )}
 
             <DisplayFeedbackDialog
               key={index}
               contactName={notification.contactName}
               description={notification.description}
               email={notification.email}
-              featureTypeValue="other"
+              featureTypeValue={notification.featureType}
               handleClose={handleCloseDialog}
               open={selectedFeedback === notification}
             />

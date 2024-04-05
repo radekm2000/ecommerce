@@ -1,31 +1,33 @@
 import { Button, Menu, MenuItem } from "@mui/material";
+import { useState } from "react";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import { useState } from "react";
-export const SortByPriceButton = ({
-  onPriceSelected,
+import { featureType } from "../../FeedbackDialog";
+export const SortByFeatureButton = ({
+  onFeatureSelected,
 }: {
-  onPriceSelected: (order: string) => void;
+  onFeatureSelected: (feature: featureType) => void;
 }) => {
   const [isActive, setIsActive] = useState<boolean>(false);
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setIsActive(true);
-    setAnchorEl(event.currentTarget);
-    setIsMenuOpen(true);
-  };
+
   const handleClose = () => {
     setAnchorEl(null);
     setIsMenuOpen(false);
     setIsActive(!isActive);
   };
 
-  const handleOrder = (order: string) => {
-    onPriceSelected(order);
-    handleClose();
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setIsActive(true);
+    setAnchorEl(event.currentTarget);
+    setIsMenuOpen(true);
   };
 
+  const handleFeatureType = (feature: featureType) => {
+    onFeatureSelected(feature);
+    handleClose();
+  };
   return (
     <>
       <Button
@@ -44,15 +46,17 @@ export const SortByPriceButton = ({
         variant="outlined"
         onClick={handleClick}
       >
-        Sort by
+        Feature type
       </Button>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
-        <MenuItem onClick={() => handleOrder("price_high_to_low")}>
-          Price: High to Low
-        </MenuItem>
-        <MenuItem onClick={() => handleOrder("price_low_to_high")}>
-          Price: Low to High
-        </MenuItem>
+        {["other", "enhancement", "bug", "new feature"].map((type) => (
+          <MenuItem
+            key={type}
+            onClick={() => handleFeatureType(type as featureType)}
+          >
+            {type}
+          </MenuItem>
+        ))}
       </Menu>
     </>
   );

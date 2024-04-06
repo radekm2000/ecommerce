@@ -146,7 +146,7 @@ function App() {
                     <Route path="/inbox/:userId*">
                       <Inbox />
                     </Route>
-                    <Route path="/dashboard">
+                    <Route path="/dashboard/:tab">
                       <AdminDashboard />
                     </Route>
 

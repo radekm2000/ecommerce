@@ -12,8 +12,7 @@ import DisplayAdminNotifications from "../DisplayAdminNotifications";
 import { SyntheticEvent, useEffect, useState } from "react";
 import { FeedbackNotifications } from "../AdminDashboard/FeedbackNotifications";
 import { AdminDashboardSkeleton } from "../AdminDashboard/AdminDashboardSkeleton";
-import { useLocation } from "wouter";
-import { CatchingPokemonSharp } from "@mui/icons-material";
+import { useLocation, useRoute } from "wouter";
 const Container = styled(Box)({
   backgroundColor: "rgba(37,44,51,0.05)",
   display: "flex",
@@ -30,9 +29,20 @@ const Sidebar = styled(Box)({
 export const AdminDashboard = () => {
   const { data: adminNotifications, isLoading } = useFetchAdminNotifications();
   const [tabValue, setTabValue] = useState("notifications");
+  const [, setLocation] = useLocation();
+  const [, params] = useRoute("/dashboard/:tab");
+
+  useEffect(() => {
+    if (!params || !params.tab) {
+      setLocation(`/dashboard/${tabValue}`);
+    } else {
+      setTabValue(params.tab);
+    }
+  }, [params, setLocation, tabValue]);
 
   const handleTabChange = (e: SyntheticEvent, newValue: string) => {
     setTabValue(newValue);
+    setLocation(`/dashboard/${newValue}`);
   };
 
   if (isLoading) {

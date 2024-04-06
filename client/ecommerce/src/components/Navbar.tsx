@@ -390,7 +390,7 @@ export const Navbar = () => {
                       display: below800 ? "none" : null,
                     }}
                   >
-                    <Link href="/dashboard">
+                    <Link href="/dashboard/notifications">
                       <Typography
                         color="white"
                         fontFamily="Maison Neue"
@@ -426,7 +426,8 @@ export const Navbar = () => {
               </Button>
 
               <Box sx={{ display: { xs: "none", md: "flex", gap: "5px" } }}>
-                <IconButton size="large"
+                <IconButton
+                  size="large"
                   disableFocusRipple
                   onClick={handleClickOpen}
                 >

@@ -27,16 +27,16 @@ export const FeedbackNotifications = () => {
   const { data, isLoading } = useFetchFeedbacks();
   const [featureType, setFeatureType] = useState<featureType>();
   const [location, setLocation] = useLocation();
-
+  console.log(location);
   useEffect(() => {
     const params = new URLSearchParams();
     if (featureType !== undefined) {
       params.set("featureType", featureType);
-      setLocation(`${location}?${params.toString()}`);
+      setLocation(`/dashboard/feedbacks?${params.toString()}`);
     } else {
       setLocation(location);
     }
-  }, [featureType, setLocation, location]);
+  }, [featureType]);
 
   if (isLoading) {
     return <AdminDashboardSkeleton />;

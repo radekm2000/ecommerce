@@ -6,7 +6,10 @@ import { AuthUser } from 'src/decorators/user.decorator';
 import { ProductWithImageAndUser } from 'src/utils/dtos/product.dto';
 import { UsersService } from 'src/users/users.service';
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
-
+const BASE_URL =
+  process.env.IS_DEV === 'true'
+    ? 'http://localhost:5173'
+    : 'https://exquisite-pasca-338883.netlify.app';
 @Injectable()
 export class StripeService {
   constructor(
@@ -91,9 +94,8 @@ export class StripeService {
       payment_method_types: ['card', 'blik'],
       mode: 'payment',
       allow_promotion_codes: true,
-      success_url:
-        'http://localhost:5173/success?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'http://localhost:5173/cancel',
+      success_url: `${BASE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${BASE_URL}/cancel`,
       custom_text: {
         submit: {
           message: `Card number 4242 4242 4242 4242 for succesfull payment and feel free to use 20% off coupon with code: ${promotionCode.code} `,

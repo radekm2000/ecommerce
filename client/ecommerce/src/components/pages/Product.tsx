@@ -12,6 +12,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useUserContext } from "../../contexts/UserContext";
 import { useDeleteProduct } from "../../hooks/useDeleteProduct";
 import { useAddAdminNotification } from "../../hooks/useAddAdminNotification";
+import { ProductSkeleton } from "../ProductSkeleton";
 
 export const Product = () => {
   const stripe = useStripe();
@@ -44,17 +45,12 @@ export const Product = () => {
   const { data: userProducts, isLoading: isUserProductsLoading } =
     useGivenUserProducts(product?.user.id, product);
   const productAuthorId = product?.user.id;
-  if (isLoading) {
-    return "isLoading...";
+
+  if (isLoading || isUserProductsLoading || isFetching) {
+    return <ProductSkeleton />;
   }
   if (!product) {
     return;
-  }
-  if (isFetching) {
-    return "data is fetching...";
-  }
-  if (isUserProductsLoading) {
-    return "isUserProductsLoading...";
   }
 
   const productsWithoutMainOne = userProducts?.filter(

@@ -19,6 +19,7 @@ import { BrandButton } from "../filter-buttons/BrandButton";
 import { SortByPriceButton } from "../filter-buttons/SortByPriceButton";
 import { useFilteredProducts } from "../../hooks/useFilteredProducts";
 import { AccountCircle } from "@mui/icons-material";
+import { CatalogSkeleton } from "../CatalogSkeleton";
 
 export const MenCatalog = () => {
   const below1200 = useMediaQuery(1200);
@@ -53,7 +54,7 @@ export const MenCatalog = () => {
   );
 
   if (isProductsLoading) {
-    return "isLoading...";
+    return <CatalogSkeleton />;
   }
   if (!products) {
     return;

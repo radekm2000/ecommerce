@@ -19,6 +19,7 @@ import { BrandButton } from "../filter-buttons/BrandButton";
 import { SortByPriceButton } from "../filter-buttons/SortByPriceButton";
 import { useFilteredProducts } from "../../hooks/useFilteredProducts";
 import { AccountCircle } from "@mui/icons-material";
+import { CatalogSkeleton } from "../CatalogSkeleton";
 
 export const WomenCatalog = () => {
   const below1200 = useMediaQuery(1200);
@@ -30,11 +31,6 @@ export const WomenCatalog = () => {
   const [order, setOrder] = useState("");
   const { user } = useUserContext();
   const [category] = useState<string>("Women");
-  console.log("chosen brand");
-  console.log(brand);
-
-  console.log(user);
-  console.log(order);
   useEffect(() => {
     const params = new URLSearchParams();
     if (brand && order) {
@@ -57,7 +53,7 @@ export const WomenCatalog = () => {
   );
 
   if (isProductsLoading) {
-    return "isLoading...";
+    return <CatalogSkeleton />;
   }
   if (!products) {
     return;

@@ -8,7 +8,6 @@ export const useFollowUser = (userId: number | undefined) => {
       return followUser(userId);
     },
     onSuccess: () => {
-      console.log("user followed");
     },
     onError: (err) => {
       console.log(err);

@@ -148,7 +148,6 @@ export class ProductsService {
         image.imageUrl = url;
       }
     }
-    console.log(products);
     return products;
   }
 
@@ -274,7 +273,6 @@ export class ProductsService {
   }
 
   public isValidOrder(order: string): order is Order {
-    console.log(order);
     const validOrders: Order[] = ['price_high_to_low', 'price_low_to_high'];
 
     return validOrders.includes(order as Order);

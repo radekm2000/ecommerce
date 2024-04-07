@@ -46,7 +46,6 @@ export const PaymentSuccess = () => {
   const itemOwnerId = sessionObj?.itemOwnerId as number;
   const itemDescription = sessionObj?.itemDescription as string[];
   const itemPrice = sessionObj?.itemPrice as { unit: string; amount: number }[];
-  console.log(itemPrice);
   const adminNotificationMutation = useAddAdminNotification();
   const { mutate: mutateAdminNotification } = adminNotificationMutation;
   const { data: ownerData, isLoading: isOwnerDataLoading } =

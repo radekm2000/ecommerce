@@ -57,7 +57,6 @@ export class ProductsController {
   }
   @Get('/filtered')
   async getFilteredProducts(@Query() queryParams: QueryParams) {
-    console.log(queryParams);
     if (queryParams.category === 'Men') {
       return await this.productsService.getMenFilteredProducts(queryParams);
     } else if (queryParams.category === 'Women') {
@@ -80,7 +79,6 @@ export class ProductsController {
   }
   @Get('user/:userId')
   async getUserProducts(@Param('userId', ParseIntPipe) userId: number) {
-    console.log(userId);
     const products = await this.productsService.getUserProducts(userId);
     return products;
   }

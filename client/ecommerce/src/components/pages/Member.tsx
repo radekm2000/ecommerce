@@ -17,7 +17,6 @@ export const Member = () => {
   const { data: user, isLoading: isUserInfoLoading } = useUserInfo(
     parseInt(userId!)
   );
-  console.log(user);
   const { data: products, isLoading: isUserProductsLoading } = useAllProducts();
 
   useEffect(() => {

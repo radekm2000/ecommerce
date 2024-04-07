@@ -27,7 +27,6 @@ const SearchTextResults = () => {
   if (isProductsLoading) {
     return "isLoading...";
   }
-  console.log(products);
   return (
     <Container sx={{ padding: "20px", margin: below1600 ? null : "0px 150px" }}>
       <Box sx={{ display: "flex", flexDirection: "row" }}>

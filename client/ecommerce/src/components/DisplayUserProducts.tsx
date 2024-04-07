@@ -29,8 +29,6 @@ export const DisplayUserProducts = ({
 }) => {
   const handleOnProductClick = (productId: number, productTitle: string) => {
     const url = `/products/${productId}-${productTitle}`;
-    console.log(productId);
-    console.log(productTitle);
     setLocation(url, { replace: true });
   };
   const below600 = useMediaQuery(600);

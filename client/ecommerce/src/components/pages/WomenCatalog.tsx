@@ -58,7 +58,6 @@ export const WomenCatalog = () => {
   if (!products) {
     return;
   }
-  console.log(products);
   const handlePriceSelected = (price: string) => {
     setOrder(price);
   };

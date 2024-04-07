@@ -27,7 +27,6 @@ export const FeedbackNotifications = () => {
   const { data, isLoading } = useFetchFeedbacks();
   const [featureType, setFeatureType] = useState<featureType>();
   const [location, setLocation] = useLocation();
-  console.log(location);
   useEffect(() => {
     const params = new URLSearchParams();
     if (featureType !== undefined) {

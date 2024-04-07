@@ -12,7 +12,6 @@ export class NotificationsService {
     private notificationRepository: Repository<Notification>,
   ) {}
   async addNotification(notification: NotificationDto) {
-    console.log(notification);
     const newNotification = this.notificationRepository.create({
       sender: { id: notification.senderId },
       receiver: { id: notification.receiverId },

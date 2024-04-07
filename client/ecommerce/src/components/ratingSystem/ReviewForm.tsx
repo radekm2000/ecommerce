@@ -32,7 +32,6 @@ export const ReviewForm = ({ user }: { user: UserWithAvatar }) => {
   const postMutation = useAddReview(user.id);
   const { mutate } = postMutation;
   const onSubmit: SubmitHandler<FormFields> = (data) => {
-    console.log(data);
     mutate({
       data: {
         ...data,

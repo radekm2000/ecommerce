@@ -28,8 +28,6 @@ export class StripeService {
       );
     });
     lineItems.data.map((item) => {
-      console.log(item.price.currency);
-      console.log(item.price.unit_amount);
     });
     const itemDescription = lineItems.data.map((item) => {
       return item.description;

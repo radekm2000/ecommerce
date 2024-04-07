@@ -25,7 +25,6 @@ export const BrandButton = ({
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setIsActive(true);
     setAnchorEl(event.currentTarget);
-    console.log(event.currentTarget);
     setIsMenuOpen(true);
   };
   const handleClose = () => {

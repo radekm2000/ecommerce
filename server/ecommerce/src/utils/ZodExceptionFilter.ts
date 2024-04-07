@@ -11,7 +11,6 @@ export class ZodExceptionFilter extends BaseExceptionFilter {
     }
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
-    console.log(exception.issues);
     response.status(HttpStatus.UNPROCESSABLE_ENTITY).json({
       type: 'validation',
       message: exception.issues[0]?.message ?? 'Unknown error',

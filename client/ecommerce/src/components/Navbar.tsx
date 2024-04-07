@@ -155,7 +155,6 @@ export const Navbar = () => {
   if (isFetchedUserSuccess && !isUserLoading) {
     setUser(userData);
   }
-  console.log(user);
   const {
     data: productNotificationsReceived,
     isLoading: isProductNotificationsLoading,

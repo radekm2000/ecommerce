@@ -12,19 +12,16 @@ import {
   ProductNotification,
   ProductWithImage,
   ProductWithImageAndUser,
-  ProductWithImageAndUserSchema,
   RegisterInput,
   ReviewFormFields,
-  SimpleNotification,
   User,
   UserWithAvatar,
-  UserWithFollows,
 } from "../types/types";
 import { RequestAccessTokenInterceptor } from "./request-access-token.interceptor";
 import { ResponseOAuthInterceptor } from "./response-auth.interceptor";
 import { FeedbackFormData } from "../components/FeedbackDialog";
 const LIMIT = 5;
-const baseUrl = "https://ecommerce-123.onrender.com";
+const baseUrl = "http://localhost:3000";
 // if (import.meta.env.VITE_NETLIFY == "true") {
 //   baseUrl = "https://ecommerce-123.onrender.com";
 // } else {

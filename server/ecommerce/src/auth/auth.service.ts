@@ -90,7 +90,6 @@ export class AuthService {
         HttpStatus.NOT_FOUND,
       );
     }
-    console.log(user);
     return user;
   }
 }

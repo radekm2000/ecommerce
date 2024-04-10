@@ -21,12 +21,12 @@ import { RequestAccessTokenInterceptor } from "./request-access-token.intercepto
 import { ResponseOAuthInterceptor } from "./response-auth.interceptor";
 import { FeedbackFormData } from "../components/FeedbackDialog";
 const LIMIT = 5;
-let baseUrl;
-if (import.meta.env.IS_INDEV == "true") {
-  baseUrl = "http://localhost:3000";
-} else {
-  baseUrl = "https://ecommerce-123.onrender.com";
-}
+const baseUrl = "https://ecommerce-123.onrender.com";
+// if (import.meta.env.VITE_NETLIFY == "true") {
+//   baseUrl = "https://ecommerce-123.onrender.com";
+// } else {
+//   baseUrl = "http://localhost:3000";
+// }
 
 export const axiosApi = axios.create({
   baseURL: baseUrl,

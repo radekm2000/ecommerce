@@ -15,7 +15,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import MailIcon from "@mui/icons-material/Mail";
 import MoreIcon from "@mui/icons-material/MoreVert";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserContext } from "../contexts/UserContext";
 import {
   Avatar,
@@ -147,14 +147,18 @@ export const Navbar = () => {
   const handleClose = () => {
     setOpenDialogContent(false);
   };
+
   const {
     data: userData,
     isLoading: isUserLoading,
     isSuccess: isFetchedUserSuccess,
   } = useFetchUserInfo(user.id);
-  if (isFetchedUserSuccess && !isUserLoading) {
-    setUser(userData);
-  }
+
+  useEffect(() => {
+    if (isFetchedUserSuccess && !isUserLoading) {
+      setUser(userData);
+    }
+  }, []);
   const {
     data: productNotificationsReceived,
     isLoading: isProductNotificationsLoading,

@@ -8,7 +8,7 @@ import { ProductWithImageAndUser } from "../../types/types";
 import { DisplayUserInfo } from "../ProductPage/DisplayUserInfo";
 import { sendProductInfoToCheckout } from "../../api/axios";
 import { useStripe } from "@stripe/react-stripe-js";
-import { useMutation } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserContext } from "../../contexts/UserContext";
 import { useDeleteProduct } from "../../hooks/useDeleteProduct";
 import { useAddAdminNotification } from "../../hooks/useAddAdminNotification";
@@ -22,7 +22,6 @@ export const Product = () => {
   const params = useParams();
   const [, setLocation] = useLocation();
   const productId = params?.productId;
-
   const {
     data: product,
     isLoading,

@@ -13,7 +13,10 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Brand, Order, QueryParams } from 'src/utils/dtos/types';
 import { ProductNotificationService } from 'src/product-notification/product-notification.service';
 import { Image } from 'src/utils/entities/image.entity';
-import { createProductFromJson } from 'src/utils/dtos/product.dto';
+import {
+  ProductWithoutImageDto,
+  createProductFromJson,
+} from 'src/utils/dtos/product.dto';
 import * as sharp from 'sharp';
 import { randomUUID } from 'crypto';
 import { UsersService } from 'src/users/users.service';
@@ -286,13 +289,16 @@ export class ProductsService {
     return;
   }
 
-  async uploadProduct(body: any, file: Express.Multer.File, userId: number) {
-    const productBody = createProductFromJson(body.data);
+  async uploadProduct(
+    productBody: ProductWithoutImageDto,
+    file: Express.Multer.File,
+    userId: number,
+  ) {
     const buffer = await sharp(file.buffer)
       .resize({
-        height: 500,
+        height: 300,
         width: 500,
-        fit: 'contain',
+        fit: 'cover',
       })
       .toBuffer();
     const productImageName = `${randomUUID()}${file.originalname}`;

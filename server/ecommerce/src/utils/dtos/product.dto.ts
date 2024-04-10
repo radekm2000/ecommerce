@@ -6,7 +6,12 @@ export const ProductWithoutImageDtoSchema = z.object({
   description: z.string(),
   brand: z.string(),
   category: z.string(),
-  price: z.string().transform((value) => parseInt(value)),
+  price: z
+    .string()
+    .transform((value) => parseInt(value))
+    .refine((value) => !isNaN(value), {
+      message: 'Price must be a number',
+    }),
 });
 
 export type ProductWithoutImageDto = z.infer<

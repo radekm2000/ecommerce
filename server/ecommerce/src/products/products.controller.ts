@@ -19,6 +19,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import {
   ProductWithImageAndUser,
   ProductWithImageAndUserSchema,
+  ProductWithoutImageDto,
 } from 'src/utils/dtos/product.dto';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
@@ -27,6 +28,7 @@ import { QueryParams } from 'src/utils/dtos/types';
 import { ZodValidationPipe } from 'src/utils/pipes/ZodValidationPipe';
 import { Response } from 'express';
 import { StripeService } from 'src/stripe/stripe.service';
+import { ParseAndValidateProductPipe } from 'src/utils/pipes/ParseAndValidateProductPipe';
 
 @Controller('products')
 export class ProductsController {
@@ -109,10 +111,11 @@ export class ProductsController {
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))
   async uploadProduct(
-    @Body() body: any,
+    @Body(new ParseAndValidateProductPipe()) body: ProductWithoutImageDto,
     @UploadedFile() file: Express.Multer.File,
     @AuthUser() authUser: AuthUser,
   ) {
+    console.log(body);
     return await this.productsService.uploadProduct(body, file, authUser.sub);
   }
 }

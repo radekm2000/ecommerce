@@ -6,8 +6,38 @@ import { Feedback } from "../../types/types";
 import { DisplayFeedbackNotifications } from "./DisplayFeedbackNotifications";
 import { featureType } from "../FeedbackDialog";
 import { SortByFeatureButton } from "./FeedbackNotificationsComponents/SortByFeatureButton";
-import { Box, Button, Divider, styled } from "@mui/material";
+import {
+  Box,
+  Button,
+  Divider,
+  Skeleton,
+  Typography,
+  styled,
+} from "@mui/material";
 import { useLocation } from "wouter";
+
+const FeedbackSkeleton = () => {
+  return (
+    <Box sx={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+      <Skeleton
+        variant="rectangular"
+        sx={{ width: "15%", height: "40px", marginTop: "20px" }}
+      ></Skeleton>
+      <Divider />
+      {Array(7)
+        .fill(7)
+        .map((v, index) => (
+          <Box sx={{ display: "flex", justifyContent: "space-between" }}>
+            <Skeleton
+              variant="text"
+              sx={{ width: "70%", height: "40px" }}
+            ></Skeleton>
+            <Skeleton variant="text" sx={{ width: "10%" }}></Skeleton>
+          </Box>
+        ))}
+    </Box>
+  );
+};
 
 const FeatureButton = styled(Button)({
   cursor: "auto",
@@ -38,7 +68,7 @@ export const FeedbackNotifications = () => {
   }, [featureType]);
 
   if (isLoading) {
-    return <AdminDashboardSkeleton />;
+    return <FeedbackSkeleton />;
   }
   const sortFeedbacksByCreationTime = data?.sort((a, b) =>
     compareDesc(a.createdAt, b.createdAt)

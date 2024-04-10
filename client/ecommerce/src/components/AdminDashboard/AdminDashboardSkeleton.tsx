@@ -17,8 +17,8 @@ export const AdminDashboardSkeleton = () => {
     <Container>
       <Card
         sx={{
-          width: "960px",
           display: "flex",
+          width: '100%',
           height: "90%",
           position: "relative",
           overflowY: "scroll",
@@ -32,12 +32,12 @@ export const AdminDashboardSkeleton = () => {
             .fill(7)
             .map((_, index) => (
               <Box key={index}>
-                <Skeleton variant="text" sx={{ height: '70px'}}></Skeleton>
+                <Skeleton variant="text" sx={{ height: "70px" }}></Skeleton>
               </Box>
             ))}
         </CardContent>
       </Card>
-        <Sidebar></Sidebar>
+      <Sidebar></Sidebar>
     </Container>
   );
 };

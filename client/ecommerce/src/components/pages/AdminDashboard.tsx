@@ -44,7 +44,7 @@ export const AdminDashboard = () => {
     setTabValue(newValue);
     setLocation(`/dashboard/${newValue}`);
   };
-
+  
   if (isLoading) {
     return <AdminDashboardSkeleton />;
   }

@@ -1,5 +1,12 @@
 # E-commerce App
 
+## Check the app live at [ecommerce](https://exquisite-pasca-338883.netlify.app/login)
+
+To explore the additional admin dashboard feature, you can use the following test credentials for admin account:
+
+- **Username:** demoadmin
+- **Password:** demoadmin123
+
 This app is a simplified version of **Vinted**, following a similar layout. Below you will find basic information about the features.
 
 ## Features

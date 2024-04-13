@@ -1,5 +1,5 @@
 import { Box, Skeleton } from "@mui/material";
-import { useMediaQuery } from "../hooks/useMediaQuery";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 
 export const ProductSkeleton = () => {
   const below960 = useMediaQuery(960);

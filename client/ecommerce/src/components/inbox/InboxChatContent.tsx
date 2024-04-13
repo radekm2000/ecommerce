@@ -8,8 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 import { useEffect, useRef } from "react";
-import { Conversation, UserWithFollows } from "../types/types";
-import { useUserContext } from "../contexts/UserContext";
+import { Conversation, UserWithFollows } from "../../types/types";
+import { useUserContext } from "../../contexts/UserContext";
 
 export const InboxChatContent = ({
   selectedUserConversation,

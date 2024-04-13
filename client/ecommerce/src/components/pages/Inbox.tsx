@@ -1,11 +1,11 @@
 import { Box, Button, Container, Typography } from "@mui/material";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import AddCommentOutlinedIcon from "@mui/icons-material/AddCommentOutlined";
-import { InboxSidebar } from "../InboxSidebar";
-import { InboxChatNavbar } from "../InboxChatNavbar";
-import { InboxChatContent } from "../InboxChatContent";
+import { InboxSidebar } from "../inbox/InboxSidebar";
+import { InboxChatNavbar } from "../inbox/InboxChatNavbar";
+import { InboxChatContent } from "../inbox/InboxChatContent";
 import { Route, Switch, useLocation, useParams } from "wouter";
-import { InboxChatInput } from "../InboxChatInput";
+import { InboxChatInput } from "../inbox/InboxChatInput";
 import { useAllConversations } from "../../hooks/useAllConversations";
 import { useUserContext } from "../../contexts/UserContext";
 import { getRecipientFromConversation } from "../../utils/getRecipientFromConversation";
@@ -14,6 +14,7 @@ import { useUserConversations } from "../../hooks/useUserConversations";
 import { ConversationDetailsNavbar } from "../conversation-details/ConversationDetailsNavbar";
 import { ConversationDetailsContent } from "../conversation-details/ConversationDetailsContent";
 import { useNotifications } from "../../hooks/useNotifications";
+import { InboxSkeleton } from "../skeletons/InboxSkeleton";
 
 export const Inbox = () => {
   const params = useParams();
@@ -37,18 +38,16 @@ export const Inbox = () => {
     isLoading: isSelectedUserConversationsLoading,
   } = useUserConversations(selectedUserId);
 
-  if (isSelectedUserConversationsLoading) {
-    return "isLoading...";
-  }
-  if (isNotificationsLoading) {
-    return "notifications loading...";
-  }
   if (!notificationsReceived) {
     return "no Notifications";
   }
 
-  if (isConversationsLoading) {
-    return "isLoading...";
+  if (
+    isSelectedUserConversationsLoading ||
+    isNotificationsLoading ||
+    isConversationsLoading
+  ) {
+    return <InboxSkeleton />;
   }
 
   const extractUserIdFromParam = (param: string) => {

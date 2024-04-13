@@ -9,7 +9,7 @@ import { axiosApi } from "../../api/axios";
 import { useGetBasicUserInfo } from "../../hooks/useGetBasicUserInfo";
 import { ReviewForm } from "../ratingSystem/ReviewForm";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
-import { PaymentSuccessSkeleton } from "../PaymentSuccessSkeleton";
+import { PaymentSuccessSkeleton } from "../skeletons/PaymentSuccessSkeleton";
 import { useAddAdminNotification } from "../../hooks/useAddAdminNotification";
 
 export const PaymentSuccess = () => {
@@ -68,11 +68,8 @@ export const PaymentSuccess = () => {
       });
     }
   }, [ownerData, user, itemPrice, mutateAdminNotification]);
-  if (isLoading) {
-    return "user info is loading...";
-  }
 
-  if (isSessionObjLoading && !ownerData) {
+  if ((isSessionObjLoading && !ownerData) || isLoading) {
     return <PaymentSuccessSkeleton />;
   }
   const handleButtonClick = () => {

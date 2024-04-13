@@ -34,7 +34,7 @@ import { useMarkProductNotificationAsRead } from "../hooks/useMarkProductNotific
 import PopoverPopupState from "./PopoverPopupState";
 import { useFetchUserInfo } from "../hooks/useFetchUserInfo";
 import { isAdmin } from "../utils/isAdmin";
-import { NavbarSkeleton } from "./NavbarSkeleton";
+import { NavbarSkeleton } from "./skeletons/NavbarSkeleton";
 import { FeedbackDialog } from "./FeedbackDialog";
 
 export const NotAuthed = () => {

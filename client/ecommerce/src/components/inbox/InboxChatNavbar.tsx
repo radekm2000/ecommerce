@@ -1,8 +1,8 @@
 import { Box, Button, Typography } from "@mui/material";
 import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
-import { Conversation } from "../types/types";
-import { getRecipientFromConversation } from "../utils/getRecipientFromConversation";
-import { useUserContext } from "../contexts/UserContext";
+import { Conversation } from "../../types/types";
+import { getRecipientFromConversation } from "../../utils/getRecipientFromConversation";
+import { useUserContext } from "../../contexts/UserContext";
 
 export const InboxChatNavbar = ({
   selectedUserConversation,

@@ -4,9 +4,9 @@ import { useLocation, useParams } from "wouter";
 import {
   FetchedNotifications,
   RecipientOfSidebarConversation,
-} from "../types/types";
+} from "../../types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { markNotificationsAsRead } from "../api/axios";
+import { markNotificationsAsRead } from "../../api/axios";
 const displayLastMessage = (message: string) => {
   if (message.length > 20) {
     return message.slice(0, 20).concat("...");

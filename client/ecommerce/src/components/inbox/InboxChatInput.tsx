@@ -1,17 +1,15 @@
 import { Box, Input } from "@mui/material";
 import {
-  QueryClient,
   useMutation,
   useQueryClient,
 } from "@tanstack/react-query";
 
 import { useState } from "react";
-import { createConversationAndSendFirstMessage } from "../api/axios";
+import { createConversationAndSendFirstMessage } from "../../api/axios";
 import { useLocation } from "wouter";
-import { Conversation } from "../types/types";
-import { useNotificationsContext } from "../contexts/ChatNotificationsContext";
-import { useUserContext } from "../contexts/UserContext";
-import { useNotificationMutation } from "../hooks/useNotificationMutation";
+import { Conversation } from "../../types/types";
+import { useUserContext } from "../../contexts/UserContext";
+import { useNotificationMutation } from "../../hooks/useNotificationMutation";
 
 export const InboxChatInput = ({
   userId,

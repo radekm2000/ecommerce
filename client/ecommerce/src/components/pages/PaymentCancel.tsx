@@ -6,7 +6,7 @@ import { useUserContext } from "../../contexts/UserContext";
 import { useQuery } from "@tanstack/react-query";
 import { axiosApi } from "../../api/axios";
 import { useUserFromAccessToken } from "../../hooks/useUserFromAccessToken";
-import { PaymentCancelSkeleton } from "../PaymentCancelSkeleton";
+import { PaymentCancelSkeleton } from "../skeletons/PaymentCancelSkeleton";
 export const PaymentCancel = () => {
   const [, setLocation] = useLocation();
   const { user, setUser } = useUserContext();

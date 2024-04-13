@@ -6,7 +6,7 @@ import {
   Skeleton,
   TextField,
 } from "@mui/material";
-import { useMediaQuery } from "../hooks/useMediaQuery";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
 const DisplayPaymentInfoSkeleton = () => {
   const below960 = useMediaQuery(960);
   return (

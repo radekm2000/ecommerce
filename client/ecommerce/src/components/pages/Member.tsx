@@ -6,8 +6,8 @@ import { useUserInfo } from "../../hooks/useUserInfo";
 import BasicTabs from "../TabPanel";
 import { useEffect, useState } from "react";
 import { compareDesc, formatDistanceToNowStrict } from "date-fns";
-import { UserProfileSkeleton } from "../UserProfileSkeleton";
-import MemberProductsSkeleton from "../MemberProductsSkeleton";
+import { UserProfileSkeleton } from "../skeletons/UserProfileSkeleton";
+import MemberProductsSkeleton from "../skeletons/MemberProductsSkeleton";
 
 export const Member = () => {
   const [tab, setTab] = useState("");

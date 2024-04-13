@@ -19,7 +19,7 @@ import { BrandButton } from "../filter-buttons/BrandButton";
 import { SortByPriceButton } from "../filter-buttons/SortByPriceButton";
 import { useFilteredProducts } from "../../hooks/useFilteredProducts";
 import { AccountCircle } from "@mui/icons-material";
-import { CatalogSkeleton } from "../CatalogSkeleton";
+import { CatalogSkeleton } from "../skeletons/CatalogSkeleton";
 
 export const MenCatalog = () => {
   const below1200 = useMediaQuery(1200);

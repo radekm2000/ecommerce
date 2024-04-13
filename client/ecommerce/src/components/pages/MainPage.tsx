@@ -5,7 +5,7 @@ import { Box, Typography } from "@mui/material";
 import { useAllProducts } from "../../hooks/useAllProducts";
 import { NotAuthed } from "../Navbar";
 import { PaginatedProducts } from "../PaginatedProducts";
-import { MainPageSkeleton } from "../MainPageSkeleton";
+import { MainPageSkeleton } from "../skeletons/MainPageSkeleton";
 
 export const MainPage = () => {
   const { user, setUser } = useUserContext();

@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserContext } from "../../contexts/UserContext";
 import { useDeleteProduct } from "../../hooks/useDeleteProduct";
 import { useAddAdminNotification } from "../../hooks/useAddAdminNotification";
-import { ProductSkeleton } from "../ProductSkeleton";
+import { ProductSkeleton } from "../skeletons/ProductSkeleton";
 
 export const Product = () => {
   const stripe = useStripe();

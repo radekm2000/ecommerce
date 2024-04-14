@@ -56,7 +56,7 @@ export const WomenCatalog = () => {
     return <CatalogSkeleton />;
   }
   if (!products) {
-    return;
+    return <CatalogSkeleton/>
   }
   const handlePriceSelected = (price: string) => {
     setOrder(price);

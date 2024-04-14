@@ -131,7 +131,7 @@ export const Navbar = () => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
     useState<null | HTMLElement>(null);
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const [openDialogContent, setOpenDialogContent] = useState<boolean>(false);
   const isMenuOpen = Boolean(anchorEl);
   const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
@@ -256,19 +256,7 @@ export const Navbar = () => {
           setLocation("inbox");
           handleMobileMenuClose();
         }}
-      >
-        <Link to="/inbox">
-          <IconButton size="large" aria-label="show  new mails" color="inherit">
-            <Badge
-              color="error"
-              badgeContent={shownNotificationsInboxNumber.length}
-            >
-              <MailIcon />
-            </Badge>
-          </IconButton>
-        </Link>
-        <p>Messages</p>
-      </MenuItem>
+      ></MenuItem>
 
       <MenuItem onClick={handleProfileMenuOpen}>
         <IconButton
@@ -504,7 +492,7 @@ export const Navbar = () => {
           {renderMobileMenu}
           {renderMenu}
         </Box>
-        {below800 ? (
+        {below800 && location === "/" ? (
           <Box
             sx={{
               padding: "16px 16px",

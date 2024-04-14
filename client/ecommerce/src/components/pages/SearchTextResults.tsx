@@ -14,7 +14,7 @@ import { Link } from "wouter";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { AccountCircle } from "@mui/icons-material";
 
-const SearchTextResults = () => {
+export const SearchTextResults = () => {
   const below960 = useMediaQuery(960);
   const below1600 = useMediaQuery(1600);
   const below700 = useMediaQuery(700);

@@ -273,36 +273,3 @@ export const MenCatalog = () => {
     </Container>
   );
 };
-
-{
-  /* <Button
-disableRipple
-disableElevation
-sx={{
-  margin: "0px 8px",
-  paddingRight: "12px",
-  textTransform: "none",
-  cursor: "pointer",
-  backgroundColor: isActive ? "#88D4D7" : "initial",
-  color: "black",
-  border: "1px solid lightgrey",
-}}
-endIcon={isMenuOpen ? <ExpandLessIcon /> : <ExpandMoreIcon />}
-variant="outlined"
-onClick={handleClick}
->
-Sort By
-</Button>
-<Menu
-anchorEl={anchorEl}
-open={Boolean(anchorEl)}
-onClose={handleClose}
->
-<MenuItem onClick={() => handleSortBy("price_high_to_low")}>
-  Price: High to Low
-</MenuItem>
-<MenuItem onClick={() => handleSortBy("price_low_to_high")}>
-  Price: Low to High
-</MenuItem>
-</Menu> */
-}

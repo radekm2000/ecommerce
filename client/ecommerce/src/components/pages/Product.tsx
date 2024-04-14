@@ -48,16 +48,14 @@ export const Product = () => {
   if (isLoading || isUserProductsLoading || isFetching) {
     return <ProductSkeleton />;
   }
-  if (!product) {
-    return;
+  if (!product || !productAuthorId) {
+    return "Product not found";
   }
 
   const productsWithoutMainOne = userProducts?.filter(
     (userProduct) => userProduct.id != product?.id
   );
-  if (!productAuthorId) {
-    return;
-  }
+
   const handleCheckout = async (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {

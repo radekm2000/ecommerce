@@ -22,7 +22,7 @@ export const InboxSidebar = ({
   setSelectedUserId: React.Dispatch<React.SetStateAction<number>>;
   recipientsOfSidebarConversations:
     | RecipientOfSidebarConversation[]
-    | undefined;
+    | undefined
   notifications: FetchedNotifications[];
 }) => {
   // const { notifications } = useNotificationsContext();

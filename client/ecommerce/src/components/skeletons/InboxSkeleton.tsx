@@ -28,6 +28,7 @@ const Sidebar = () => {
           .fill(7)
           .map((_, index) => (
             <Box
+              key={index}
               sx={{
                 display: "flex",
                 justifyContent: "flex-start",

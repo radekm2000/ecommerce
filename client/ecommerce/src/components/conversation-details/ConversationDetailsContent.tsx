@@ -33,7 +33,6 @@ export const ConversationDetailsContent = ({
       navigate("/inbox");
     },
     onError: (error) => {
-      console.log(error);
       toast.error("Something went wrong");
     },
   });

@@ -20,6 +20,7 @@ import {
 import { RequestAccessTokenInterceptor } from "./request-access-token.interceptor";
 import { ResponseOAuthInterceptor } from "./response-auth.interceptor";
 import { FeedbackFormData } from "../components/FeedbackDialog";
+import { ResponseErrorInterceptor } from "./responseError.interceptor";
 const LIMIT = 5;
 const baseUrl = "http://localhost:3000";
 // if (import.meta.env.VITE_NETLIFY == "true") {
@@ -32,6 +33,7 @@ export const axiosApi = axios.create({
   baseURL: baseUrl,
   withCredentials: true,
 });
+ResponseErrorInterceptor(axiosApi);
 RequestAccessTokenInterceptor(axiosApi);
 ResponseOAuthInterceptor(axiosApi);
 export const registerUser = async ({

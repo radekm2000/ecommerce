@@ -113,7 +113,7 @@ export const PaginatedProducts = () => {
                     </Link>
                     <CardContent>
                       <Typography sx={{ fontSize: "14px", color: "#171717" }}>
-                        PLN {item.price}.00
+                        USD {item.price}.00
                       </Typography>
                     </CardContent>
                   </Card>
@@ -126,65 +126,4 @@ export const PaginatedProducts = () => {
       <div ref={ref}>{isFetchingNextPage && "Loading..."}</div>
     </div>
   );
-  //   return (
-  //     <Grid container>
-  //       {products.map((product, index) => (
-  //         <Grid item key={index} xl={12 / 5}>
-  //           <Card
-  //             elevation={0}
-  //             sx={{
-  //               width: "fit-content",
-  //               height: "fit-content",
-  //               padding: "8px",
-  //             }}
-  //           >
-  //             <Link href={`/members/${product.user.id}`}>
-  //               <CardContent
-  //                 sx={{
-  //                   display: "flex",
-  //                   alignItems: "center",
-  //                   justifyContent: "flex-start",
-  //                   cursor: "pointer",
-  //                 }}
-  //               >
-  //                 {product.user.avatar ? (
-  //                   <Avatar
-  //                     sx={{ width: "24px", height: "24px" }}
-  //                     alt="user-avatar"
-  //                     src={product.user.avatar}
-  //                   />
-  //                 ) : (
-  //                   <AccountCircle
-  //                     sx={{ color: "grey", width: "24px", height: "24px" }}
-  //                   />
-  //                 )}
-  //                 <Typography
-  //                   sx={{
-  //                     fontSize: "12px",
-  //                     color: "#757575",
-  //                     paddingLeft: "8px",
-  //                   }}
-  //                 >
-  //                   {product.user.username}
-  //                 </Typography>
-  //               </CardContent>
-  //             </Link>
-  //             <Link href={`products/${product.id}-${product.title}`}>
-  //               <CardMedia
-  //                 alt={product.title}
-  //                 component="img"
-  //                 sx={{ width: "100%", height: "330px", cursor: "pointer" }}
-  //                 image={product.images[0].imageUrl}
-  //               ></CardMedia>
-  //             </Link>
-  //             <CardContent>
-  //               <Typography sx={{ fontSize: "14px", color: "#171717" }}>
-  //                 PLN {product.price}.00
-  //               </Typography>
-  //             </CardContent>
-  //           </Card>
-  //         </Grid>
-  //       ))}
-  //     </Grid>
-  //   );
 };

@@ -38,7 +38,6 @@ export const ProfileInfo = ({
   const below900 = useMediaQuery(900);
   const mutation = useFollowUser(user.id);
   const { mutate } = mutation;
-  console.log(user);
   const handleFollowButtonClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {

@@ -1,6 +1,8 @@
 # E-commerce App
 
-## Check the app live at [ecommerce](https://exquisite-pasca-338883.netlify.app/login)
+## Check the app live at [ecommerce](https://exquisite-pasca-338883.netlify.app/login) 
+
+<font color='#e50000'>**Render might delay first requests for 50 seconds or more due to inactivity so please be patient.**</font>
 
 To explore the additional admin dashboard feature, you can use the following test credentials for admin account:
 

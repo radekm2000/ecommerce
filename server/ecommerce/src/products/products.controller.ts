@@ -115,7 +115,6 @@ export class ProductsController {
     @UploadedFile() file: Express.Multer.File,
     @AuthUser() authUser: AuthUser,
   ) {
-    console.log(body);
     return await this.productsService.uploadProduct(body, file, authUser.sub);
   }
 }

@@ -15,18 +15,10 @@ import { calculateGridWidth } from "../utils/calculateGridWidth";
 
 export const DisplayUserProducts = ({
   products,
-  setLocation,
 }: {
   products: ProductWithImageAndUser[];
-  setLocation: (
-    to: string,
-    options?:
-      | {
-          replace?: boolean | undefined;
-        }
-      | undefined
-  ) => void;
 }) => {
+  const [, setLocation] = useLocation();
   const handleOnProductClick = (productId: number, productTitle: string) => {
     const url = `/products/${productId}-${productTitle}`;
     setLocation(url, { replace: true });
@@ -36,7 +28,6 @@ export const DisplayUserProducts = ({
 
   const below1050 = useMediaQuery(1050);
   const below1200 = useMediaQuery(1200);
-  const below1600 = useMediaQuery(1600);
   return (
     <Box
       sx={{
@@ -143,7 +134,7 @@ export const DisplayUserProducts = ({
                 sx={{ overflow: "hidden", textOverflow: "ellipsis" }}
               >
                 <Typography sx={{ fontSize: "14px", color: "#171717" }}>
-                  PLN {product.price}.00
+                  USD {product.price}.00
                 </Typography>
               </CardContent>
             </Card>

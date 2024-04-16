@@ -18,7 +18,6 @@ import toast from "react-hot-toast";
 import { Redirect } from "wouter";
 import { useUserContext } from "../../contexts/UserContext";
 import { useAddAdminNotification } from "../../hooks/useAddAdminNotification";
-import axios from "axios";
 
 //important note --------------
 // change button component prop to label if you want to upload files

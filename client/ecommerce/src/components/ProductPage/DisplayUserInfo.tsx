@@ -9,6 +9,7 @@ import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight";
 import { Link, useLocation } from "wouter";
 import { useUserInfo } from "../../hooks/useUserInfo";
 import { calculateMedian } from "../../utils/calculateMedian";
+import { FallbackProgress } from "../../utils/FallbackProgress";
 export const DisplayUserInfo = ({
   userId,
   product,
@@ -32,15 +33,13 @@ export const DisplayUserInfo = ({
     setFollowButtonClicked(isFollowed(user));
   }, [user]);
   const mutation = useFollowUser(user?.id);
-  if (isMeUserInfoLoading) {
-    return "isLoading...";
+  if (isMeUserInfoLoading || isUserLoading) {
+    return <FallbackProgress />;
   }
   if (!product) {
     return;
   }
-  if (isUserLoading) {
-    return "userLoading...";
-  }
+
   if (!user) {
     return;
   }

@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { UserWithFollows } from "../../types/types";
 import { useUserContext } from "../../contexts/UserContext";
 import { useFollowUser } from "../../utils/followUser";
+import { FallbackProgress } from "../../utils/FallbackProgress";
 
 export const Followings = () => {
   const { user: meUser } = useUserContext();
@@ -42,7 +43,7 @@ export const Followings = () => {
   };
 
   if (isUserLoading) {
-    return "isLoading...";
+    return <FallbackProgress/>
   }
   if (!user) {
     return;

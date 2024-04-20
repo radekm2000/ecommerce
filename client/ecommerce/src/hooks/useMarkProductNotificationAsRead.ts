@@ -1,15 +1,16 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUserContext } from "../contexts/UserContext";
 import { markProductNotificationsAsRead } from "../api/axios";
+import { ProductNotificationsKeys } from "../api/requests/productNotifications";
 
 export const useMarkProductNotificationAsRead = () => {
-  const { user } = useUserContext();
   const queryClient = useQueryClient();
   return useMutation({
-    mutationKey: ["productNotifications", "update", user.id],
     mutationFn: markProductNotificationsAsRead,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["productNotifications"] });
+      queryClient.invalidateQueries({
+        queryKey: ProductNotificationsKeys.list(),
+      });
     },
     onError: (err) => {
       console.log(err);

@@ -287,9 +287,11 @@ export const addAdminNotification = async (dto: AdminNotification) => {
   return response.data;
 };
 
-export const getAdminNotifications = async () => {
-  const response = await axiosApi.get("admin-notifications");
-  return response.data as AdminNotification[];
+export const getAdminNotifications = async (): Promise<AdminNotification[]> => {
+  const response = await axiosApi.get<AdminNotification[]>(
+    "admin-notifications"
+  );
+  return response.data;
 };
 
 export const addFeedback = async (dto: FeedbackFormData) => {

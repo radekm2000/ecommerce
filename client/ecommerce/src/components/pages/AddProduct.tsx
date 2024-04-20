@@ -12,7 +12,7 @@ import {
 import AddIcon from "@mui/icons-material/Add";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { ChangeEvent, useState } from "react";
-import { addAdminNotification, addProduct } from "../../api/axios";
+import {  addProduct } from "../../api/axios";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Redirect } from "wouter";

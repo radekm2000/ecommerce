@@ -1,14 +1,13 @@
-import { useLocation, useParams } from "wouter";
+import { useParams } from "wouter";
 import { useSingleProduct } from "../../hooks/useSingleProduct";
-import { Box, Button, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
 import { useGivenUserProducts } from "../../hooks/useGivenUserProducts";
 import { DisplayUserProducts } from "../DisplayUserProducts";
 import { ProductWithImageAndUser } from "../../types/types";
-import { DisplayUserInfo } from "../ProductPage/DisplayUserInfo";
 import { sendProductInfoToCheckout } from "../../api/axios";
 import { useStripe } from "@stripe/react-stripe-js";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { useUserContext } from "../../contexts/UserContext";
 import { useDeleteProduct } from "../../hooks/useDeleteProduct";
 import { useAddAdminNotification } from "../../hooks/useAddAdminNotification";
@@ -38,9 +37,7 @@ export const Product = () => {
   const stripe = useStripe();
   const { user } = useUserContext();
   const below960 = useMediaQuery(960);
-  const below800 = useMediaQuery(800);
   const params = useParams();
-  const [, setLocation] = useLocation();
   const productId = params?.productId;
   const {
     data: product,
@@ -152,7 +149,6 @@ export const Product = () => {
           }}
         >
           <DisplayUserProducts
-            setLocation={setLocation}
             products={productsWithoutMainOne as ProductWithImageAndUser[]}
           />
         </Box>

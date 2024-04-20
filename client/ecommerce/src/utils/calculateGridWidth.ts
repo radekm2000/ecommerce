@@ -19,16 +19,16 @@ export const calculateGridWidth = (
   } else if (below700) {
     if (totalProducts! > 4) {
       return 6;
-    } else if(totalProducts === 1) {
-      return 12
+    } else if (totalProducts === 1) {
+      return 12;
     } else {
-        return 6
+      return 6;
     }
   } else if (below1050) {
     if (totalProducts == 2) {
       return 6;
     } else if (totalProducts == 1) {
-      return 12
+      return 12;
     } else {
       return 4;
     }

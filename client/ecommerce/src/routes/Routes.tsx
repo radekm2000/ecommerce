@@ -185,7 +185,9 @@ export const Routes = () => {
           </Suspense>
         </Route>
       </Layout>
-      <Route path="/:rest*">{() => <Redirect to="/" />}</Route>
+      <Route>
+        <Redirect to="/login" />
+      </Route>
     </Switch>
   );
 };

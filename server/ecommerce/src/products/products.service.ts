@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/utils/entities/product.entity';
 import { ILike, Repository } from 'typeorm';
@@ -31,13 +31,16 @@ const s3 = new S3Client({
 });
 @Injectable()
 export class ProductsService {
+  logger: Logger;
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
     private productsNotificationService: ProductNotificationService,
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
     private usersService: UsersService,
-  ) {}
+  ) {
+    this.logger = new Logger(ProductsService.name);
+  }
 
   async findProduct(productId: number) {
     const product = await this.productRepository.findOne({
@@ -328,6 +331,9 @@ export class ProductsService {
     } catch (error) {
       return 'Failed uploading image to s3 bucket';
     }
+    this.logger.log(
+      `User ${existingUser.username} added product with id ${newProduct.id}`,
+    );
     return;
   }
 

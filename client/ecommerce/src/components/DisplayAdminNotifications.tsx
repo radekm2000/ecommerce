@@ -1,6 +1,6 @@
 import { AdminNotification } from "../types/types";
 import { Box, Divider, Typography } from "@mui/material";
-import { formatDistanceToNowStrict } from "date-fns";
+import { compareDesc, formatDistanceToNowStrict } from "date-fns";
 import { Link } from "wouter";
 
 const DisplayAdminNotifications = ({
@@ -8,7 +8,10 @@ const DisplayAdminNotifications = ({
 }: {
   adminNotifications: AdminNotification[];
 }) => {
-  const timeFormattedAdminNotifications = adminNotifications.map(
+  const sortNotificationsByCreationTime = adminNotifications.sort((a, b) =>
+    compareDesc(a.createdAt, b.createdAt)
+  );
+  const timeFormattedAdminNotifications = sortNotificationsByCreationTime.map(
     (notification) => {
       const formattedTime = formatDistanceToNowStrict(notification.createdAt, {
         addSuffix: true,

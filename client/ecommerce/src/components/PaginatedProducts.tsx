@@ -45,16 +45,10 @@ export const PaginatedProducts = () => {
                 <Grid
                   item
                   key={index}
-                  lg={below1200 ? 3 : 12 / 5}
-                  md={below1200 ? 3 : 3}
-                  xs={below700 ? 6 : 4}
-                  xl={
-                    page.data.length == 2 || page.data.length == 1
-                      ? 6
-                      : page.data.length >= 4
-                      ? 3
-                      : 4
-                  }
+                  lg={3}
+                  md={below1200 ? 4 : 3}
+                  xs={below700 ? 12 : 6}
+                  xl={3}
                 >
                   <Card
                     elevation={0}

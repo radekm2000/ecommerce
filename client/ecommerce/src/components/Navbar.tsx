@@ -206,6 +206,10 @@ export const Navbar = () => {
     setMobileMoreAnchorEl(event.currentTarget);
   };
 
+  const onButtonClick = () => {
+    setLocation("/products/new", { replace: true });
+  };
+
   const menuId = "primary-search-account-menu";
   const shownNotificationsInboxNumber = notificationsReceived.filter(
     (notification) => notification.isRead !== true
@@ -394,6 +398,7 @@ export const Navbar = () => {
                 ))}
 
               <Button
+                onClick={onButtonClick}
                 sx={{
                   borderRadius: "6px",
                   background: "#007782",
@@ -405,15 +410,13 @@ export const Navbar = () => {
                   display: below800 ? "none" : null,
                 }}
               >
-                <Link href="/products/new">
-                  <Typography
-                    color="white"
-                    fontFamily="Maison Neue"
-                    fontSize="14px"
-                  >
-                    Sell now
-                  </Typography>
-                </Link>
+                <Typography
+                  color="white"
+                  fontFamily="Maison Neue"
+                  fontSize="14px"
+                >
+                  Sell now
+                </Typography>
               </Button>
 
               <Box sx={{ display: { xs: "none", md: "flex", gap: "5px" } }}>

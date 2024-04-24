@@ -34,17 +34,11 @@ export const MenCatalog = () => {
 
   useEffect(() => {
     const params = new URLSearchParams();
-    if (brand && order) {
-      params.set("brand", brand);
-      params.set("order", order);
-      setLocation(`/catalog/men?${params.toString()}`);
-    }
-    if (brand) {
-      params.set("brand", brand);
-    } else if (order) {
-      params.set("order", order);
-    }
-    setLocation(`/catalog/men?${params.toString()}`);
+    if (brand) params.set("brand", brand);
+    if (order) params.set("order", order);
+    const queryString = params.toString();
+    const url = `/catalog/men${queryString ? `?${queryString}` : ""}`;
+    setLocation(url);
   }, [brand, order, setLocation]);
 
   const { data: products, isLoading: isProductsLoading } = useFilteredProducts(

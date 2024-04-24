@@ -15,7 +15,6 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { updateProfile } from "../../api/axios";
 import toast from "react-hot-toast";
 import { useLocation } from "wouter";
-import { User } from "../../types/types";
 import { useFetchUserInfo } from "../../hooks/useFetchUserInfo";
 
 type FormData = {

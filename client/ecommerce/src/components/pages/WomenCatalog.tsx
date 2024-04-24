@@ -24,7 +24,7 @@ import { CatalogSkeleton } from "../skeletons/CatalogSkeleton";
 export const WomenCatalog = () => {
   const below1200 = useMediaQuery(1200);
   const below960 = useMediaQuery(960);
-  const [, setLocation] = useLocation();
+  const [location, setLocation] = useLocation();
   const below700 = useMediaQuery(700);
   const below1600 = useMediaQuery(1600);
   const [brand, setBrand] = useState<Brand>("");
@@ -33,18 +33,13 @@ export const WomenCatalog = () => {
   const [category] = useState<string>("Women");
   useEffect(() => {
     const params = new URLSearchParams();
-    if (brand && order) {
-      params.set("brand", brand);
-      params.set("order", order);
-      setLocation(`/catalog/women?${params.toString()}`);
-    }
-    if (brand) {
-      params.set("brand", brand);
-    } else if (order) {
-      params.set("order", order);
-    }
-    setLocation(`/catalog/women?${params.toString()}`);
-  }, [brand, order, setLocation]);
+    if (order) params.set("order", order);
+    if (brand) params.set("brand", brand);
+
+    const queryString = params.toString();
+    const url = `${location}${queryString ? `?${queryString}` : ""}`;
+    setLocation(url);
+  }, [brand, order, setLocation, location]);
 
   const { data: products, isLoading: isProductsLoading } = useFilteredProducts(
     brand,
@@ -56,7 +51,7 @@ export const WomenCatalog = () => {
     return <CatalogSkeleton />;
   }
   if (!products) {
-    return <CatalogSkeleton/>
+    return <CatalogSkeleton />;
   }
   const handlePriceSelected = (price: string) => {
     setOrder(price);

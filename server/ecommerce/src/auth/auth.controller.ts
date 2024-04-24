@@ -68,6 +68,6 @@ export class AuthController {
       httpOnly: true,
       maxAge: 60 * 60 * 1000,
     });
-    response.redirect('http://localhost:5173');
+    response.redirect('https://exquisite-pasca-338883.netlify.app');
   }
 }

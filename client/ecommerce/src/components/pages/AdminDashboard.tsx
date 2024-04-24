@@ -3,6 +3,7 @@ import {
   Card,
   CardContent,
   Tab,
+  TabProps,
   Tabs,
   Typography,
   styled,

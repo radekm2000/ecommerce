@@ -12,7 +12,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
     super({
       clientID: process.env.CLIENT_ID,
       clientSecret: process.env.CLIENT_SECRET,
-      callbackURL: 'http://localhost:3000/auth/google/redirect',
+      callbackURL: 'https://ecommerce-123.onrender.com/auth/google/redirect',
       scope: ['profile', 'email'],
     } as StrategyOptions);
   }

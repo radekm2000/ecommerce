@@ -24,6 +24,8 @@ export const Inbox = () => {
   const below1200 = useMediaQuery(1200);
   const below960 = useMediaQuery(960);
   const below1600 = useMediaQuery(1600);
+  // const [selectedImage, setSelectedImage] = useState<File | "">("");
+
   const [isConversationDetailsOpen, setisConversationDetailsOpen] =
     useState<boolean>(false);
   const [selectedUserId, setSelectedUserId] = useState<number>(0);
@@ -74,7 +76,7 @@ export const Inbox = () => {
       }
     }
   );
-
+  console.log(selectedUserConversation);
   const ExistingChat = () => {
     return (
       <Container

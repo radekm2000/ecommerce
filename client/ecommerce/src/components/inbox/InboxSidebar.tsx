@@ -3,15 +3,20 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useLocation, useParams } from "wouter";
 import {
   FetchedNotifications,
+  Message,
   RecipientOfSidebarConversation,
 } from "../../types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { markNotificationsAsRead } from "../../api/axios";
-const displayLastMessage = (message: string) => {
-  if (message.length > 20) {
-    return message.slice(0, 20).concat("...");
+const displayLastMessage = (lastMessage: Message) => {
+  console.log(lastMessage);
+  if (!lastMessage.content && lastMessage.imageName) {
+    return "User sent a photo";
   }
-  return message;
+  if (lastMessage.content.length > 20) {
+    return lastMessage.content.slice(0, 20).concat("...");
+  }
+  return lastMessage.content;
 };
 
 export const InboxSidebar = ({
@@ -22,7 +27,7 @@ export const InboxSidebar = ({
   setSelectedUserId: React.Dispatch<React.SetStateAction<number>>;
   recipientsOfSidebarConversations:
     | RecipientOfSidebarConversation[]
-    | undefined
+    | undefined;
   notifications: FetchedNotifications[];
 }) => {
   // const { notifications } = useNotificationsContext();
@@ -63,6 +68,7 @@ export const InboxSidebar = ({
     setSelectedUserId(userId);
     setLocation(`/inbox/${userId}`);
   };
+
   return (
     <Box
       sx={{
@@ -135,7 +141,7 @@ export const InboxSidebar = ({
                 </Box>
                 <Typography sx={{ fontSize: "14px", color: "#4D4D4D" }}>
                   {displayLastMessage(
-                    recipientsOfSidebarConversation.lastMessageSent.content
+                    recipientsOfSidebarConversation.lastMessageSent
                   )}
                 </Typography>
               </Box>

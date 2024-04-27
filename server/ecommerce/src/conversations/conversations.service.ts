@@ -1,8 +1,18 @@
+import { GetObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { Conversation } from 'src/utils/entities/conversation.entity';
 import { Repository } from 'typeorm';
+
+const s3 = new S3Client({
+  region: process.env.BUCKET_REGION,
+  credentials: {
+    accessKeyId: process.env.BUCKET_ACCESS_KEY,
+    secretAccessKey: process.env.BUCKET_SECRET_ACCESS_KEY,
+  },
+});
 
 @Injectable()
 export class ConversationsService {
@@ -60,7 +70,7 @@ export class ConversationsService {
   }
 
   async getUserConversations(userId: number, authUser: AuthUser) {
-    return await this.conversationRepository.findOne({
+    const conversation = await this.conversationRepository.findOne({
       where: [
         {
           creator: { id: userId },
@@ -80,6 +90,19 @@ export class ConversationsService {
         'creator',
       ],
     });
+    for (const message of conversation.messages) {
+      if (message.content === '' && message.imageName) {
+        const getObjectParams = {
+          Bucket: process.env.BUCKET_NAME,
+          Key: message.imageName,
+        };
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+
+        message.imageUrl = url;
+      }
+    }
+    return conversation;
   }
 
   async deleteConversation(conversationId: number) {

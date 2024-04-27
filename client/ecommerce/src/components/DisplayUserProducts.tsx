@@ -6,6 +6,7 @@ import {
   CardContent,
   CardMedia,
   Grid,
+  Input,
   Typography,
 } from "@mui/material";
 import { ProductWithImageAndUser } from "../types/types";

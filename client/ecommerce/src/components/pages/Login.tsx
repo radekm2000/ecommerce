@@ -15,7 +15,7 @@ import PersonRoundedIcon from "@mui/icons-material/PersonRounded";
 import LockRoundedIcon from "@mui/icons-material/LockRounded";
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import { useMutation, } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { signInUser } from "../../api/axios";
 import toast from "react-hot-toast";
 import { Redirect, useLocation } from "wouter";
@@ -166,7 +166,7 @@ export const Login = () => {
         </Grid>
         <Typography sx={{ mb: "5px" }}>or</Typography>
         <Box>
-          <Link href={`http://localhost:3000/auth/google/login`}>
+          <Link href={`https://ecommerce-123.onrender.com/auth/google/login`}>
             <GoogleButton />
           </Link>
         </Box>

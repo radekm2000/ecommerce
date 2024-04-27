@@ -122,10 +122,13 @@ export type Brand =
   | "Calvin Klein"
   | "";
 
+
 export type Message = {
   id: number;
   content: string;
   author: User;
+  imageName?: string;
+  imageUrl?: string;
 };
 export type ProductNotification = {
   id: number;

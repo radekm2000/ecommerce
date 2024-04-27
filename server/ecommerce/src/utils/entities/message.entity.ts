@@ -18,4 +18,10 @@ export class Message {
 
   @ManyToOne(() => User, (user) => user.messages)
   author: User;
+
+  @Column({ nullable: true })
+  imageName?: string;
+
+  @Column({ nullable: true })
+  imageUrl?: string;
 }

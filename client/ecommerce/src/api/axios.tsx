@@ -67,15 +67,6 @@ export const getUserProfileInfo = async (): Promise<User> => {
   return response.data as User;
 };
 
-export const addProduct = async (formDataToBackend: FormData) => {
-  const response = await axiosApi.post("products/upload", formDataToBackend, {
-    headers: {
-      "Content-Type": "multipart/form-data",
-    },
-  });
-  return response.data;
-};
-
 export const getUserProducts = async (userId: number) => {
   const response = await axiosApi.get(`products/${userId}`);
   return response.data;
@@ -302,4 +293,18 @@ export const addFeedback = async (dto: FeedbackFormData): Promise<Feedback> => {
 export const getFeedbacks = async () => {
   const response = await axiosApi.get("feedbacks");
   return response.data as Feedback[];
+};
+
+export const addProduct = async (formDataToBackend: FormData) => {
+  const response = await axiosApi.post("products/upload", formDataToBackend, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response.data;
+};
+
+export const uploadMessageImage = async (formData: FormData, userId: number) => {
+  const response = await axiosApi.post(`messages/image?receiverId=${userId}`, formData);
+  return response.data;
 };

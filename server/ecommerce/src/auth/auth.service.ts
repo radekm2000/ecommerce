@@ -45,6 +45,7 @@ export class AuthService {
   }
 
   async handleRefreshToken(req: Request) {
+    console.log(req.cookies);
     const { refreshToken } = req.cookies;
 
     if (!refreshToken) {

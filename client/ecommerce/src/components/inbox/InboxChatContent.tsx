@@ -2,6 +2,7 @@ import AccountCircle from "@mui/icons-material/AccountCircle";
 import {
   Avatar,
   Box,
+  CardMedia,
   List,
   ListItem,
   ListItemText,
@@ -10,6 +11,7 @@ import {
 import { useEffect, useRef } from "react";
 import { Conversation, UserWithFollows } from "../../types/types";
 import { useUserContext } from "../../contexts/UserContext";
+import { ImagePreview } from "./ImagePreview";
 
 export const InboxChatContent = ({
   selectedUserConversation,
@@ -56,22 +58,44 @@ export const InboxChatContent = ({
                   />
                 )
               ) : null}
-              <ListItemText
-                sx={{
-                  alignItems: "flex-end",
-                  padding: "8px",
-                  borderRadius: "5px",
-                  textAlign: "left",
-                  border: "1px solid rgba(23, 23, 23, 0.08)",
-                  backgroundColor:
-                    message.author.username === user.username
-                      ? "rgba(163, 157, 146, 0.15)"
-                      : null,
-                }}
-              >
-                {message.content}
-                <Typography ref={divRef}></Typography>
-              </ListItemText>
+              {message.imageUrl && (
+                <ListItemText
+                  sx={{
+                    alignItems: "flex-end",
+                    padding: "8px",
+                    borderRadius: "5px",
+                    textAlign: "left",
+                    border: "1px solid rgba(23, 23, 23, 0.08)",
+                    backgroundColor:
+                      message.author.username === user.username
+                        ? "rgba(163, 157, 146, 0.15)"
+                        : null,
+                  }}
+                >
+                  <ImagePreview image={message.imageUrl} />
+
+                  <Typography ref={divRef}></Typography>
+                </ListItemText>
+              )}
+              {message.content && (
+                <ListItemText
+                  sx={{
+                    alignItems: "flex-end",
+                    padding: "8px",
+                    borderRadius: "5px",
+                    textAlign: "left",
+                    border: "1px solid rgba(23, 23, 23, 0.08)",
+                    backgroundColor:
+                      message.author.username === user.username
+                        ? "rgba(163, 157, 146, 0.15)"
+                        : null,
+                  }}
+                >
+                  {message.content}
+
+                  <Typography ref={divRef}></Typography>
+                </ListItemText>
+              )}
             </Box>
           </ListItem>
         ))}

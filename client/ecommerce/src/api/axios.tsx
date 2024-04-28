@@ -304,7 +304,20 @@ export const addProduct = async (formDataToBackend: FormData) => {
   return response.data;
 };
 
-export const uploadMessageImage = async (formData: FormData, userId: number) => {
-  const response = await axiosApi.post(`messages/image?receiverId=${userId}`, formData);
+export const uploadMessageImage = async (
+  formData: FormData,
+  userId: number
+) => {
+  const response = await axiosApi.post(
+    `messages/image?receiverId=${userId}`,
+    formData
+  );
+  return response.data;
+};
+
+export const deleteMessage = async (messageId: number, userId: number) => {
+  const response = await axiosApi.delete(
+    `messages/${messageId}?receiverId=${userId}`
+  );
   return response.data;
 };

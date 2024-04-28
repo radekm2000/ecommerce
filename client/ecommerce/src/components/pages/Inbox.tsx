@@ -9,7 +9,7 @@ import { InboxChatInput } from "../inbox/InboxChatInput";
 import { useAllConversations } from "../../hooks/useAllConversations";
 import { useUserContext } from "../../contexts/UserContext";
 import { getRecipientFromConversation } from "../../utils/getRecipientFromConversation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useUserConversations } from "../../hooks/useUserConversations";
 import { ConversationDetailsNavbar } from "../conversation-details/ConversationDetailsNavbar";
 import { ConversationDetailsContent } from "../conversation-details/ConversationDetailsContent";
@@ -51,7 +51,6 @@ export const Inbox = () => {
   ) {
     return <InboxSkeleton />;
   }
-
   const extractUserIdFromParam = (param: string) => {
     if (param.startsWith("new/")) {
       const userIdParam = param.replace("new/", "");
@@ -171,6 +170,7 @@ export const Inbox = () => {
                     />
                     <Box sx={{ maxHeight: "335px", overflowY: "auto" }}>
                       <InboxChatContent
+                        userId={Number(userId)}
                         selectedUserConversation={selectedUserConversation}
                       />
                     </Box>

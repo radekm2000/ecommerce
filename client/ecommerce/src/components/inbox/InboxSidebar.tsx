@@ -9,7 +9,6 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { markNotificationsAsRead } from "../../api/axios";
 const displayLastMessage = (lastMessage: Message) => {
-  console.log(lastMessage);
   if (!lastMessage.content && lastMessage.imageName) {
     return "User sent a photo";
   }
@@ -68,7 +67,6 @@ export const InboxSidebar = ({
     setSelectedUserId(userId);
     setLocation(`/inbox/${userId}`);
   };
-
   return (
     <Box
       sx={{

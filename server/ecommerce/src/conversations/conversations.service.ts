@@ -20,7 +20,10 @@ export class ConversationsService {
     @InjectRepository(Conversation)
     private conversationRepository: Repository<Conversation>,
   ) {}
-  async createNewConversation(receiverId: number, authUser: AuthUser) {
+  async createNewConversationOrReturnExistingOne(
+    receiverId: number,
+    authUser: AuthUser,
+  ) {
     const existingConversation = await this.conversationRepository.findOne({
       where: [
         {

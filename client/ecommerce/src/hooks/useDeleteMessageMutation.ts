@@ -1,18 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { uploadMessageImage } from "../api/axios";
+import { deleteMessage } from "../api/axios";
 import toast from "react-hot-toast";
+import { Conversation } from "../types/types";
 
-export const useUploadMessageImageMutation = (userId: number) => {
+export const useDeleteMessageMutation = (userId: number) => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (formData: FormData) => {
-      return uploadMessageImage(formData, userId);
-    },
+    mutationFn: (messageId: number) => deleteMessage(messageId, userId),
     onSuccess: () => {
-      toast.success("Image uploaded!");
       queryClient.invalidateQueries({
         queryKey: [`conversations/users/${userId}`],
       });
+      toast.success("Message deleted!");
     },
     onError: (err) => {
       toast.error(err.message || "Something went wrong");

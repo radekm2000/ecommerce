@@ -1,7 +1,9 @@
 import {
   Body,
   Controller,
+  Delete,
   FileTypeValidator,
+  Param,
   ParseFilePipe,
   ParseIntPipe,
   Post,
@@ -39,7 +41,7 @@ export class MessagesController {
     @AuthUser() authUser: AuthUser,
   ) {
     const { conversation, isNew } =
-      await this.conversationsService.createNewConversation(
+      await this.conversationsService.createNewConversationOrReturnExistingOne(
         receiverId,
         authUser,
       );
@@ -59,15 +61,33 @@ export class MessagesController {
 
     @AuthUser() authUser: AuthUser,
   ) {
-    console.log(file);
     const { conversation } =
-      await this.conversationsService.createNewConversation(
+      await this.conversationsService.createNewConversationOrReturnExistingOne(
         receiverId,
         authUser,
       );
     return await this.messagesService.uploadImage(
       authUser.sub,
       file,
+      conversation,
+    );
+  }
+
+  @Delete(':id')
+  @UseGuards(AuthGuard)
+  async deleteMessage(
+    @Query('receiverId', ParseIntPipe) receiverId: number,
+    @Param('id', ParseIntPipe) messageId: number,
+    @AuthUser() authUser: AuthUser,
+  ) {
+    const { conversation } =
+      await this.conversationsService.createNewConversationOrReturnExistingOne(
+        receiverId,
+        authUser,
+      );
+    return await this.messagesService.deleteMessage(
+      messageId,
+      authUser.sub,
       conversation,
     );
   }

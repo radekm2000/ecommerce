@@ -1,31 +1,69 @@
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
+import DeleteOutlineOutlinedIcon from "@mui/icons-material/DeleteOutlineOutlined";
 import {
   Avatar,
   Box,
+  Button,
   CardMedia,
+  IconButton,
   List,
   ListItem,
   ListItemText,
+  Popover,
   Typography,
 } from "@mui/material";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Conversation, UserWithFollows } from "../../types/types";
 import { useUserContext } from "../../contexts/UserContext";
 import { ImagePreview } from "./ImagePreview";
+import { useDeleteMessageMutation } from "../../hooks/useDeleteMessageMutation";
 
 export const InboxChatContent = ({
   selectedUserConversation,
+  userId,
 }: {
   selectedUserConversation: Conversation | undefined;
+  userId: number;
 }) => {
+  const [anchorEl, setAnchorEl] = useState<(HTMLButtonElement | null)[]>(
+    Array.from(
+      { length: selectedUserConversation!.messages.length },
+      () => null
+    )
+  );
+
+  const deleteMessageMutation = useDeleteMessageMutation(userId);
+
+  const handleClick = (
+    event: React.MouseEvent<HTMLButtonElement>,
+    index: number
+  ) => {
+    const newAnchorEl = [...anchorEl];
+    newAnchorEl[index] = event.currentTarget;
+    setAnchorEl(newAnchorEl);
+  };
+
+  const handleClose = (index: number) => {
+    const newAnchorEl = [...anchorEl];
+    newAnchorEl[index] = null;
+    setAnchorEl(newAnchorEl);
+  };
+
+  const open = (index: number) => Boolean(anchorEl[index]);
+
+  const [hoveredIndex, setHoveredIndex] = useState<null | number>(null);
   const { user } = useUserContext();
-  const divRef = useRef<null | HTMLDivElement>(null);
-  <Typography ref={divRef}></Typography>;
+
+  const messagesEndRef = useRef<null | HTMLDivElement>(null);
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
+  };
 
   useEffect(() => {
-    divRef?.current?.scrollIntoView({ behavior: "instant" });
-  });
-
+    scrollToBottom();
+  }, [selectedUserConversation]);
   return (
     <List sx={{}}>
       {selectedUserConversation &&
@@ -40,7 +78,13 @@ export const InboxChatContent = ({
               alignItems: "center",
             }}
           >
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+            <Box
+              onMouseOver={() => {
+                setHoveredIndex(index);
+              }}
+              onMouseLeave={() => setHoveredIndex(null)}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
               {message.author.username !== user.username ? (
                 message.author.avatar ? (
                   <Avatar
@@ -58,6 +102,41 @@ export const InboxChatContent = ({
                   />
                 )
               ) : null}
+              {message.author.username === user.username &&
+                hoveredIndex === index && (
+                  <IconButton
+                    disableRipple
+                    onClick={(e) => handleClick(e, index)}
+                    sx={{
+                      "&:hover": {
+                        backgroundColor: "white",
+                      },
+                    }}
+                  >
+                    <MoreVertIcon sx={{ cursor: "pointer", color: "grey" }} />
+                  </IconButton>
+                )}
+              <Popover
+                open={open(index)}
+                anchorEl={anchorEl[index]}
+                onClose={() => handleClose(index)}
+                anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+              >
+                <Button
+                  onClick={() => {
+                    deleteMessageMutation.mutate(message.id);
+                  }}
+                  startIcon={
+                    <DeleteOutlineOutlinedIcon sx={{ color: "black" }} />
+                  }
+                  sx={{ p: 2, textTransform: "none" }}
+                >
+                  <Typography sx={{ color: "black", fontWeight: "600" }}>
+                    Delete
+                  </Typography>
+                </Button>
+              </Popover>
+
               {message.imageUrl && (
                 <ListItemText
                   sx={{
@@ -73,8 +152,6 @@ export const InboxChatContent = ({
                   }}
                 >
                   <ImagePreview image={message.imageUrl} />
-
-                  <Typography ref={divRef}></Typography>
                 </ListItemText>
               )}
               {message.content && (
@@ -92,10 +169,9 @@ export const InboxChatContent = ({
                   }}
                 >
                   {message.content}
-
-                  <Typography ref={divRef}></Typography>
                 </ListItemText>
               )}
+              <Typography ref={messagesEndRef}></Typography>
             </Box>
           </ListItem>
         ))}

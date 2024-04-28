@@ -3,7 +3,7 @@ import {
   PutObjectCommandInput,
   S3Client,
 } from '@aws-sdk/client-s3';
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { randomUUID } from 'crypto';
 import { AuthUser } from 'src/decorators/user.decorator';
@@ -105,5 +105,46 @@ export class MessagesService {
     }
 
     return updatedConversation;
+  }
+
+  async deleteMessage(
+    messageId: number,
+    userId: number,
+    conversation: Conversation,
+  ) {
+    const message = await this.messageRepository.findOne({
+      where: { id: messageId },
+      relations: ['author'],
+    });
+
+    const conversationWithMessages = await this.conversationRepository.findOne({
+      where: { id: conversation.id },
+      relations: ['messages', 'creator', 'recipient', 'lastMessageSent'],
+    });
+
+    if (message.author.id !== userId) {
+      throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+    }
+
+    //checks if the last message is being deleted
+
+    const updatedConversation = {
+      ...conversation,
+      lastMessageSent:
+        conversationWithMessages.messages.length > 0 &&
+        messageId ===
+          conversationWithMessages.messages[
+            conversationWithMessages.messages.length - 1
+          ].id
+          ? (conversationWithMessages.lastMessageSent =
+              conversationWithMessages.messages[
+                conversationWithMessages.messages.length - 2
+              ])
+          : conversationWithMessages.lastMessageSent,
+    } as Conversation;
+
+    await this.messageRepository.delete({ id: messageId });
+    await this.conversationRepository.save(updatedConversation);
+    return messageId;
   }
 }

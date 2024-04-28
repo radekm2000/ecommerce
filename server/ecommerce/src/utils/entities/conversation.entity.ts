@@ -28,7 +28,10 @@ export class Conversation {
   })
   messages: Message[];
 
-  @OneToOne(() => Message, { nullable: true })
+  @OneToOne(() => Message, {
+    nullable: true,
+    createForeignKeyConstraints: false,
+  })
   @JoinColumn()
   lastMessageSent: Message;
 

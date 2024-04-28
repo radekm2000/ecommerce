@@ -28,7 +28,7 @@ describe('conversations service CREATE NEW CONVERSATION', () => {
       conversationRepositoryMock,
     );
 
-    const result = await conversationsService.createNewConversation(
+    const result = await conversationsService.createNewConversationOrReturnExistingOne(
       1,
       {} as AuthUser,
     );
@@ -54,7 +54,7 @@ describe('conversations service CREATE NEW CONVERSATION', () => {
       conversationRepositoryMock,
     );
 
-    const result = await conversationsService.createNewConversation(
+    const result = await conversationsService.createNewConversationOrReturnExistingOne(
       1,
       {} as AuthUser,
     );

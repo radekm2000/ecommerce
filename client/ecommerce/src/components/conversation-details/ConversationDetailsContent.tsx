@@ -10,8 +10,10 @@ import { deleteConversation } from "../../api/axios";
 import toast from "react-hot-toast";
 export const ConversationDetailsContent = ({
   selectedUserConversation,
+  setIsConversationDetailsOpen,
 }: {
   selectedUserConversation: Conversation | undefined;
+  setIsConversationDetailsOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const { user } = useUserContext();
   const [, navigate] = useLocation();
@@ -31,6 +33,7 @@ export const ConversationDetailsContent = ({
       toast.success("Conversation deleted");
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
       navigate("/inbox");
+      setIsConversationDetailsOpen(false);
     },
     onError: (error) => {
       toast.error("Something went wrong");

@@ -30,6 +30,8 @@ import { InboxSearchCard } from "../inbox/InboxSearchCard";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useFetchUsersBySearchInput } from "../../hooks/useFetchUsersBySearchInput";
 import { AccountCircle } from "@mui/icons-material";
+import { DisplayFilteredUsers } from "../inbox/DisplayFilteredUsers";
+import { InboxSidebarNavbar } from "../inbox/InboxSidebarNavbar";
 
 export const Inbox = () => {
   const params = useParams();
@@ -39,7 +41,6 @@ export const Inbox = () => {
   const below1200 = useMediaQuery(1200);
   const below960 = useMediaQuery(960);
   const below1600 = useMediaQuery(1600);
-  // const [selectedImage, setSelectedImage] = useState<File | "">("");
 
   const [isNewChatClicked, setIsNewChatClicked] = useState(false);
   const handleClick = () => {
@@ -176,6 +177,9 @@ export const Inbox = () => {
                     />
                     <ConversationDetailsContent
                       selectedUserConversation={selectedUserConversation}
+                      setIsConversationDetailsOpen={
+                        setisConversationDetailsOpen
+                      }
                     />
                   </>
                 ) : (
@@ -241,32 +245,7 @@ export const Inbox = () => {
                 borderRight: "1px solid rgba(23, 23, 23, 0.08)",
               }}
             >
-              <Box
-                sx={{
-                  height: "52px",
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  borderRight: "1px solid rgba(23, 23, 23, 0.08)",
-                  borderBottom: "1px solid rgba(23, 23, 23, 0.08)",
-                  padding: "4px",
-                }}
-              >
-                <Typography
-                  sx={{ fontSize: "16px", padding: "8px", fontWeight: "500" }}
-                >
-                  Inbox
-                </Typography>
-                <Button onClick={handleClick}>
-                  <AddCommentOutlinedIcon
-                    sx={{
-                      color: "#007782",
-                      width: "24px",
-                      height: "24px",
-                    }}
-                  />
-                </Button>
-              </Box>
+              <InboxSidebarNavbar setIsNewChatClicked={setIsNewChatClicked} />
               <InboxSidebar
                 setSelectedUserId={setSelectedUserId}
                 recipientsOfSidebarConversations={
@@ -310,44 +289,12 @@ export const Inbox = () => {
               </Box>
               <Divider />
               {debouncedInput && filteredUsers && isSearchedIconClicked && (
-                <Card
-                  sx={{
-                    width: "100%",
-                    height: "281px",
-                    boxShadow: "none",
-                    overflowY: "auto",
-                  }}
-                >
-                  {filteredUsers.map((user, index) => (
-                    <CardActionArea
-                      onClick={() => {
-                        setSearchInputValue(user.username);
-                        setChosenUserId(user.id);
-
-                        setIsSearchedIconClicked(false);
-                      }}
-                    >
-                      <CardContent key={index} sx={{ display: "flex" }}>
-                        
-                        <Box sx={{ display: "flex", gap: "10px" }}>
-                          {user.avatar ? (
-                            <Avatar src={user.avatar} />
-                          ) : (
-                            <AccountCircle
-                              sx={{
-                                color: "grey",
-                                width: "24px",
-                                height: "24px",
-                              }}
-                            />
-                          )}
-                          <Typography sx={{}}>{user.username}</Typography>
-                        </Box>
-                      </CardContent>
-                      <Divider />
-                    </CardActionArea>
-                  ))}
-                </Card>
+                <DisplayFilteredUsers
+                  filteredUsers={filteredUsers}
+                  setChosenUserId={setChosenUserId}
+                  setIsSearchedIconClicked={setIsSearchedIconClicked}
+                  setSearchInputValue={setSearchInputValue}
+                />
               )}
             </Box>
 
@@ -359,20 +306,6 @@ export const Inbox = () => {
                 />
               </Box>
             )}
-            {/* check if userId is valid (find user with that userId) */}
-            {/* {userId && (
-              <>
-                <InboxChatNavbar
-                  selectedUserConversation={selectedUserConversation}
-                />
-                <Box sx={{ display: "block", width: "100%" }}>
-                  <InboxChatInput
-                    selectedUserConversation={selectedUserConversation}
-                    userId={extractUserIdFromParam(userId)}
-                  />
-                </Box>
-              </>
-            )} */}
           </Box>
         </Box>
         <Box sx={{ width: below1200 ? "none" : "25%" }}></Box>
@@ -484,8 +417,9 @@ export const Inbox = () => {
       <Route path="/inbox/:userId">
         <ExistingChat />
       </Route>
-      <Route path="/inbox/new"></Route>
-      <SelectUserToNewChat />
+      <Route path="/inbox/new">
+        <SelectUserToNewChat />
+      </Route>
     </Switch>
   );
 };

@@ -101,6 +101,7 @@ export const InboxChatInput = ({
             receiverId: parseInt(userId),
             senderId: meUser.id,
           });
+          
         }}
         onChange={(e) => setMessage(e.target.value)}
         onKeyDown={(e) => handleKeyDown(e)}

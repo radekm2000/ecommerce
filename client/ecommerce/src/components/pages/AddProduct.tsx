@@ -202,9 +202,10 @@ export const AddProduct = () => {
             sx={{
               border: "1px dashed rgba(37,44,51,0.1)",
               display: "flex",
-              justifyent: "center",
+              justifyContent: "center",
               alignItems: "center",
               minHeight: "170px",
+              width: '100%'
             }}
           >
             <Box sx={{ marginRight: selectedFile ? "auto" : "" }}>
@@ -220,13 +221,13 @@ export const AddProduct = () => {
               startIcon={!selectedFile ? <AddIcon /> : ""}
               disableRipple
               sx={{
-                justifyContent: "center",
                 alignItems: "center",
                 padding: "14px",
                 textTransform: "none",
                 fontSize: "14px",
                 color: "#007782",
                 border: "1px solid #007782",
+                
               }}
             >
               <Typography sx={{ fontSize: "16px" }}>

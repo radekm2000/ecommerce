@@ -1,6 +1,6 @@
 # E-commerce App
 
-## Check the app live at [ecommerce](https://exquisite-pasca-338883.netlify.app/login) 
+## Check the app live at [ecommerce](https://exquisite-pasca-338883.netlify.app/login)
 
 <font color='#e50000'>**Render might delay first requests for 50 seconds or more due to inactivity so please be patient.**</font>
 
@@ -51,16 +51,34 @@ This app is a simplified version of **Vinted**, following a similar layout. Belo
 - **Frontend:**
   - React using Vite.
 
-
 ## Images
-  ![Add feedback](/readmeImages/addFeedback.png)
-  ![Add Product](/readmeImages/addProduct.png)
-  ![Admin Dashboard](/readmeImages/AdminDashboardFeedbacks.png)
-  ![Edit profile](/readmeImages/EditProfile.png)
-  ![Add feedback](/readmeImages/addFeedback.png)
-  ![After Payment](/readmeImages/PaymentSuccess.png)
-  ![Product Page](/readmeImages/productPage.png) 
-  ![Inbox](/readmeImages/Inbox.png)
-  ![Profile Page](/readmeImages/ProfilePage.png)  
-  ![Catalog with filtering](/readmeImages/WomanCatalog.png)
-  ![Notifications in navbar](/readmeImages/mainPageShowNotifications.png)
+
+Add feedback
+![Add feedback](/readmeImages/addFeedback.png)
+
+Add product
+![Add Product](/readmeImages/addProduct.png)
+
+Admin Dashboard
+![Admin Dashboard](/readmeImages/AdminDashboardFeedbacks.png)
+
+Edit profile page
+![Edit profile](/readmeImages/EditProfile.png)
+
+Profile page
+![Profile Page](/readmeImages/ProfilePage.png)
+
+After stripe payment
+![After Payment](/readmeImages/PaymentSuccess.png)
+
+Product page
+![Product Page](/readmeImages/productPage.png)
+
+Inbox
+![Inbox](/readmeImages/Inbox.png)
+
+Catalog with filtering
+![Catalog with filtering](/readmeImages/WomanCatalog.png)
+
+Notifications + main page
+![Notifications in navbar](/readmeImages/mainPageShowNotifications.png)

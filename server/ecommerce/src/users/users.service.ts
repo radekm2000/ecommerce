@@ -16,7 +16,7 @@ import { Avatar } from 'src/utils/entities/avatar.entity';
 import { Follow } from 'src/utils/entities/followers.entity';
 import { Profile as userProfile } from 'src/utils/entities/profile.entity';
 import { User } from 'src/utils/entities/user.entity';
-import { Repository } from 'typeorm';
+import { Like, Repository } from 'typeorm';
 const s3 = new S3Client({
   region: process.env.BUCKET_REGION,
   credentials: {
@@ -340,5 +340,39 @@ export class UsersService {
         return 'Failed uploading avatar to s3 bucket';
       }
     }
+  }
+
+  public async findUsersByName(name: string, meUserId: number) {
+    if (!name) {
+      return [];
+    }
+
+    const users = await this.usersRepository.find({
+      where: {
+        username: Like(`%${name}%`),
+      },
+      relations: ['avatarEntity'],
+    });
+    if (!users) {
+      return [];
+    }
+
+    const filteredUsersWithoutMe = users.filter((u) => u.id !== meUserId);
+
+    for (const user of filteredUsersWithoutMe) {
+      const userAvatar = user.avatarEntity;
+      if (userAvatar) {
+        const getObjectParams = {
+          Bucket: process.env.BUCKET_NAME,
+          Key: userAvatar.avatarName,
+        };
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 360000 });
+
+        user.avatar = url;
+        await this.usersRepository.save(user);
+      }
+    }
+    return filteredUsersWithoutMe;
   }
 }

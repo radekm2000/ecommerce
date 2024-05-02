@@ -36,6 +36,15 @@ export class UsersController {
     return await this.usersService.findUserById(userId);
   }
 
+  @UseGuards(AuthGuard)
+  @Get('/all/:name')
+  async searchUsersByInput(
+    @AuthUser() authUser: AuthUser,
+    @Param('name') userName: string,
+  ) {
+    return await this.usersService.findUsersByName(userName, authUser.sub);
+  }
+
   @Post('profile/update')
   @UseGuards(AuthGuard)
   @UseInterceptors(FileInterceptor('file'))

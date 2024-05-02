@@ -321,3 +321,10 @@ export const deleteMessage = async (messageId: number, userId: number) => {
   );
   return response.data;
 };
+
+export const findUsersBySearchInput = async (
+  name: string
+): Promise<UserWithAvatar[]> => {
+  const response = await axiosApi.get(`users/all/${name}`);
+  return response.data;
+};

@@ -1,7 +1,6 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteMessage } from "../api/axios";
 import toast from "react-hot-toast";
-import { Conversation } from "../types/types";
 
 export const useDeleteMessageMutation = (userId: number) => {
   const queryClient = useQueryClient();

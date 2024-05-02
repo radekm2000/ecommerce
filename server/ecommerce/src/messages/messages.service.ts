@@ -117,14 +117,17 @@ export class MessagesService {
       relations: ['author'],
     });
 
-    const conversationWithMessages = await this.conversationRepository.findOne({
-      where: { id: conversation.id },
-      relations: ['messages', 'creator', 'recipient', 'lastMessageSent'],
-    });
+    if (!message) {
+      throw new HttpException('Message not found', HttpStatus.NOT_FOUND);
+    }
 
     if (message.author.id !== userId) {
       throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
     }
+    const conversationWithMessages = await this.conversationRepository.findOne({
+      where: { id: conversation.id },
+      relations: ['messages', 'creator', 'recipient', 'lastMessageSent'],
+    });
 
     //checks if the last message is being deleted
 

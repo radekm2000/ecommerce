@@ -11,6 +11,7 @@ import {
   Popover,
   Typography,
 } from "@mui/material";
+import NotificationsActiveOutlinedIcon from "@mui/icons-material/NotificationsActiveOutlined";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { Link } from "wouter";
 import { useDeleteProductNotificationsMutation } from "../hooks/useDeleteProductNotificationsMutation";
@@ -96,8 +97,19 @@ export default function PopoverPopupState({
                 ))
               ) : (
                 <Box>
-                  <CardContent>
-                    <Typography>No notifications</Typography>
+                  <CardContent
+                    sx={{
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <NotificationsActiveOutlinedIcon sx={{width: '48px', height: '48px', mb: '10px'}} />
+                    <Typography>No notifications yet</Typography>
+                    <Typography sx={{ fontSize: "13px", color: "#4D4D4D" }}>
+                      This is where you'll find your notifications
+                    </Typography>
                   </CardContent>
                 </Box>
               )}

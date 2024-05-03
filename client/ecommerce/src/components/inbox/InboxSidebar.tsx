@@ -9,12 +9,16 @@ import {
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { markNotificationsAsRead } from "../../api/axios";
 const displayLastMessage = (lastMessage: Message) => {
+  if (!lastMessage) {
+    return "";
+  }
   if (!lastMessage.content && lastMessage.imageName) {
     return "User sent a photo";
   }
   if (lastMessage.content.length > 20) {
     return lastMessage.content.slice(0, 20).concat("...");
   }
+
   return lastMessage.content;
 };
 

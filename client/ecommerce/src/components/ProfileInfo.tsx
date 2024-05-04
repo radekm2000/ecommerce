@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 import { useFollowUser } from "../utils/followUser";
 import { Link, useLocation } from "wouter";
 import { calculateMedian } from "../utils/calculateMedian";
+import { DiscordAvatar } from "./DiscordAvatar";
 export const ProfileInfo = ({
   user,
 }: {
@@ -24,6 +25,9 @@ export const ProfileInfo = ({
   const [, setLocation] = useLocation();
   const ratings = user.reviews.map((review) => review.rating);
   const calculatedRatingValue = calculateMedian(ratings);
+
+  const avatarUrl = `https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.png`;
+  console.log(avatarUrl);
 
   const isFollowed = (member: UserWithFollows) => {
     return (member.followings ?? []).some((following) => {
@@ -106,7 +110,12 @@ export const ProfileInfo = ({
       ) : (
         <>
           <Box>
-            {user.avatar ? (
+            {user.role === "discordUser" && user.avatar && (
+              <DiscordAvatar userId={user.discordId} avatar={user.avatar} />
+            )}
+          </Box>
+          <Box>
+            {user.role !== "discordUser" && user.avatar && (
               <img
                 src={user.avatar}
                 alt="Avatar"
@@ -118,7 +127,8 @@ export const ProfileInfo = ({
                   borderRadius: "50%",
                 }}
               />
-            ) : (
+            )}
+            {!(user.role === "discordUser" && user.avatar) && (
               <AccountCircle
                 sx={{
                   height: "192px",

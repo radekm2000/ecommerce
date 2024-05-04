@@ -11,6 +11,7 @@ import { GoogleStrategy } from './utils/GoogleStrategy';
 import { Follow } from 'src/utils/entities/followers.entity';
 import { Profile } from 'src/utils/entities/profile.entity';
 import { Avatar } from 'src/utils/entities/avatar.entity';
+import { DiscordStrategy } from './utils/DiscordStrategy';
 
 @Module({
   imports: [
@@ -21,7 +22,7 @@ import { Avatar } from 'src/utils/entities/avatar.entity';
       secret: jwtConstants.secret,
     }),
   ],
-  providers: [AuthService, UsersService, GoogleStrategy],
+  providers: [AuthService, UsersService, GoogleStrategy, DiscordStrategy],
   controllers: [AuthController],
 })
 export class AuthModule {}

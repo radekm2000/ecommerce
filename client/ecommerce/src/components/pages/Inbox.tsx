@@ -1,13 +1,8 @@
 import {
-  Avatar,
   Box,
   Button,
-  Card,
-  CardActionArea,
-  CardContent,
   Container,
   Divider,
-  Select,
   Typography,
 } from "@mui/material";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
@@ -29,7 +24,6 @@ import { InboxSkeleton } from "../skeletons/InboxSkeleton";
 import { InboxSearchCard } from "../inbox/InboxSearchCard";
 import { useDebounce } from "../../hooks/useDebounce";
 import { useFetchUsersBySearchInput } from "../../hooks/useFetchUsersBySearchInput";
-import { AccountCircle } from "@mui/icons-material";
 import { DisplayFilteredUsers } from "../inbox/DisplayFilteredUsers";
 import { InboxSidebarNavbar } from "../inbox/InboxSidebarNavbar";
 

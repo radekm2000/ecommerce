@@ -25,18 +25,21 @@ export class User {
   @Column({ nullable: true })
   googleId: string;
 
-  @Column()
+  @Column({ nullable: true })
   email: string;
 
   @Column({ nullable: true })
   password: string;
+
+  @Column({ nullable: true })
+  discordId: string;
 
   @OneToOne(() => Profile, (profile) => profile.user, { cascade: true })
   @JoinColumn()
   profile: Profile;
 
   @Column({ default: 'user' })
-  role: 'admin' | 'user';
+  role: 'admin' | 'user' | 'discordUser';
 
   @Column({ nullable: true })
   avatar: string;
@@ -59,7 +62,6 @@ export class User {
 
   @OneToMany(() => Review, (review) => review.reviewRecipient)
   reviews: Review[];
-
 
   @BeforeInsert()
   async hashPassword() {

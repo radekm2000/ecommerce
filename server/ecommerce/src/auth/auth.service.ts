@@ -9,6 +9,7 @@ import 'dotenv/config';
 import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { Profile } from 'passport-google-oauth20';
+import { DiscordProfile } from 'src/utils/dtos/discord.dto';
 @Injectable()
 export class AuthService {
   constructor(
@@ -45,7 +46,6 @@ export class AuthService {
   }
 
   async handleRefreshToken(req: Request) {
-    console.log(req.cookies);
     const { refreshToken } = req.cookies;
 
     if (!refreshToken) {
@@ -70,6 +70,19 @@ export class AuthService {
     const user = await this.usersService.findByEmailAndGetOrCreate(
       profile.emails[0].value,
       profile,
+    );
+    return user;
+  }
+
+  async createOrGetDiscordUser(
+    profile: DiscordProfile,
+    accessToken: string,
+    refreshToken: string,
+  ) {
+    const user = await this.usersService.findDiscordUserOrCreate(
+      profile.username,
+      profile.avatar,
+      profile.id,
     );
     return user;
   }

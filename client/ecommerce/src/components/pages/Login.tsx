@@ -23,6 +23,7 @@ import GoogleButton from "react-google-button";
 import { AxiosError } from "axios";
 import { LoginInput, LoginResponseData } from "../../types/types";
 import { useUserContext } from "../../contexts/UserContext";
+import { DiscordSignInButton } from "../DiscordSignInButton";
 export const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -165,10 +166,11 @@ export const Login = () => {
           </Link>
         </Grid>
         <Typography sx={{ mb: "5px" }}>or</Typography>
-        <Box>
+        <Box sx={{ display: "flex", gap: "20px" }}>
           <Link href={`https://ecommerce-123.onrender.com/auth/google/login`}>
             <GoogleButton />
           </Link>
+          <DiscordSignInButton />
         </Box>
       </Box>
     </Box>

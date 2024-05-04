@@ -29,7 +29,8 @@ export type User = {
   username: string;
   googleId?: string;
   email: string;
-  role: "admin" | "user";
+  discordId?: string;
+  role: "admin" | "user" | "discordUser";
   avatar?: string;
   products?: Product[];
 };
@@ -121,7 +122,6 @@ export type Brand =
   | "4F"
   | "Calvin Klein"
   | "";
-
 
 export type Message = {
   id: number;

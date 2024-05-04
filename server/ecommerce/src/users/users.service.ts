@@ -375,4 +375,23 @@ export class UsersService {
     }
     return filteredUsersWithoutMe;
   }
+
+  async findDiscordUserOrCreate(username: string, avatar: string, id: string) {
+    const user = await this.usersRepository.findOne({
+      where: { username: username },
+    });
+
+    if (!user) {
+      const newUser = this.usersRepository.create({
+        avatar: avatar,
+        username: username,
+        discordId: id,
+        role: 'discordUser',
+      });
+      await this.usersRepository.save(newUser);
+      return newUser;
+    }
+
+    return user;
+  }
 }

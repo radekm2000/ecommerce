@@ -21,6 +21,8 @@ import { GoogleAuthGuard } from './utils/GoogleGuard';
 import { User } from 'src/utils/entities/user.entity';
 import { AuthGuard } from './auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
+import { DiscordAuthGuard } from './utils/DiscordGuard';
+import { DiscordProfile } from 'src/utils/dtos/discord.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -46,6 +48,12 @@ export class AuthController {
     return await this.authService.handleRefreshToken(request);
   }
 
+  @UseGuards(DiscordAuthGuard)
+  @Get('discord/login')
+  handleDiscordLogin() {
+    //empty method to initialize oauth flow
+  }
+
   @UseGuards(GoogleAuthGuard)
   @Get('google/login')
   handleGoogleLogin() {
@@ -69,5 +77,20 @@ export class AuthController {
       maxAge: 60 * 60 * 1000,
     });
     response.redirect('https://exquisite-pasca-338883.netlify.app');
+  }
+
+  @UseGuards(DiscordAuthGuard)
+  @Get('discord/redirect')
+  async disordAuthRedirect(@Req() request: Request, @Res() response: Response) {
+    const user = request.user as DiscordProfile;
+    console.log(user);
+    const refreshToken = await this.authService.generateRefreshTokenFor(
+      Number(user.id),
+    );
+    response.cookie('refreshToken', refreshToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 1000,
+    });
+    response.redirect('http://localhost:5173');
   }
 }

@@ -108,6 +108,12 @@ export class UsersService {
         avatar: profile.photos[0].value,
       });
       await this.usersRepository.save(newUser);
+      const newProfile = this.profilesRepository.create({
+        user: newUser,
+      });
+      newUser.profile = newProfile;
+      await this.profilesRepository.save(newProfile);
+      await this.usersRepository.save(newUser);
       return newUser;
     } else {
       await this.usersRepository.save(user);
@@ -388,6 +394,11 @@ export class UsersService {
         discordId: id,
         role: 'discordUser',
       });
+      const newProfile = this.profilesRepository.create({
+        user: newUser,
+      });
+      newUser.profile = newProfile;
+      await this.profilesRepository.save(newProfile);
       await this.usersRepository.save(newUser);
       return newUser;
     }

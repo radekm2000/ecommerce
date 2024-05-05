@@ -36,6 +36,7 @@ import { useFetchUserInfo } from "../hooks/useFetchUserInfo";
 import { isAdmin } from "../utils/isAdmin";
 import { NavbarSkeleton } from "./skeletons/NavbarSkeleton";
 import { FeedbackDialog } from "./FeedbackDialog";
+import { RenderAvatar } from "./RenderAvatar";
 
 export const NotAuthed = () => {
   return (
@@ -199,7 +200,6 @@ export const Navbar = () => {
   const handleMenuClose = () => {
     setAnchorEl(null);
     handleMobileMenuClose();
-    return <Redirect to="/profile" />;
   };
 
   const handleMobileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
@@ -230,10 +230,22 @@ export const Navbar = () => {
       open={isMenuOpen}
       onClose={handleMenuClose}
     >
-      <MenuItem onClick={handleMenuClose}>
+      <MenuItem
+        sx={{ display: "flex", flexDirection: "column", gap: "10px" }}
+        onClick={handleMenuClose}
+      >
         <Link href={`/members/${user.id}`}>
           <Typography>Profile</Typography>
         </Link>
+        <Button
+          onClick={() => {
+            localStorage.removeItem("accessToken");
+            setLocation("/login");
+          }}
+          sx={{ textTransform: "none" }}
+        >
+          <Typography>Logout</Typography>
+        </Button>
       </MenuItem>
     </Menu>
   );
@@ -270,7 +282,7 @@ export const Navbar = () => {
           aria-haspopup="true"
           color="inherit"
         >
-          {user.avatar ? <Avatar src={user.avatar} /> : <AccountCircle />}
+          <RenderAvatar user={user} height="32px" width="32px" />
         </IconButton>
         <p>Profile</p>
       </MenuItem>
@@ -470,11 +482,7 @@ export const Navbar = () => {
                   onClick={handleProfileMenuOpen}
                   color="primary"
                 >
-                  {user.avatar ? (
-                    <Avatar src={user.avatar} />
-                  ) : (
-                    <AccountCircle />
-                  )}
+                  <RenderAvatar width="40px" height="40px" user={user}/>
                 </IconButton>
               </Box>
 

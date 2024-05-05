@@ -13,6 +13,8 @@ import { useEffect } from "react";
 import { fetchPaginatedProducts } from "../api/axios";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Link } from "wouter";
+import { RenderAvatar } from "./RenderAvatar";
+import { CURRENCY } from "./pages/MenCatalog";
 
 export const PaginatedProducts = () => {
   const below1200 = useMediaQuery(1200);
@@ -67,21 +69,11 @@ export const PaginatedProducts = () => {
                           cursor: "pointer",
                         }}
                       >
-                        {item.user.avatar ? (
-                          <Avatar
-                            sx={{ width: "24px", height: "24px" }}
-                            alt="user-avatar"
-                            src={item.user.avatar}
-                          />
-                        ) : (
-                          <AccountCircle
-                            sx={{
-                              color: "grey",
-                              width: "24px",
-                              height: "24px",
-                            }}
-                          />
-                        )}
+                        <RenderAvatar
+                          width="24px"
+                          height="24px"
+                          user={item.user}
+                        />
                         <Typography
                           sx={{
                             fontSize: "12px",
@@ -107,7 +99,7 @@ export const PaginatedProducts = () => {
                     </Link>
                     <CardContent>
                       <Typography sx={{ fontSize: "14px", color: "#171717" }}>
-                        USD {item.price}.00
+                        {CURRENCY} {item.price}.00
                       </Typography>
                     </CardContent>
                   </Card>

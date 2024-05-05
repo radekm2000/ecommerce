@@ -3,15 +3,22 @@ import { Avatar } from "@mui/material";
 type Props = {
   userId: string | undefined;
   avatar: string;
+  width: string;
+  height: string;
+  marginRight?: string
 };
 
-export const DiscordAvatar = ({ userId, avatar }: Props) => {
+export const DiscordAvatar = ({ userId, avatar, width, height, marginRight }: Props) => {
   const avatarUrl = `https://cdn.discordapp.com/avatars/${userId}/${avatar}.png`;
-  console.log(avatarUrl);
   return (
     <Avatar
       src={avatarUrl}
-      sx={{ width: "192px", height: "192px", borderRadius: "50%", marginRight: '20px' }}
+      sx={{
+        width: width,
+        height: height,
+        borderRadius: "50%",
+        marginRight: marginRight
+      }}
     />
   );
 };

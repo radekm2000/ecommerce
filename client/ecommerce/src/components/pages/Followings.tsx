@@ -8,6 +8,7 @@ import { UserWithFollows } from "../../types/types";
 import { useUserContext } from "../../contexts/UserContext";
 import { useFollowUser } from "../../utils/followUser";
 import { FallbackProgress } from "../../utils/FallbackProgress";
+import { RenderAvatar } from "../RenderAvatar";
 
 export const Followings = () => {
   const { user: meUser } = useUserContext();
@@ -43,7 +44,7 @@ export const Followings = () => {
   };
 
   if (isUserLoading) {
-    return <FallbackProgress/>
+    return <FallbackProgress />;
   }
   if (!user) {
     return;
@@ -90,16 +91,7 @@ export const Followings = () => {
                   paddingBottom: "16px",
                 }}
               >
-                {user.avatar ? (
-                  <Avatar
-                    sx={{ width: "48px", height: "48px" }}
-                    src={user.avatar}
-                  />
-                ) : (
-                  <AccountCircle
-                    sx={{ width: "48px", height: "48px", color: "grey" }}
-                  />
-                )}
+                <RenderAvatar width="48px" height="48px" user={user} />
                 <Typography
                   sx={{
                     fontsize: "16px",
@@ -185,7 +177,7 @@ export const Followings = () => {
                     padding: "16px 0px",
                   }}
                 >
-                  {following.follower.avatar ? (
+                  {/* {following.follower.avatar ? (
                     <img
                       style={{
                         height: "48px",
@@ -198,7 +190,12 @@ export const Followings = () => {
                     <AccountCircle
                       sx={{ width: "48px", height: "48px", color: "grey" }}
                     />
-                  )}
+                  )} */}
+                  <RenderAvatar
+                    width="48px"
+                    height="48px"
+                    user={following.follower}
+                  />
                   <Typography
                     sx={{
                       whiteSpace: "nowrap",

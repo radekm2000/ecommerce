@@ -20,6 +20,9 @@ import { SortByPriceButton } from "../filter-buttons/SortByPriceButton";
 import { useFilteredProducts } from "../../hooks/useFilteredProducts";
 import { AccountCircle } from "@mui/icons-material";
 import { CatalogSkeleton } from "../skeletons/CatalogSkeleton";
+import { RenderAvatar } from "../RenderAvatar";
+import { CURRENCY } from "./MenCatalog";
+
 
 export const WomenCatalog = () => {
   const below1200 = useMediaQuery(1200);
@@ -213,21 +216,11 @@ export const WomenCatalog = () => {
                           cursor: "pointer",
                         }}
                       >
-                        {product.user.avatar ? (
-                          <Avatar
-                            sx={{ width: "24px", height: "24px" }}
-                            alt="user-avatar"
-                            src={product.user.avatar}
-                          />
-                        ) : (
-                          <AccountCircle
-                            sx={{
-                              color: "grey",
-                              width: "24px",
-                              height: "24px",
-                            }}
-                          />
-                        )}
+                        <RenderAvatar
+                          width="24px"
+                          height="24px"
+                          user={product.user}
+                        />
                         <Typography
                           sx={{
                             fontSize: "12px",
@@ -253,7 +246,7 @@ export const WomenCatalog = () => {
                     </Link>
                     <CardContent>
                       <Typography sx={{ fontSize: "14px", color: "#171717" }}>
-                        PLN {product.price}.00
+                        {CURRENCY} {product.price}.00
                       </Typography>
                     </CardContent>
                   </Card>

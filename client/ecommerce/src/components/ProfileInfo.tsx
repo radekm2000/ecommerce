@@ -16,6 +16,8 @@ import { useFollowUser } from "../utils/followUser";
 import { Link, useLocation } from "wouter";
 import { calculateMedian } from "../utils/calculateMedian";
 import { DiscordAvatar } from "./DiscordAvatar";
+import { RenderAvatar } from "./RenderAvatar";
+import { DisplayVerifiedInfo } from "./DisplayVerifiedInfo";
 export const ProfileInfo = ({
   user,
 }: {
@@ -25,9 +27,6 @@ export const ProfileInfo = ({
   const [, setLocation] = useLocation();
   const ratings = user.reviews.map((review) => review.rating);
   const calculatedRatingValue = calculateMedian(ratings);
-
-  const avatarUrl = `https://cdn.discordapp.com/avatars/${user.discordId}/${user.avatar}.png`;
-  console.log(avatarUrl);
 
   const isFollowed = (member: UserWithFollows) => {
     return (member.followings ?? []).some((following) => {
@@ -73,27 +72,12 @@ export const ProfileInfo = ({
           }}
         >
           <Box>
-            {user.avatar ? (
-              <img
-                style={{
-                  height: "48px",
-                  width: "48px",
-                  marginRight: "auto",
-                  padding: "20px",
-                  borderRadius: "50%",
-                }}
-                src={user.avatar}
-              />
-            ) : (
-              <AccountCircle
-                sx={{
-                  height: "64px",
-                  width: "64px",
-                  marginRight: "auto",
-                  color: "grey",
-                }}
-              />
-            )}
+            <RenderAvatar
+              height="48px"
+              width="48px"
+              user={user}
+              marginRight="10px"
+            />
           </Box>
           <Box
             sx={{
@@ -109,36 +93,13 @@ export const ProfileInfo = ({
         </Box>
       ) : (
         <>
-          <Box>
-            {user.role === "discordUser" && user.avatar && (
-              <DiscordAvatar userId={user.discordId} avatar={user.avatar} />
-            )}
-          </Box>
-          <Box>
-            {user.role !== "discordUser" && user.avatar && (
-              <img
-                src={user.avatar}
-                alt="Avatar"
-                style={{
-                  height: "192px",
-                  width: "192px",
-                  marginRight: "auto",
-                  padding: "20px",
-                  borderRadius: "50%",
-                }}
-              />
-            )}
-            {!(user.role === "discordUser" && user.avatar) && (
-              <AccountCircle
-                sx={{
-                  height: "192px",
-                  width: "226px",
-                  marginRight: "auto",
-                  color: "grey",
-                }}
-              />
-            )}
-          </Box>
+          <RenderAvatar
+            height="192px"
+            width="192px"
+            user={user}
+            marginRight="10px"
+          />
+
           <Box sx={{ display: "flex", flexDirection: "column", width: "100%" }}>
             <Box
               sx={{
@@ -424,41 +385,15 @@ export const ProfileInfo = ({
                 <Box
                   sx={{
                     display: "flex",
-                    alignItems: "center",
+                    flexDirection: "column",
+                    alignItems: "flex-start",
                     justifyContent: "center",
-                    gap: "5px",
                   }}
                 >
-                  <CheckCircleOutlineOutlinedIcon
-                    sx={{
-                      width: "16px",
-                      height: "16px",
-                      color: "grey",
-                    }}
-                  />
-                  <Typography color={"#4D4D4D"}>Email</Typography>
+                  {user.email && <DisplayVerifiedInfo info="Email" />}
+                  {user.discordId && <DisplayVerifiedInfo info="Discord" />}
+                  {user.googleId && <DisplayVerifiedInfo info="Google" />}
                 </Box>
-                <Typography color={"#4D4D4D"}>
-                  {user.googleId && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "5px",
-                      }}
-                    >
-                      <CheckCircleOutlineOutlinedIcon
-                        sx={{
-                          width: "16px",
-                          height: "16px",
-                          color: "grey",
-                        }}
-                      />
-                      <Typography color={"#4D4D4D"}>Google</Typography>
-                    </Box>
-                  )}
-                </Typography>
               </Box>
             </Box>
           </Box>

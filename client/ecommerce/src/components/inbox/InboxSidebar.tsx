@@ -8,6 +8,7 @@ import {
 } from "../../types/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { markNotificationsAsRead } from "../../api/axios";
+import { RenderAvatar } from "../RenderAvatar";
 const displayLastMessage = (lastMessage: Message) => {
   if (!lastMessage) {
     return "";
@@ -100,7 +101,7 @@ export const InboxSidebar = ({
                 },
               }}
             >
-              {!recipientsOfSidebarConversation.avatar ? (
+              {/* {!recipientsOfSidebarConversation.avatar ? (
                 <AccountCircle
                   sx={{ width: "48px", height: "48px", color: "grey" }}
                 />
@@ -109,7 +110,13 @@ export const InboxSidebar = ({
                   sx={{ marginRight: "5px" }}
                   src={`${recipientsOfSidebarConversation.avatar}`}
                 />
-              )}
+              )} */}
+              <RenderAvatar
+                width="48px"
+                height="48px"
+                user={recipientsOfSidebarConversation}
+                marginRight="5px"
+              />
               <Box
                 sx={{
                   flexDirection: "column",

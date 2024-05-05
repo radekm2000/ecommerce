@@ -18,6 +18,7 @@ import { Conversation, UserWithFollows } from "../../types/types";
 import { useUserContext } from "../../contexts/UserContext";
 import { ImagePreview } from "./ImagePreview";
 import { useDeleteMessageMutation } from "../../hooks/useDeleteMessageMutation";
+import { RenderAvatar } from "../RenderAvatar";
 
 export const InboxChatContent = ({
   selectedUserConversation,
@@ -85,7 +86,7 @@ export const InboxChatContent = ({
               onMouseLeave={() => setHoveredIndex(null)}
               sx={{ display: "flex", alignItems: "center" }}
             >
-              {message.author.username !== user.username ? (
+              {/* {message.author.username !== user.username ? (
                 message.author.avatar ? (
                   <Avatar
                     src={message.author.avatar}
@@ -101,7 +102,8 @@ export const InboxChatContent = ({
                     }}
                   />
                 )
-              ) : null}
+              ) : null} */}
+              <RenderAvatar width="40px" height="40px" user={message.author} marginRight="5px"/>
               {message.author.username === user.username &&
                 hoveredIndex === index && (
                   <IconButton

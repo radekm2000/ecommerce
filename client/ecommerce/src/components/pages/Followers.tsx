@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { UserWithFollows } from "../../types/types";
 import { useUserContext } from "../../contexts/UserContext";
 import { useFollowUser } from "../../utils/followUser";
+import { RenderAvatar } from "../RenderAvatar";
 
 export const Followers = () => {
   const { user: meUser } = useUserContext();
@@ -89,16 +90,7 @@ export const Followers = () => {
                   paddingBottom: "16px",
                 }}
               >
-                {user.avatar ? (
-                  <Avatar
-                    sx={{ width: "48px", height: "48px" }}
-                    src={user.avatar}
-                  />
-                ) : (
-                  <AccountCircle
-                    sx={{ width: "48px", height: "48px", color: "grey" }}
-                  />
-                )}
+                <RenderAvatar width="48px" height="48px" user={user} />
                 <Typography
                   sx={{
                     fontsize: "16px",
@@ -184,20 +176,11 @@ export const Followers = () => {
                     padding: "16px 0px",
                   }}
                 >
-                  {follower.following.avatar ? (
-                    <img
-                      style={{
-                        height: "48px",
-                        width: "48px",
-                        borderRadius: "50%",
-                      }}
-                      src={follower.following.avatar}
-                    />
-                  ) : (
-                    <AccountCircle
-                      sx={{ width: "48px", height: "48px", color: "grey" }}
-                    />
-                  )}
+                  <RenderAvatar
+                    width="48px"
+                    height="48px"
+                    user={follower.following}
+                  />
                   <Typography
                     sx={{
                       whiteSpace: "nowrap",

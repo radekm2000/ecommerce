@@ -16,6 +16,7 @@ import { updateProfile } from "../../api/axios";
 import toast from "react-hot-toast";
 import { useLocation } from "wouter";
 import { useFetchUserInfo } from "../../hooks/useFetchUserInfo";
+import { RenderAvatar } from "../RenderAvatar";
 
 type FormData = {
   country: string;
@@ -131,24 +132,8 @@ export const EditProfile = () => {
                   src={URL.createObjectURL(selectedFile)}
                   sx={{ height: "64px", width: "64px", marginRight: "16px" }}
                 />
-              ) : user.avatar ? (
-                <Avatar
-                  src={user.avatar}
-                  sx={{
-                    width: "64px",
-                    height: "64px",
-                  }}
-                />
               ) : (
-                <AccountCircle
-                  sx={{
-                    width: "64px",
-                    height: "64px",
-                    paddingRight: "16px",
-                    color: "grey",
-                    display: "flex",
-                  }}
-                />
+                <RenderAvatar width="64px" height="64px" user={user} />
               )}
 
               <Button

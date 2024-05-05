@@ -3,6 +3,7 @@ import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 import { Conversation } from "../../types/types";
 import { getRecipientFromConversation } from "../../utils/getRecipientFromConversation";
 import { useUserContext } from "../../contexts/UserContext";
+import { Link } from "wouter";
 
 export const InboxChatNavbar = ({
   selectedUserConversation,
@@ -34,11 +35,19 @@ export const InboxChatNavbar = ({
         padding: "4px",
       }}
     >
-      <Typography sx={{ color: "black", margin: "0 auto" }}>
-        {recipientOfConversation
-          ? recipientOfConversation.username
-          : "New Message"}
-      </Typography>
+      <Link
+        to={
+          recipientOfConversation?.username
+            ? `/members/${recipientOfConversation.id}`
+            : ""
+        }
+      >
+        <Typography sx={{ color: "black", margin: "0 auto", cursor: 'pointer' }}>
+          {recipientOfConversation
+            ? recipientOfConversation.username
+            : "New Message"}
+        </Typography>
+      </Link>
       <Button
         onClick={handleInfoChatClick}
         sx={{ maxWidth: "30px", maxHeight: "50px" }}

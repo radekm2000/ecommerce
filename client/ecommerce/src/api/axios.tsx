@@ -3,6 +3,7 @@ import {
   AdminNotification,
   Brand,
   Conversation,
+  EditMessageParams,
   ExtendedUserWithProfileAndReviews,
   Feedback,
   FetchedNotifications,
@@ -326,5 +327,15 @@ export const findUsersBySearchInput = async (
   name: string
 ): Promise<UserWithAvatar[]> => {
   const response = await axiosApi.get(`users/all/${name}`);
+  return response.data;
+};
+
+export const editMessage = async (
+  dto: EditMessageParams
+) => {
+  const response = await axiosApi.post(
+    `conversations/${dto.conversationId}/messages/${dto.messageId}`,
+    dto
+  );
   return response.data;
 };

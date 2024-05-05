@@ -16,6 +16,9 @@ export class Message {
   })
   conversation: Conversation;
 
+  @Column({ nullable: true })
+  edited?: boolean;
+
   @ManyToOne(() => User, (user) => user.messages)
   author: User;
 

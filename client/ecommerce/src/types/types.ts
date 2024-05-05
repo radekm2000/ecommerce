@@ -8,6 +8,11 @@ export type RegisterInput = {
   password: string;
   confirmPassword: string;
 };
+export type EditMessageParams = {
+  content: string;
+  messageId: number;
+  conversationId: number;
+}
 
 export type LoginInput = {
   username: string;
@@ -129,6 +134,7 @@ export type Message = {
   author: User;
   imageName?: string;
   imageUrl?: string;
+  edited?: boolean
 };
 export type ProductNotification = {
   id: number;

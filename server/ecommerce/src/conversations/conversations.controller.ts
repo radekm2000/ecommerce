@@ -1,15 +1,24 @@
 import {
+  Body,
   Controller,
   Delete,
   Get,
   Param,
   ParseIntPipe,
+  Patch,
+  Post,
   Query,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { ConversationsService } from './conversations.service';
 import { AuthGuard } from 'src/auth/auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
+import { ZodValidationPipe } from 'src/utils/pipes/ZodValidationPipe';
+import {
+  EditMessageDto,
+  EditMessageSchema,
+} from 'src/utils/dtos/conversation.dto';
 
 @Controller('conversations')
 export class ConversationsController {
@@ -36,5 +45,16 @@ export class ConversationsController {
   @Delete(`:id`)
   async deleteConversation(@Param('id', ParseIntPipe) conversationId: number) {
     return await this.conversationsService.deleteConversation(conversationId);
+  }
+
+  @Post(`:conversationId/messages/:messageId`)
+  @UseGuards(AuthGuard)
+  @UsePipes(new ZodValidationPipe(EditMessageSchema))
+  async editMessage(
+    @AuthUser() authUser: AuthUser,
+    @Body() dto: EditMessageDto,
+  ) {
+    console.log(dto);
+    return await this.conversationsService.editMessage(dto, authUser.sub);
   }
 }

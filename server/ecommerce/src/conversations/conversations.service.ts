@@ -3,6 +3,8 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthUser } from 'src/decorators/user.decorator';
+import { MessagesService } from 'src/messages/messages.service';
+import { EditMessageDto } from 'src/utils/dtos/conversation.dto';
 import { Conversation } from 'src/utils/entities/conversation.entity';
 import { Repository } from 'typeorm';
 
@@ -19,6 +21,7 @@ export class ConversationsService {
   constructor(
     @InjectRepository(Conversation)
     private conversationRepository: Repository<Conversation>,
+    private readonly messageService: MessagesService,
   ) {}
   async createNewConversationOrReturnExistingOne(
     receiverId: number,
@@ -121,5 +124,37 @@ export class ConversationsService {
       );
     }
     return await this.conversationRepository.remove(conversation);
+  }
+
+  async editMessage(dto: EditMessageDto, authUserId: number) {
+    const conversation = await this.conversationRepository.findOne({
+      where: {
+        id: dto.conversationId,
+      },
+      relations: ['messages', 'messages.author'],
+    });
+    if (!conversation) {
+      throw new HttpException('Conversation not found', HttpStatus.NOT_FOUND);
+    }
+
+    const message = conversation.messages.find((m) => m.id === dto.messageId);
+
+    if (message.author.id !== authUserId) {
+      throw new HttpException(
+        'Cant edit message if you are not an author',
+        HttpStatus.FORBIDDEN,
+      );
+    } else if (message.content === dto.content) {
+      throw new HttpException(
+        'Content must be different',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    message.content = dto.content;
+    message.edited = true;
+
+    await this.messageService.saveMessage(message);
+    return message;
   }
 }

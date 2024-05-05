@@ -150,4 +150,16 @@ export class MessagesService {
     await this.conversationRepository.save(updatedConversation);
     return messageId;
   }
+
+  async saveMessage(message: Message) {
+    return await this.messageRepository.update(
+      {
+        id: message.id,
+      },
+      {
+        content: message.content,
+        edited: true,
+      },
+    );
+  }
 }

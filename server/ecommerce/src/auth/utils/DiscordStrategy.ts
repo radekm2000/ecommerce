@@ -80,5 +80,4 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
   private get profileErrorMessage() {
     return 'Failed to parse user discord profile';
   }
-  F;
 }

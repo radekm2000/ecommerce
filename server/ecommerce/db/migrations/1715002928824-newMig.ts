@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class NewMigration21714923900161 implements MigrationInterface {
-  name = 'NewMigration21714923900161';
+export class NewMig1715002928824 implements MigrationInterface {
+  name = 'NewMig1715002928824';
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -20,7 +20,7 @@ export class NewMigration21714923900161 implements MigrationInterface {
       `CREATE TABLE "conversation" ("id" SERIAL NOT NULL, "lastMessageSentAt" TIMESTAMP NOT NULL DEFAULT now(), "creatorId" integer, "recipientId" integer, "lastMessageSentId" integer, CONSTRAINT "PK_864528ec4274360a40f66c29845" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "message" ("id" SERIAL NOT NULL, "content" character varying NOT NULL, "imageName" character varying, "imageUrl" character varying, "conversationId" integer, "authorId" integer, CONSTRAINT "PK_ba01f0a3e0123651915008bc578" PRIMARY KEY ("id"))`,
+      `CREATE TABLE "message" ("id" SERIAL NOT NULL, "content" character varying NOT NULL, "edited" boolean, "imageName" character varying, "imageUrl" character varying, "conversationId" integer, "authorId" integer, CONSTRAINT "PK_ba01f0a3e0123651915008bc578" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
       `CREATE TABLE "review" ("id" SERIAL NOT NULL, "comment" character varying NOT NULL, "rating" integer NOT NULL, "createdAt" TIMESTAMP NOT NULL DEFAULT now(), "reviewRecipientId" integer, "reviewCreatorId" integer, CONSTRAINT "PK_2e4299a343a81574217255c00ca" PRIMARY KEY ("id"))`,

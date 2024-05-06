@@ -15,3 +15,10 @@ export const NotificationMarkAsReadDtoSchema = z.object({
 export type NotificationMarkAsReadDto = z.infer<
   typeof NotificationMarkAsReadDtoSchema
 >;
+
+export const DeleteNotificationDtoSchema = z.object({
+  senderId: z.number(),
+  receiverId: z.number(),
+});
+
+export type DeleteNotificationDto = z.infer<typeof DeleteNotificationDtoSchema>;

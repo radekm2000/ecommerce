@@ -3,6 +3,7 @@ import {
   AdminNotification,
   Brand,
   Conversation,
+  DeleteNotificationDto,
   EditMessageParams,
   ExtendedUserWithProfileAndReviews,
   Feedback,
@@ -330,12 +331,17 @@ export const findUsersBySearchInput = async (
   return response.data;
 };
 
-export const editMessage = async (
-  dto: EditMessageParams
-) => {
+export const editMessage = async (dto: EditMessageParams) => {
   const response = await axiosApi.post(
     `conversations/${dto.conversationId}/messages/${dto.messageId}`,
     dto
   );
+  return response.data;
+};
+
+export const deleteNotificationsOfConversation = async (
+  dto: DeleteNotificationDto
+): Promise<void> => {
+  const response = await axiosApi.post(`notifications/delete`, dto);
   return response.data;
 };

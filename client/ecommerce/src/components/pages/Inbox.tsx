@@ -49,7 +49,7 @@ export const Inbox = () => {
 
   const { data: notificationsReceived, isLoading: isNotificationsLoading } =
     useNotifications(user.id);
-
+  console.log(notificationsReceived)
   const {
     data: selectedUserConversation,
     isLoading: isSelectedUserConversationsLoading,

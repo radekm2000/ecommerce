@@ -12,7 +12,7 @@ export type EditMessageParams = {
   content: string;
   messageId: number;
   conversationId: number;
-}
+};
 
 export type LoginInput = {
   username: string;
@@ -128,13 +128,18 @@ export type Brand =
   | "Calvin Klein"
   | "";
 
+export type DeleteNotificationDto = {
+  receiverId: number;
+  senderId: number;
+};
+
 export type Message = {
   id: number;
   content: string;
   author: User;
   imageName?: string;
   imageUrl?: string;
-  edited?: boolean
+  edited?: boolean;
 };
 export type ProductNotification = {
   id: number;

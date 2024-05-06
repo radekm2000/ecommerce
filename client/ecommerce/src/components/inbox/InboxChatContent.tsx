@@ -19,6 +19,7 @@ import { useDeleteMessageMutation } from "../../hooks/useDeleteMessageMutation";
 import { RenderAvatar } from "../RenderAvatar";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import { useEditMessageMutation } from "../../hooks/useEditMessageMutation";
+import toast from "react-hot-toast";
 export const InboxChatContent = ({
   selectedUserConversation,
   userId,
@@ -50,6 +51,17 @@ export const InboxChatContent = ({
   const editMessageMutation = useEditMessageMutation(userId);
   const deleteMessageMutation = useDeleteMessageMutation(userId);
 
+  const handleDeleteMessage = (messageId: number) => {
+    if (!selectedUserConversation) {
+      return;
+    }
+    if (selectedUserConversation.messages.length <= 1) {
+      return toast.error(
+        "At least one message must remain in the conversation."
+      );
+    }
+    deleteMessageMutation.mutate(messageId);
+  };
   const handleClick = (
     event: React.MouseEvent<HTMLButtonElement>,
     index: number
@@ -75,7 +87,6 @@ export const InboxChatContent = ({
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "instant" });
   };
-  console.log(selectedUserConversation?.messages);
   useEffect(() => {
     scrollToBottom();
   }, [selectedUserConversation]);
@@ -138,7 +149,8 @@ export const InboxChatContent = ({
               >
                 <Button
                   onClick={() => {
-                    deleteMessageMutation.mutate(message.id);
+                    handleDeleteMessage(message.id);
+                    handleClose(index);
                   }}
                   startIcon={
                     <DeleteOutlineOutlinedIcon sx={{ color: "black" }} />
@@ -206,8 +218,6 @@ export const InboxChatContent = ({
                     onKeyDown={(e) => {
                       if (e.key == "Escape" || e.key == "Esc") {
                         handleEditSave(index);
-                        console.log(message.content);
-                        console.log(editedMessageContent);
                       }
                       if (e.key === "Enter") {
                         editMessageMutation.mutate({

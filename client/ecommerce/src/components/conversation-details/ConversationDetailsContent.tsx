@@ -8,6 +8,7 @@ import { useLocation } from "wouter";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { deleteConversation } from "../../api/axios";
 import toast from "react-hot-toast";
+import { useDeleteNotificationsOfConversation } from "../../hooks/useDeleteNotificationsOfConversation";
 export const ConversationDetailsContent = ({
   selectedUserConversation,
   setIsConversationDetailsOpen,
@@ -26,6 +27,8 @@ export const ConversationDetailsContent = ({
     navigate(`/members/${recipientOfConversation?.id}`);
   };
 
+  const deleteNotificationsMutation = useDeleteNotificationsOfConversation();
+
   const mutation = useMutation({
     mutationKey: [`conversations/${selectedUserConversation?.id}`],
     mutationFn: deleteConversation,
@@ -34,6 +37,10 @@ export const ConversationDetailsContent = ({
       queryClient.invalidateQueries({ queryKey: ["conversations"] });
       navigate("/inbox");
       setIsConversationDetailsOpen(false);
+      deleteNotificationsMutation.mutate({
+        receiverId: selectedUserConversation!.creator.id,
+        senderId: selectedUserConversation!.recipient.id,
+      });
     },
     onError: (error) => {
       toast.error("Something went wrong");

@@ -33,7 +33,7 @@ This app is a simplified version of **Vinted**, following a similar layout. Belo
 
 - **Communication**
 
-  - Sending messages and uploading files to other users
+  - Sending, editing, deleting messages and uploading files to other users
 
 - **Notifications**
 

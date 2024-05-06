@@ -72,6 +72,11 @@ export const InboxSidebar = ({
     setSelectedUserId(userId);
     setLocation(`/inbox/${userId}`);
   };
+
+  sortedRecipientsWithNotifications.map((s) => {
+    console.log(s.notifications);
+    console.log(s.notifications.length);
+  });
   return (
     <Box
       sx={{

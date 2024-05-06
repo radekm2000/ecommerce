@@ -9,15 +9,21 @@ import {
 } from "@mui/material";
 import { UserWithAvatar } from "../../types/types";
 import { AccountCircle } from "@mui/icons-material";
+import { RenderAvatar } from "../RenderAvatar";
 
 type Props = {
   filteredUsers: UserWithAvatar[];
-  setSearchInputValue: React.Dispatch<React.SetStateAction<string>>
-  setChosenUserId: React.Dispatch<React.SetStateAction<number | null>>
-  setIsSearchedIconClicked: React.Dispatch<React.SetStateAction<boolean>>
+  setSearchInputValue: React.Dispatch<React.SetStateAction<string>>;
+  setChosenUserId: React.Dispatch<React.SetStateAction<number | null>>;
+  setIsSearchedIconClicked: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-export const DisplayFilteredUsers = ({ filteredUsers, setSearchInputValue, setChosenUserId, setIsSearchedIconClicked }: Props) => {
+export const DisplayFilteredUsers = ({
+  filteredUsers,
+  setSearchInputValue,
+  setChosenUserId,
+  setIsSearchedIconClicked,
+}: Props) => {
   return (
     <Card
       sx={{
@@ -38,17 +44,7 @@ export const DisplayFilteredUsers = ({ filteredUsers, setSearchInputValue, setCh
         >
           <CardContent key={index} sx={{ display: "flex" }}>
             <Box sx={{ display: "flex", gap: "10px" }}>
-              {user.avatar ? (
-                <Avatar src={user.avatar} />
-              ) : (
-                <AccountCircle
-                  sx={{
-                    color: "grey",
-                    width: "24px",
-                    height: "24px",
-                  }}
-                />
-              )}
+              <RenderAvatar width="36px" height="36px" user={user} />
               <Typography>{user.username}</Typography>
             </Box>
           </CardContent>

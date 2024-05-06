@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Patch,
   Post,
@@ -8,6 +9,8 @@ import {
   UsePipes,
 } from '@nestjs/common';
 import {
+  DeleteNotificationDto,
+  DeleteNotificationDtoSchema,
   NotificationDto,
   NotificationDtoSchema,
   NotificationMarkAsReadDto,
@@ -44,5 +47,12 @@ export class NotificationsController {
       dto.senderId,
       authUser.sub,
     );
+  }
+
+  @Post('/delete')
+  @UseGuards(AuthGuard)
+  @UsePipes(new ZodValidationPipe(DeleteNotificationDtoSchema))
+  async deleteNotificationsOfConversation(@Body() dto: DeleteNotificationDto) {
+    return await this.notificationsService.deleteNotifications(dto);
   }
 }

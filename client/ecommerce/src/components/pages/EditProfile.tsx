@@ -17,6 +17,7 @@ import toast from "react-hot-toast";
 import { useLocation } from "wouter";
 import { useFetchUserInfo } from "../../hooks/useFetchUserInfo";
 import { RenderAvatar } from "../RenderAvatar";
+import { isAbleToChangeAvatar } from "../../utils/checkIfUserCanChangeAvatar";
 
 type FormData = {
   country: string;
@@ -135,30 +136,31 @@ export const EditProfile = () => {
               ) : (
                 <RenderAvatar width="64px" height="64px" user={user} />
               )}
-
-              <Button
-                component="label"
-                size="small"
-                variant="outlined"
-                sx={{
-                  border: "1px solid #007782",
-                  textTransform: "none",
-                  padding: "8px",
-                  color: "#007782",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  height: "40%",
-                }}
-              >
-                Choose photo
-                <Input
-                  id="upload-photo"
-                  name="upload-photo"
-                  type="file"
-                  style={{ display: "none" }}
-                  onChange={(e) => handleAvatarChange(e)}
-                />
-              </Button>
+              {isAbleToChangeAvatar(user) && (
+                <Button
+                  component="label"
+                  size="small"
+                  variant="outlined"
+                  sx={{
+                    border: "1px solid #007782",
+                    textTransform: "none",
+                    padding: "8px",
+                    color: "#007782",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    height: "40%",
+                  }}
+                >
+                  Choose photo
+                  <Input
+                    id="upload-photo"
+                    name="upload-photo"
+                    type="file"
+                    style={{ display: "none" }}
+                    onChange={(e) => handleAvatarChange(e)}
+                  />
+                </Button>
+              )}
             </Box>
           </Box>
           <Box

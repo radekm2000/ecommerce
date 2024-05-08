@@ -30,6 +30,7 @@ const baseUrl = "http://localhost:3000";
 // } else {
 //   baseUrl = "http://localhost:3000";
 // }
+const ACCESS_TOKEN_KEY = "accessToken";
 
 export const axiosApi = axios.create({
   baseURL: baseUrl,
@@ -344,4 +345,13 @@ export const deleteNotificationsOfConversation = async (
 ): Promise<void> => {
   const response = await axiosApi.post(`notifications/delete`, dto);
   return response.data;
+};
+
+export const logout = async () => {
+  await axiosApi.post("auth/logout").catch(() => {});
+  const hasAccessToken = !!localStorage.getItem(ACCESS_TOKEN_KEY);
+  if (hasAccessToken) {
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+    window.location.reload();
+  }
 };

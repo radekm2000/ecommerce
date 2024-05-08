@@ -37,6 +37,7 @@ import { isAdmin } from "../utils/isAdmin";
 import { NavbarSkeleton } from "./skeletons/NavbarSkeleton";
 import { FeedbackDialog } from "./FeedbackDialog";
 import { RenderAvatar } from "./RenderAvatar";
+import { logout } from "../api/axios";
 
 export const NotAuthed = () => {
   return (
@@ -239,7 +240,7 @@ export const Navbar = () => {
         </Link>
         <Button
           onClick={() => {
-            localStorage.removeItem("accessToken");
+            logout();
             setLocation("/login");
           }}
           sx={{ textTransform: "none" }}
@@ -482,7 +483,7 @@ export const Navbar = () => {
                   onClick={handleProfileMenuOpen}
                   color="primary"
                 >
-                  <RenderAvatar width="40px" height="40px" user={user}/>
+                  <RenderAvatar width="40px" height="40px" user={user} />
                 </IconButton>
               </Box>
 

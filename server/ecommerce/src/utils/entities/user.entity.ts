@@ -14,6 +14,7 @@ import { Follow } from './followers.entity';
 import { Message } from './message.entity';
 import { Avatar } from './avatar.entity';
 import { Review } from './review.entity';
+import { UserRole } from '../dtos/types';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -38,8 +39,12 @@ export class User {
   @JoinColumn()
   profile: Profile;
 
-  @Column({ default: 'user' })
-  role: 'admin' | 'user' | 'discordUser';
+  @Column({
+    type: 'enum',
+    enum: UserRole,
+    default: UserRole.User,
+  })
+  role: UserRole;
 
   @Column({ nullable: true })
   avatar: string;

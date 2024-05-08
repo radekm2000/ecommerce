@@ -20,6 +20,7 @@ if (process.env.IS_DEV == 'true') {
   config = {
     type: 'postgres',
     url: process.env.EXTERNAL_POSTGRES_DB_URL,
+    port: 5432,
     ssl: {
       rejectUnauthorized: false,
     },

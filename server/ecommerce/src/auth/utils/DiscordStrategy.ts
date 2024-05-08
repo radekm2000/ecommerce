@@ -42,7 +42,6 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
     done: VerifyCallback,
   ) => {
     try {
-      console.log(profile);
       const user = await this.authService.createOrGetDiscordUser(
         profile,
         accessToken,

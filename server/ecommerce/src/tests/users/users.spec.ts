@@ -1,5 +1,6 @@
 import { HttpException } from '@nestjs/common';
 import { UsersService } from 'src/users/users.service';
+import { UserRole } from 'src/utils/dtos/types';
 import { RegisterUserDto } from 'src/utils/dtos/user.dto';
 import { Avatar } from 'src/utils/entities/avatar.entity';
 import { Follow } from 'src/utils/entities/followers.entity';
@@ -170,5 +171,89 @@ describe('Users register method', () => {
       expect(user.id).toBeDefined();
       expect(user.username).toEqual(dto.username);
     } catch (error) {}
+  });
+});
+
+describe('Users grantAdminRoleFor method', () => {
+  let userRepository: any;
+  beforeEach(() => {
+    userRepository = {};
+  });
+  it('should throw error if user does not exist', async () => {
+    userRepository = {
+      findOne: jest.fn().mockResolvedValue(null),
+    };
+
+    const userId = 1;
+
+    const usersService = new UsersService(
+      {} as any,
+      userRepository,
+      {} as any,
+      {} as any,
+    );
+
+    try {
+      await usersService.grantAdminRoleFor(userId);
+    } catch (error) {
+      expect(error).toBeInstanceOf(HttpException);
+      expect(error.response).toEqual('User does not exist');
+    }
+  });
+  it('should throw error if user has rank admin', async () => {
+    const userId = 1;
+
+    const user = {
+      id: 1,
+      role: UserRole.Admin,
+    };
+    userRepository = {
+      findOne: jest.fn().mockResolvedValue(user),
+    };
+
+    const usersService = new UsersService(
+      {} as any,
+      userRepository,
+      {} as any,
+      {} as any,
+    );
+
+    try {
+      await usersService.grantAdminRoleFor(userId);
+    } catch (error) {
+      expect(error).toBeInstanceOf(HttpException);
+      expect(error.response).toEqual('User has already rank admin');
+    }
+  });
+  it('should grant role for user', async () => {
+    const userId = 1;
+
+    const user = {
+      id: 1,
+      role: UserRole.User,
+    };
+    userRepository = {
+      findOne: jest.fn().mockResolvedValue(user),
+      save: jest.fn(),
+    };
+
+    const usersService = new UsersService(
+      {} as any,
+      userRepository,
+      {} as any,
+      {} as any,
+    );
+
+    const updatedUser = {
+      ...user,
+      role: UserRole.Admin,
+    };
+
+    const result = await usersService.grantAdminRoleFor(userId);
+
+    expect(result).toEqual({
+      message: 'User has been granted an admin rank',
+      updatedUser,
+    });
   });
 });

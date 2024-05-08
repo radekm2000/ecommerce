@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   ParseIntPipe,
+  Patch,
   Post,
   Req,
   UploadedFile,
@@ -15,6 +16,8 @@ import { AuthGuard } from 'src/auth/auth.guard';
 import { Request } from 'express';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { RoleGuard } from 'src/auth/utils/role.guard';
+import { UserRole } from 'src/utils/dtos/types';
 
 @Controller('users')
 export class UsersController {
@@ -64,5 +67,11 @@ export class UsersController {
       file,
       authUser.sub,
     );
+  }
+
+  @UseGuards(RoleGuard(UserRole.Admin))
+  @Patch('grantAdmin/:userId')
+  async grantAdminRole(@Param('userId', ParseIntPipe) userId: number) {
+    return await this.usersService.grantAdminRoleFor(userId);
   }
 }

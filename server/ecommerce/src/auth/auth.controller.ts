@@ -48,6 +48,11 @@ export class AuthController {
     return await this.authService.handleRefreshToken(request);
   }
 
+  @Post('logout')
+  async logout(@Res() response: Response) {
+    return await this.authService.logout(response);
+  }
+
   @UseGuards(DiscordAuthGuard)
   @Get('discord/login')
   handleDiscordLogin() {

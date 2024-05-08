@@ -24,3 +24,9 @@ export type Notification = {
   receiverId: number;
 };
 export type FeatureType = 'other' | 'enhancement' | 'bug' | 'new feature';
+
+export enum UserRole {
+  User = 'user',
+  Admin = 'admin',
+  discordUser = 'discordUser',
+}

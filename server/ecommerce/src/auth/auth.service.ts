@@ -10,6 +10,9 @@ import { JwtService } from '@nestjs/jwt';
 import { jwtConstants } from './constants';
 import { Profile } from 'passport-google-oauth20';
 import { DiscordProfile } from 'src/utils/dtos/discord.dto';
+
+const REFRESH_TOKEN_COOKIE_KEY = 'refreshToken';
+
 @Injectable()
 export class AuthService {
   constructor(
@@ -26,7 +29,7 @@ export class AuthService {
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
     }
-    const payload = { sub: user.id, username: user.username };
+    const payload = { sub: user.id, username: user.username, role: user.role };
     const accessToken = await this.jwtService.signAsync(payload, {
       expiresIn: '24h',
     });
@@ -105,5 +108,11 @@ export class AuthService {
       );
     }
     return user;
+  }
+
+  async logout(response: Response) {
+    return response
+      .clearCookie(REFRESH_TOKEN_COOKIE_KEY)
+      .sendStatus(HttpStatus.CREATED);
   }
 }

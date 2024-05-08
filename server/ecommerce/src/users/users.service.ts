@@ -17,6 +17,7 @@ import { Follow } from 'src/utils/entities/followers.entity';
 import { Profile as userProfile } from 'src/utils/entities/profile.entity';
 import { User } from 'src/utils/entities/user.entity';
 import { Like, Repository } from 'typeorm';
+import { UserRole } from 'src/utils/dtos/types';
 const s3 = new S3Client({
   region: process.env.BUCKET_REGION,
   credentials: {
@@ -76,7 +77,7 @@ export class UsersService {
       const newProfile = this.profilesRepository.create({
         user: newUser,
       });
-      newUser.role = 'admin';
+      newUser.role = UserRole.Admin;
       newUser.profile = newProfile;
       await this.profilesRepository.save(newProfile);
       return await this.usersRepository.save(newUser);
@@ -392,7 +393,7 @@ export class UsersService {
         avatar: avatar,
         username: username,
         discordId: id,
-        role: 'discordUser',
+        role: UserRole.discordUser,
       });
       const newProfile = this.profilesRepository.create({
         user: newUser,
@@ -404,5 +405,27 @@ export class UsersService {
     }
 
     return user;
+  }
+
+  async grantAdminRoleFor(userId: number) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!user) {
+      throw new HttpException('User does not exist', HttpStatus.NOT_FOUND);
+    } else if (user.role === UserRole.Admin) {
+      throw new HttpException(
+        'User has already rank admin',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+
+    const updatedUser = { ...user, role: UserRole.Admin };
+    await this.usersRepository.save(updatedUser);
+
+    return { message: 'User has been granted an admin rank', updatedUser };
   }
 }

@@ -23,6 +23,12 @@ import { UserRole } from 'src/utils/dtos/types';
 export class UsersController {
   constructor(private usersService: UsersService) {}
 
+  @Get()
+  @UseGuards(AuthGuard)
+  async getUsers() {
+    return await this.usersService.getUsers();
+  }
+
   @Get('/profile')
   @UseGuards(AuthGuard)
   async getUser(@Req() request: Request, @AuthUser() authUser: AuthUser) {

@@ -45,7 +45,7 @@ export type UserWithAvatar = {
   username: string;
   googleId?: string;
   email: string;
-  role: "admin" | "user";
+  role: "admin" | "user" | "discordUser";
   avatar: string;
 };
 export type Product = {

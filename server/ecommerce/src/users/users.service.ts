@@ -428,4 +428,33 @@ export class UsersService {
 
     return { message: 'User has been granted an admin rank', updatedUser };
   }
+
+  async getUsers() {
+    const users = await this.usersRepository.find({
+      relations: ['avatarEntity'],
+    });
+
+    if (!users) {
+      return [];
+    }
+
+    for (const user of users) {
+      const userAvatar = user.avatarEntity;
+      if (user.role == UserRole.discordUser) {
+        continue;
+      }
+      if (userAvatar) {
+        const getObjectParams = {
+          Bucket: process.env.BUCKET_NAME,
+          Key: userAvatar.avatarName,
+        };
+        const command = new GetObjectCommand(getObjectParams);
+        const url = await getSignedUrl(s3, command, { expiresIn: 360000 });
+
+        user.avatar = url;
+        await this.usersRepository.save(user);
+      }
+    }
+    return users;
+  }
 }

@@ -15,6 +15,7 @@ import { SyntheticEvent, useEffect, useState } from "react";
 import { FeedbackNotifications } from "../AdminDashboard/FeedbackNotifications";
 import { AdminDashboardSkeleton } from "../AdminDashboard/AdminDashboardSkeleton";
 import { useLocation, useRoute } from "wouter";
+import { People } from "../AdminDashboard/People/People";
 const Container = styled(Box)({
   backgroundColor: "rgba(37,44,51,0.05)",
   display: "flex",
@@ -31,6 +32,7 @@ const Sidebar = styled(Box)({
 enum TabValues {
   Notifications = "notifications",
   Feedbacks = "feedbacks",
+  People = "people",
 }
 
 export const AdminDashboard = () => {
@@ -62,6 +64,8 @@ export const AdminDashboard = () => {
         );
       case TabValues.Feedbacks:
         return <FeedbackNotifications />;
+      case TabValues.People:
+        return <People />;
       default:
         return null;
     }
@@ -102,6 +106,11 @@ export const AdminDashboard = () => {
                   sx={{ textTransform: "none" }}
                   label="Feedbacks"
                   value={TabValues.Feedbacks}
+                ></Tab>
+                <Tab
+                  sx={{ textTransform: "none" }}
+                  label="People"
+                  value={TabValues.People}
                 ></Tab>
               </Tabs>
             </Box>

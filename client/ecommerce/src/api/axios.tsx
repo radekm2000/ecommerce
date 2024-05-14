@@ -355,3 +355,8 @@ export const logout = async () => {
     window.location.reload();
   }
 };
+
+export const fetchUsers = async () => {
+  const response = await axiosApi.get<UserWithAvatar[]>("users");
+  return response.data;
+};

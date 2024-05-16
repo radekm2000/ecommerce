@@ -360,3 +360,10 @@ export const fetchUsers = async () => {
   const response = await axiosApi.get<UserWithAvatar[]>("users");
   return response.data;
 };
+
+export const grantAdminRoleFor = async (
+  userId: number
+): Promise<MutationData> => {
+  const response = await axiosApi.patch(`users/grantAdmin/${userId}`);
+  return response.data;
+};

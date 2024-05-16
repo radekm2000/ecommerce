@@ -10,6 +10,7 @@ import {
   UploadedFile,
   UseGuards,
   UseInterceptors,
+  UsePipes,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { AuthGuard } from 'src/auth/auth.guard';
@@ -18,6 +19,8 @@ import { AuthUser } from 'src/decorators/user.decorator';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { RoleGuard } from 'src/auth/utils/role.guard';
 import { UserRole } from 'src/utils/dtos/types';
+import { ZodValidationPipe } from 'src/utils/pipes/ZodValidationPipe';
+import { EditRoleDto, EditRoleDtoSchema } from 'src/utils/dtos/user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -76,8 +79,12 @@ export class UsersController {
   }
 
   @UseGuards(RoleGuard(UserRole.Admin))
-  @Patch('grantAdmin/:userId')
-  async grantAdminRole(@Param('userId', ParseIntPipe) userId: number) {
-    return await this.usersService.grantAdminRoleFor(userId);
+  @UsePipes(new ZodValidationPipe(EditRoleDtoSchema))
+  @Patch('grantRole/:userId')
+  async grantRole(
+    @Param('userId', ParseIntPipe) userId: number,
+    @Body() dto: EditRoleDto,
+  ) {
+    return await this.usersService.grantRoleFor(userId, dto.role);
   }
 }

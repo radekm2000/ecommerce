@@ -223,3 +223,10 @@ export type AdminNotification = {
 };
 
 export type Feedback = FeedbackFormData & { createdAt: string };
+
+export type UserRole = 'user' | 'admin' | 'discordUser'
+
+export type EditRole = {
+  userId: number
+  role: UserRole
+}

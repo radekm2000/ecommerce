@@ -5,6 +5,7 @@ import {
   Conversation,
   DeleteNotificationDto,
   EditMessageParams,
+  EditRole,
   ExtendedUserWithProfileAndReviews,
   Feedback,
   FetchedNotifications,
@@ -17,6 +18,7 @@ import {
   RegisterInput,
   ReviewFormFields,
   User,
+  UserRole,
   UserWithAvatar,
 } from "../types/types";
 import { RequestAccessTokenInterceptor } from "./request-access-token.interceptor";
@@ -361,9 +363,10 @@ export const fetchUsers = async () => {
   return response.data;
 };
 
-export const grantAdminRoleFor = async (
-  userId: number
-): Promise<MutationData> => {
-  const response = await axiosApi.patch(`users/grantAdmin/${userId}`);
+export const editUserRole = async (dto: EditRole) => {
+  const response = await axiosApi.patch(
+    `users/grantRole/${dto.userId}`,
+    dto.role
+  );
   return response.data;
 };

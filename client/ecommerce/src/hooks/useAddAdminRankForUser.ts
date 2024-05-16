@@ -1,17 +1,17 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { grantAdminRoleFor } from "../api/axios";
+import { editUserRole } from "../api/axios";
 import toast from "react-hot-toast";
-import { UserWithAvatar } from "../types/types";
+import { EditRole, UserWithAvatar } from "../types/types";
 
 type MutationData = {
   message: string;
   updatedUser: UserWithAvatar;
 };
 
-export const useAddAdminRankForUser = () => {
+export const useEditUserRole = () => {
   const queryClient = useQueryClient();
-  return useMutation<MutationData, Error, number, unknown>({
-    mutationFn: grantAdminRoleFor,
+  return useMutation<MutationData, Error, EditRole, unknown>({
+    mutationFn: editUserRole,
     onError: (err) => {
       toast.error(err.message || "Unknown error");
     },

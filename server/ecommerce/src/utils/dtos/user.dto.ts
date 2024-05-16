@@ -39,3 +39,13 @@ export const ProfileChangeSchema = z.object({
 });
 
 export type ProfileChangeDto = z.input<typeof ProfileChangeSchema>;
+
+export const EditRoleDtoSchema = z.object({
+  role: z.union([
+    z.literal('user'),
+    z.literal('admin'),
+    z.literal('discordUser'),
+  ]),
+});
+
+export type EditRoleDto = z.infer<typeof EditRoleDtoSchema>;

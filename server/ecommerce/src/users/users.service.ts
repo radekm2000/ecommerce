@@ -407,7 +407,7 @@ export class UsersService {
     return user;
   }
 
-  async grantAdminRoleFor(userId: number) {
+  async grantRoleFor(userId: number, role: 'user' | 'admin' | 'discordUser') {
     const user = await this.usersRepository.findOne({
       where: {
         id: userId,
@@ -416,17 +416,24 @@ export class UsersService {
 
     if (!user) {
       throw new HttpException('User does not exist', HttpStatus.NOT_FOUND);
-    } else if (user.role === UserRole.Admin) {
+    } else if (user.role == role) {
       throw new HttpException(
-        'User has already rank admin',
+        'User has already this role',
         HttpStatus.UNPROCESSABLE_ENTITY,
       );
+    } else if (role === 'discordUser') {
+      if (!user.discordId) {
+        throw new HttpException(
+          'User cannot get this role without signing in with Discord.',
+          HttpStatus.UNPROCESSABLE_ENTITY,
+        );
+      }
     }
 
-    const updatedUser = { ...user, role: UserRole.Admin };
+    const updatedUser = { ...user, role: role as UserRole };
     await this.usersRepository.save(updatedUser);
 
-    return { message: 'User has been granted an admin rank', updatedUser };
+    return { message: `User has been granted ${role} role `, updatedUser };
   }
 
   async getUsers() {

@@ -194,13 +194,13 @@ describe('Users grantAdminRoleFor method', () => {
     );
 
     try {
-      await usersService.grantAdminRoleFor(userId);
+      await usersService.grantRoleFor(userId, 'user');
     } catch (error) {
       expect(error).toBeInstanceOf(HttpException);
       expect(error.response).toEqual('User does not exist');
     }
   });
-  it('should throw error if user has rank admin', async () => {
+  it('should throw error if user has already this role', async () => {
     const userId = 1;
 
     const user = {
@@ -219,10 +219,38 @@ describe('Users grantAdminRoleFor method', () => {
     );
 
     try {
-      await usersService.grantAdminRoleFor(userId);
+      await usersService.grantRoleFor(userId, 'admin');
     } catch (error) {
       expect(error).toBeInstanceOf(HttpException);
-      expect(error.response).toEqual('User has already rank admin');
+      expect(error.response).toEqual('User has already this role');
+    }
+  });
+  it('should throw error if trying to assign discordUser role without discord account', async () => {
+    const userId = 1;
+
+    const user = {
+      id: 1,
+      role: UserRole.Admin,
+    };
+    userRepository = {
+      findOne: jest.fn().mockResolvedValue(user),
+    };
+
+    const usersService = new UsersService(
+      {} as any,
+      userRepository,
+      {} as any,
+      {} as any,
+    );
+    const newRole = 'discordUser';
+
+    try {
+      await usersService.grantRoleFor(userId, newRole);
+    } catch (error) {
+      expect(error).toBeInstanceOf(HttpException);
+      expect(error.response).toEqual(
+        'User cannot get this role without signing in with Discord.',
+      );
     }
   });
   it('should grant role for user', async () => {
@@ -243,16 +271,17 @@ describe('Users grantAdminRoleFor method', () => {
       {} as any,
       {} as any,
     );
+    const newRole = 'admin';
 
     const updatedUser = {
       ...user,
       role: UserRole.Admin,
     };
 
-    const result = await usersService.grantAdminRoleFor(userId);
+    const result = await usersService.grantRoleFor(userId, newRole);
 
     expect(result).toEqual({
-      message: 'User has been granted an admin rank',
+      message: `User has been granted ${newRole} role `,
       updatedUser,
     });
   });

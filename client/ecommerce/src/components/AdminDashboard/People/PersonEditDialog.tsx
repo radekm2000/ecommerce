@@ -7,9 +7,25 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import { UserWithAvatar } from "../../../types/types";
+import { UserRole, UserWithAvatar } from "../../../types/types";
 import { RenderAvatar } from "../../RenderAvatar";
-import { useAddAdminRankForUser } from "../../../hooks/useAddAdminRankForUser";
+import { useEditUserRole } from "../../../hooks/useAddAdminRankForUser";
+import { z } from "zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { RoleInputDropdown } from "./RoleInputDropdown";
+
+
+
+const RoleSchema = z.object({
+  role: z.union([
+    z.literal("user"),
+    z.literal("admin"),
+    z.literal("discordUser"),
+  ]),
+});
+
+export type RoleForm = z.infer<typeof RoleSchema>;
 
 type Props = {
   open: boolean;
@@ -18,11 +34,21 @@ type Props = {
 };
 
 export const PersonEditDialog = ({ open, handleClose, user }: Props) => {
-  const editRankMutation = useAddAdminRankForUser();
+  const editRankMutation = useEditUserRole();
 
-  const handleClick = () => {
-    editRankMutation.mutate(user.id);
-    handleClose();
+  const { handleSubmit, control } = useForm<RoleForm>({
+    defaultValues: {
+      role: user.role,
+    },
+    resolver: zodResolver(RoleSchema),
+  });
+
+  const onSubmit: SubmitHandler<RoleForm> = (data) => {
+    editRankMutation.mutate({
+      role: data as unknown as UserRole,
+      userId: user.id,
+    });
+    handleClose()
   };
   return (
     <Dialog maxWidth="sm" fullWidth open={open} onClose={handleClose}>
@@ -52,7 +78,13 @@ export const PersonEditDialog = ({ open, handleClose, user }: Props) => {
               </Typography>
             </Box>
           </Box>
-          <Button onClick={handleClick}
+          <RoleInputDropdown
+            control={control}
+            label=""
+            name="role"
+          ></RoleInputDropdown>
+          <Button
+            onClick={handleSubmit(onSubmit)}
             variant="contained"
             sx={{
               textTransform: "none",
@@ -62,7 +94,7 @@ export const PersonEditDialog = ({ open, handleClose, user }: Props) => {
               },
             }}
           >
-            Grant ADMIN role
+            Grant a role
           </Button>
         </Stack>
       </DialogContent>

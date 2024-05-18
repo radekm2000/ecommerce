@@ -82,3 +82,6 @@ Catalog with filtering
 
 Notifications + main page
 ![Notifications in navbar](/readmeImages/mainPageShowNotifications.png)
+
+Editing roles
+![Editing roles](/readmeImages/EditRole.png)

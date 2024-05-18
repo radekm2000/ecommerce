@@ -21,7 +21,7 @@ import { useFilteredProducts } from "../../hooks/useFilteredProducts";
 import { AccountCircle } from "@mui/icons-material";
 import { CatalogSkeleton } from "../skeletons/CatalogSkeleton";
 import { RenderAvatar } from "../RenderAvatar";
-export const CURRENCY = "PLN";
+export const CURRENCY = "USD";
 
 export const MenCatalog = () => {
   const below1200 = useMediaQuery(1200);

@@ -15,10 +15,14 @@ import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Link } from "wouter";
 import { RenderAvatar } from "./RenderAvatar";
 import { CURRENCY } from "./pages/MenCatalog";
+import { calculateGridWidth } from "../utils/calculateGridWidth";
 
 export const PaginatedProducts = () => {
   const below1200 = useMediaQuery(1200);
   const below700 = useMediaQuery(700);
+  const below1050 = useMediaQuery(1050);
+  const below600 = useMediaQuery(600);
+
   const { data, error, status, fetchNextPage, isFetchingNextPage } =
     useInfiniteQuery({
       queryKey: ["products/paginated"],
@@ -41,16 +45,40 @@ export const PaginatedProducts = () => {
     <div>
       {data.pages.map((page) => {
         return (
-          <Grid container key={page.currentPage}>
+          <Grid sx={{ flexWrap: "wrap" }} container key={page.currentPage}>
             {page.data.map((item, index) => {
               return (
                 <Grid
                   item
                   key={index}
-                  lg={3}
-                  md={below1200 ? 4 : 3}
-                  xs={below700 ? 12 : 6}
-                  xl={3}
+                  sm={calculateGridWidth(
+                    page.data,
+                    below600,
+                    below700,
+                    below1050,
+                    below1200
+                  )}
+                  xs={calculateGridWidth(
+                    page.data,
+                    below600,
+                    below700,
+                    below1050,
+                    below1200
+                  )}
+                  md={calculateGridWidth(
+                    page.data,
+                    below600,
+                    below700,
+                    below1050,
+                    below1200
+                  )}
+                  lg={calculateGridWidth(
+                    page.data,
+                    below600,
+                    below700,
+                    below1050,
+                    below1200
+                  )}
                 >
                   <Card
                     elevation={0}

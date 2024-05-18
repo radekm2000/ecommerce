@@ -22,10 +22,12 @@ const Container = ({ children }: { children: ReactNode }) => {
       sx={{
         backgroundColor: "rgba(37,44,51,0.08)",
         display: "flex",
-        height: "calc(100vh -81px)",
         padding: "16px 30px",
         alignItems: "center",
         justifyContent: "center",
+        boxSizing: 'border-box',
+        minHeight: "calc(100vh - 130px)",
+
       }}
     >
       {children}

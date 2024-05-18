@@ -109,7 +109,7 @@ export const AdminDashboard = () => {
                 ></Tab>
                 <Tab
                   sx={{ textTransform: "none" }}
-                  label="People"
+                  label="Users"
                   value={TabValues.People}
                 ></Tab>
               </Tabs>

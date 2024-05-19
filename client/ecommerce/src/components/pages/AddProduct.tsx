@@ -11,8 +11,8 @@ import {
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
-import { ChangeEvent, useState } from "react";
-import {  addProduct } from "../../api/axios";
+import { ChangeEvent, useEffect, useState } from "react";
+import { addProduct } from "../../api/axios";
 import { useMutation } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Redirect } from "wouter";
@@ -90,6 +90,21 @@ export const AddProduct = () => {
     photoError: false,
   });
 
+  useEffect(() => {
+    if (success) {
+      mutateAdminNotification({
+        username: user.username,
+        action: `added new product ${formData.title} for ${formData.price} USD `,
+        createdAt: "",
+      });
+    }
+
+    return () => {
+      setSuccess(false);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [success]);
+
   const handleFormChange = (
     e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
@@ -134,11 +149,11 @@ export const AddProduct = () => {
     formDataToBackend.append("data", JSON.stringify(formData));
 
     mutate(formDataToBackend);
-    mutateAdminNotification({
-      username: user.username,
-      action: `added new product ${formData.title} for ${formData.price} USD `,
-      createdAt: "",
-    });
+    // mutateAdminNotification({
+    //   username: user.username,
+    //   action: `added new product ${formData.title} for ${formData.price} USD `,
+    //   createdAt: "",
+    // });
   };
   const below700 = useMediaQuery(700);
   if (success) {
@@ -205,7 +220,7 @@ export const AddProduct = () => {
               justifyContent: "center",
               alignItems: "center",
               minHeight: "170px",
-              width: '100%'
+              width: "100%",
             }}
           >
             <Box sx={{ marginRight: selectedFile ? "auto" : "" }}>
@@ -227,7 +242,6 @@ export const AddProduct = () => {
                 fontSize: "14px",
                 color: "#007782",
                 border: "1px solid #007782",
-                
               }}
             >
               <Typography sx={{ fontSize: "16px" }}>

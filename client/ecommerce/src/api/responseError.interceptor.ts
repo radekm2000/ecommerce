@@ -7,14 +7,12 @@ export const ResponseErrorInterceptor = (axios: AxiosInstance) => {
     if (!error.response) {
       return Promise.reject(error);
     }
-
     const parseResult = z
       .object({ message: z.string().optional() })
       .safeParse(error.response.data);
     const message = parseResult.success ? parseResult.data.message : undefined;
-
     if (400 <= error.response.status && error.response.status < 500) {
-      const responseData = error.response.data as unknown;
+      const responseData = error.response.data as unknown
       if (isValidationError(responseData)) {
         return Promise.reject({
           ...error,

@@ -10,6 +10,7 @@ export const useDeleteMessageMutation = (userId: number) => {
       queryClient.invalidateQueries({
         queryKey: [`conversations/users/${userId}`],
       });
+      queryClient.invalidateQueries({ queryKey: ["conversations"] });
       toast.success("Message deleted!");
     },
     onError: (err) => {

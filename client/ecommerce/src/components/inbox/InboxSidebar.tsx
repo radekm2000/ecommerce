@@ -1,5 +1,4 @@
 import { Avatar, Badge, Box, Typography } from "@mui/material";
-import AccountCircle from "@mui/icons-material/AccountCircle";
 import { useLocation, useParams } from "wouter";
 import {
   FetchedNotifications,
@@ -73,10 +72,6 @@ export const InboxSidebar = ({
     setLocation(`/inbox/${userId}`);
   };
 
-  sortedRecipientsWithNotifications.map((s) => {
-    console.log(s.notifications);
-    console.log(s.notifications.length);
-  });
   return (
     <Box
       sx={{
@@ -106,16 +101,6 @@ export const InboxSidebar = ({
                 },
               }}
             >
-              {/* {!recipientsOfSidebarConversation.avatar ? (
-                <AccountCircle
-                  sx={{ width: "48px", height: "48px", color: "grey" }}
-                />
-              ) : (
-                <Avatar
-                  sx={{ marginRight: "5px" }}
-                  src={`${recipientsOfSidebarConversation.avatar}`}
-                />
-              )} */}
               <RenderAvatar
                 width="48px"
                 height="48px"

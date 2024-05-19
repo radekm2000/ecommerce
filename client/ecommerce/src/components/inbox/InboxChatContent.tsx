@@ -161,19 +161,21 @@ export const InboxChatContent = ({
                     Delete
                   </Typography>
                 </Button>
-                <Button
-                  onClick={() => {
-                    setEditedMessageContent(message.content);
-                    handleEditClick(index);
-                    handleClose(index);
-                  }}
-                  startIcon={<EditOutlinedIcon sx={{ color: "black" }} />}
-                  sx={{ textTransform: "none", p: 2 }}
-                >
-                  <Typography sx={{ color: "black", fontWeight: "600" }}>
-                    Edit
-                  </Typography>
-                </Button>
+                {!message.imageUrl && (
+                  <Button
+                    onClick={() => {
+                      setEditedMessageContent(message.content);
+                      handleEditClick(index);
+                      handleClose(index);
+                    }}
+                    startIcon={<EditOutlinedIcon sx={{ color: "black" }} />}
+                    sx={{ textTransform: "none", p: 2 }}
+                  >
+                    <Typography sx={{ color: "black", fontWeight: "600" }}>
+                      Edit
+                    </Typography>
+                  </Button>
+                )}
               </Box>
             </Popover>
 

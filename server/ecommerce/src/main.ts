@@ -3,6 +3,8 @@ import { AppModule } from './app.module';
 import { ZodExceptionFilter } from './utils/ZodExceptionFilter';
 import * as cookieParser from 'cookie-parser';
 import 'dotenv/config';
+import { Client } from 'discord.js';
+import { DiscordBot } from './discord-bot/src/discordbot';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);

@@ -23,6 +23,7 @@ import { AuthGuard } from './auth.guard';
 import { AuthUser } from 'src/decorators/user.decorator';
 import { DiscordAuthGuard } from './utils/DiscordGuard';
 import { DiscordProfile } from 'src/utils/dtos/discord.dto';
+import 'dotenv/config';
 
 @Controller('auth')
 export class AuthController {
@@ -96,6 +97,10 @@ export class AuthController {
       httpOnly: true,
       maxAge: 60 * 60 * 1000,
     });
-    response.redirect('http://localhost:5173');
+    if (process.env.IS_DEV == 'true') {
+      response.redirect('http://localhost:5173');
+    } else {
+      response.redirect('https://exquisite-pasca-338883.netlify.app');
+    }
   }
 }

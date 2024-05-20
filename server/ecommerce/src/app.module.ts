@@ -17,6 +17,7 @@ import { StripeModule } from './stripe/stripe.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { AdminNotificationsModule } from './admin-notifications/admin-notifications.module';
 import { FeedbacksModule } from './feedbacks/feedbacks.module';
+import { DiscordBotModule } from './discord-bot/discord-bot.module';
 
 @Module({
   imports: [
@@ -35,6 +36,7 @@ import { FeedbacksModule } from './feedbacks/feedbacks.module';
     ReviewsModule,
     AdminNotificationsModule,
     FeedbacksModule,
+    DiscordBotModule,
   ],
   controllers: [AppController],
   providers: [AppService],

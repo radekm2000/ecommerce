@@ -149,11 +149,6 @@ export const AddProduct = () => {
     formDataToBackend.append("data", JSON.stringify(formData));
 
     mutate(formDataToBackend);
-    // mutateAdminNotification({
-    //   username: user.username,
-    //   action: `added new product ${formData.title} for ${formData.price} USD `,
-    //   createdAt: "",
-    // });
   };
   const below700 = useMediaQuery(700);
   if (success) {

@@ -42,6 +42,11 @@ export class DiscordBot {
     this.logger.log('Discord bot has been started');
   };
 
+  public stop = async () => {
+    await this.bot.destroy();
+    this.logger.log('Discord bot has been stopped');
+  };
+
   private registerCommands = async () => {
     const rest = new REST().setToken(this.botToken);
     const url = Routes.applicationCommands(this.botApplicationId);
@@ -52,7 +57,7 @@ export class DiscordBot {
 
   private handleCommand = async (interaction: ChatInputCommandInteraction) => {
     const command = this.commands.get(interaction.commandName);
-
+    console.log(command);
     if (!command) return;
 
     try {

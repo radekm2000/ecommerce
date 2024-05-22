@@ -5,8 +5,8 @@ import 'dotenv/config';
 import { Ping } from './src/commands/ping';
 import { ProfileCommand } from './src/commands/profile';
 import { UsersService } from 'src/users/users.service';
-
-const config1 = new Ping();
+import { InventoryCommand } from './src/commands/inventory';
+import { ProductsService } from 'src/products/products.service';
 
 @Injectable()
 export class DiscordBotService implements OnModuleInit {
@@ -15,7 +15,10 @@ export class DiscordBotService implements OnModuleInit {
   private readonly botToken: string;
   private readonly botApplicationId: string;
 
-  constructor(private readonly userService: UsersService) {
+  constructor(
+    private userService: UsersService,
+    private productsService: ProductsService,
+  ) {
     this.botToken = process.env.DISCORD_BOT_TOKEN;
     this.botApplicationId = process.env.DISCORD_CLIENT_ID;
     this.bot = new Client({
@@ -32,7 +35,14 @@ export class DiscordBotService implements OnModuleInit {
       bot: this.bot,
       botToken: this.botToken,
       botApplicationId: this.botApplicationId,
-      commands: [config1, new ProfileCommand({ userService: userService })],
+      commands: [
+        new Ping(),
+        new ProfileCommand({ userService: this.userService }),
+        new InventoryCommand({
+          productsService: this.productsService,
+          usersService: this.userService,
+        }),
+      ],
     });
   }
 

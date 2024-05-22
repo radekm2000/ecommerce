@@ -137,6 +137,73 @@ export class UsersService {
     return user;
   }
 
+  public findUserByDiscordId = async (discordId: string) => {
+    const user = await this.usersRepository.findOne({
+      where: {
+        discordId,
+      },
+      relations: {
+        products: true,
+        profile: true,
+        followers: true,
+        followings: true,
+        avatarEntity: true,
+        reviews: {
+          reviewCreator: true,
+        },
+      },
+    });
+
+    if (!user) {
+      throw new HttpException(
+        'User not found',
+        HttpStatus.UNPROCESSABLE_ENTITY,
+      );
+    }
+    const followers = user.followers;
+    const followings = user.followings;
+    const detailedFollowings = [];
+    const detailedFollowers = [];
+
+    if (followings) {
+      for (const following of followings) {
+        const detailedFollowing = await this.followsRepository.findOne({
+          where: {
+            id: following.id,
+          },
+          relations: ['following', 'follower'],
+        });
+
+        if (detailedFollowing) {
+          detailedFollowings.push(detailedFollowing);
+        }
+      }
+    }
+
+    if (followers) {
+      for (const follower of followers) {
+        const detailedFollower = await this.followsRepository.findOne({
+          where: {
+            id: follower.id,
+          },
+          relations: ['follower', 'following'],
+        });
+
+        if (detailedFollower) {
+          detailedFollowers.push(detailedFollower);
+        }
+      }
+    }
+
+    const updatedUser = {
+      ...user,
+      followings: detailedFollowings,
+      followers: detailedFollowers,
+    };
+
+    return updatedUser;
+  };
+
   public async getUserInfo(userId: number) {
     const user = await this.usersRepository.findOne({
       where: {
@@ -153,6 +220,7 @@ export class UsersService {
         },
       },
     });
+
     if (!user) {
       throw new HttpException(
         'User not found',

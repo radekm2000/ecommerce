@@ -13,6 +13,7 @@ import { ProductWithImageAndUser } from "../types/types";
 import { useMediaQuery } from "../hooks/useMediaQuery";
 import { Link, useLocation } from "wouter";
 import { calculateGridWidth } from "../utils/calculateGridWidth";
+import { RenderAvatar } from "./RenderAvatar";
 
 export const DisplayUserProducts = ({
   products,
@@ -92,21 +93,12 @@ export const DisplayUserProducts = ({
                     cursor: "pointer",
                   }}
                 >
-                  {product.user.avatar ? (
-                    <Avatar
-                      sx={{ width: "24px", height: "24px" }}
-                      alt="user-avatar"
-                      src={product.user.avatar}
-                    />
-                  ) : (
-                    <AccountCircle
-                      sx={{
-                        color: "grey",
-                        width: "24px",
-                        height: "24px",
-                      }}
-                    />
-                  )}
+                  <RenderAvatar
+                    height="24px"
+                    width="24px"
+                    user={product.user}
+                  />
+
                   <Typography
                     sx={{
                       fontSize: "12px",

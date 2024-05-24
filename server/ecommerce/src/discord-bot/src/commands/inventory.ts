@@ -60,7 +60,7 @@ export class InventoryCommand implements SlashCommand {
           { name: 'Brand', value: product.brand, inline: true },
           { name: 'Category', value: product.category, inline: true },
         ])
-        .setThumbnail(productImage);
+        .setImage(productImage);
     });
 
     return [headerEmbed, ...productEmbeds];

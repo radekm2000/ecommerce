@@ -10,6 +10,7 @@ import { Link, useLocation } from "wouter";
 import { useUserInfo } from "../../hooks/useUserInfo";
 import { calculateMedian } from "../../utils/calculateMedian";
 import { FallbackProgress } from "../../utils/FallbackProgress";
+import { RenderAvatar } from "../RenderAvatar";
 export const DisplayUserInfo = ({
   userId,
   product,
@@ -136,6 +137,7 @@ export const DisplayUserInfo = ({
                 flexDirection: "row",
                 padding: "16px",
                 backgroundColor: "white",
+                gap: "10px",
 
                 alignItems: "center",
                 justifyContent: "flex-start",
@@ -144,16 +146,8 @@ export const DisplayUserInfo = ({
                 cursor: "pointer",
               }}
             >
-              {user?.avatar ? (
-                <Avatar
-                  src={user.avatar}
-                  sx={{ width: "48px", height: "48px", marginRight: "8px" }}
-                />
-              ) : (
-                <AccountCircle
-                  sx={{ width: "48px", height: "48px", color: "grey" }}
-                />
-              )}
+              <RenderAvatar height="48px" width="48px" user={user} />
+
               <Box sx={{ display: "flex", flexDirection: "column" }}>
                 <Typography sx={{ fontSize: "16px", color: "#171717" }}>
                   {user?.username}

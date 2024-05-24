@@ -7,6 +7,7 @@ import { ProfileCommand } from './src/commands/profile';
 import { UsersService } from 'src/users/users.service';
 import { InventoryCommand } from './src/commands/inventory';
 import { ProductsService } from 'src/products/products.service';
+import { ReviewsCommand } from './src/commands/reviews';
 
 @Injectable()
 export class DiscordBotService implements OnModuleInit {
@@ -42,6 +43,7 @@ export class DiscordBotService implements OnModuleInit {
           productsService: this.productsService,
           usersService: this.userService,
         }),
+        new ReviewsCommand({ usersService: this.userService }),
       ],
     });
   }

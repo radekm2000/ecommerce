@@ -11,9 +11,10 @@ import {
 import { UserWithAvatar } from "../../types/types";
 import { AccountCircle } from "@mui/icons-material";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
-import {  useState } from "react";
+import { useState } from "react";
 import { useAddReview } from "../../hooks/useAddReview";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
+import { RenderAvatar } from "../RenderAvatar";
 
 type FormFields = {
   rating: number;
@@ -74,16 +75,8 @@ export const ReviewForm = ({ user }: { user: UserWithAvatar }) => {
               alignItems: "center",
             }}
           >
-            {user.avatar ? (
-              <Avatar
-                sx={{ width: "64px", height: "64px" }}
-                src={user.avatar}
-              />
-            ) : (
-              <AccountCircle
-                sx={{ width: "64px", height: "64px", color: "grey" }}
-              />
-            )}
+            <RenderAvatar height="64px" width="64px " user={user} />
+
             <Typography sx={{ marginLeft: "5px" }}>{user.username}</Typography>
           </Box>
           <Box sx={{ marginTop: "10px" }}>

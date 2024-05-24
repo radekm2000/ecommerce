@@ -41,9 +41,10 @@ const User = z.object({
   id: z.number(),
   username: z.string(),
   googleId: z.string().or(z.null()),
-  email: z.string(),
-  role: z.enum(['user', 'admin']),
+  email: z.string().or(z.null()),
+  role: z.enum(['user', 'admin', 'discordUser']),
   avatar: z.string().or(z.null()),
+  discordId: z.string().or(z.null()),
 });
 
 export const ProductWithImageAndUserSchema = z.object({

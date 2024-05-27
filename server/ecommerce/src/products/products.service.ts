@@ -1,4 +1,4 @@
-import { Injectable, Logger } from '@nestjs/common';
+import { Inject, Injectable, Logger, forwardRef } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Product } from 'src/utils/entities/product.entity';
 import { ILike, Repository } from 'typeorm';
@@ -13,14 +13,12 @@ import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import { Brand, Order, QueryParams } from 'src/utils/dtos/types';
 import { ProductNotificationService } from 'src/product-notification/product-notification.service';
 import { Image } from 'src/utils/entities/image.entity';
-import {
-  ProductWithoutImageDto,
-  createProductFromJson,
-} from 'src/utils/dtos/product.dto';
+import { ProductWithoutImageDto } from 'src/utils/dtos/product.dto';
 import * as sharp from 'sharp';
 import { randomUUID } from 'crypto';
 import { UsersService } from 'src/users/users.service';
 import 'dotenv/config';
+import { ItemNotifier } from 'src/discord-bot/src/commands/notifiers/item-notifier';
 
 const s3 = new S3Client({
   region: process.env.BUCKET_REGION,
@@ -32,6 +30,7 @@ const s3 = new S3Client({
 @Injectable()
 export class ProductsService {
   logger: Logger;
+
   constructor(
     @InjectRepository(Product) private productRepository: Repository<Product>,
     private productsNotificationService: ProductNotificationService,

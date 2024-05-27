@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { ProductsController } from './products.controller';
 import { ProductsService } from './products.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -14,6 +14,7 @@ import { ProductNotificationService } from 'src/product-notification/product-not
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
 import { StripeService } from 'src/stripe/stripe.service';
 import { NodemailerService } from 'src/nodemailer/nodemailer.service';
+import { ItemNotifier } from 'src/discord-bot/src/commands/notifiers/item-notifier';
 
 @Module({
   controllers: [ProductsController],

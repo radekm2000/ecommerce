@@ -122,10 +122,10 @@ export class UsersService {
     }
   }
 
-  async findUserById(userId: number) {
+  public findUserByDiscordIdBase = async (discordId: string) => {
     const user = await this.usersRepository.findOne({
       where: {
-        id: userId,
+        discordId,
       },
     });
     if (!user) {
@@ -134,6 +134,16 @@ export class UsersService {
         HttpStatus.NOT_FOUND,
       );
     }
+    return user;
+  };
+
+  async findUserById(userId: number) {
+    const user = await this.usersRepository.findOne({
+      where: {
+        id: userId,
+      },
+    });
+
     return user;
   }
 
@@ -181,8 +191,8 @@ export class UsersService {
     }
     const followers = user.followers;
     const followings = user.followings;
-    const detailedFollowings = [];
-    const detailedFollowers = [];
+    const detailedFollowings: Follow[] = [];
+    const detailedFollowers: Follow[] = [];
 
     if (followings) {
       for (const following of followings) {

@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { DiscordBotController } from './discord-bot.controller';
 import { DiscordBotService } from './discord-bot.service';
 import { UsersService } from 'src/users/users.service';
@@ -12,6 +12,7 @@ import { Image } from 'src/utils/entities/image.entity';
 import { Product } from 'src/utils/entities/product.entity';
 import { ProductNotificationService } from 'src/product-notification/product-notification.service';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
+import { FollowersService } from 'src/followers/followers.service';
 
 @Module({
   controllers: [DiscordBotController],
@@ -20,6 +21,7 @@ import { ProductNotification } from 'src/utils/entities/product-notification.ent
     UsersService,
     ProductsService,
     ProductNotificationService,
+    FollowersService,
   ],
   imports: [
     TypeOrmModule.forFeature([
@@ -32,5 +34,6 @@ import { ProductNotification } from 'src/utils/entities/product-notification.ent
       ProductNotification,
     ]),
   ],
+  exports: [DiscordBotService],
 })
 export class DiscordBotModule {}

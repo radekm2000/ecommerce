@@ -4,11 +4,13 @@ import {
   ChatInputCommandInteraction,
   Client,
   Events,
+  MessageCreateOptions,
   REST,
   Routes,
 } from 'discord.js';
 import 'dotenv/config';
 import { SlashCommand } from './commands/slash-command';
+import { InteractionError } from './errors/interactionError';
 
 type Config = {
   bot: Client;
@@ -63,8 +65,16 @@ export class DiscordBot {
     try {
       await command.execute(interaction);
     } catch (error) {
-      console.error(error);
-      const msg = 'There was an error while executing this command!';
+      const isInteractionError = error instanceof InteractionError;
+      const msg = isInteractionError
+        ? error.message
+        : 'There was an error while executing this command!';
+
+      if (!isInteractionError) {
+        this.logger.error(
+          `Error when executing ${interaction.commandName} command`,
+        );
+      }
       if (interaction.replied || interaction.deferred) {
         this.logger.error(
           `Error when executing ${interaction.commandName} command`,
@@ -74,9 +84,6 @@ export class DiscordBot {
           ephemeral: true,
         });
       } else {
-        this.logger.error(
-          `Error when executing ${interaction.commandName} command`,
-        );
         await interaction.reply({
           content: msg,
           ephemeral: true,
@@ -107,5 +114,14 @@ export class DiscordBot {
         `Error when executing the ${interaction.commandName} autocomplete`,
       );
     }
+  };
+
+  public sendDM = async (
+    userDiscordId: string,
+    message: MessageCreateOptions,
+  ) => {
+    try {
+      await this.bot.users.send(userDiscordId, message);
+    } catch (error) {}
   };
 }

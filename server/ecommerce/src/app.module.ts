@@ -18,6 +18,7 @@ import { ReviewsModule } from './reviews/reviews.module';
 import { AdminNotificationsModule } from './admin-notifications/admin-notifications.module';
 import { FeedbacksModule } from './feedbacks/feedbacks.module';
 import { DiscordBotModule } from './discord-bot/discord-bot.module';
+import { DiscordNotificationsModule } from './discord-notifications/discord-notifications.module';
 
 @Module({
   imports: [
@@ -37,6 +38,7 @@ import { DiscordBotModule } from './discord-bot/discord-bot.module';
     AdminNotificationsModule,
     FeedbacksModule,
     DiscordBotModule,
+    DiscordNotificationsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,4 +1,5 @@
 import {
+  AutocompleteInteraction,
   ChatInputCommandInteraction,
   EmbedBuilder,
   SlashCommandBuilder,
@@ -56,7 +57,7 @@ export class ReviewsCommand implements SlashCommand {
   ) => {
     const embed = new EmbedBuilder()
       .setTitle(
-        `You have a total of ${totalReviews} reviews with an average rating of ⭐ ${averageRating.toFixed(
+        `You have a total of ${totalReviews} reviews with an average rating of  ${averageRating.toFixed(
           2,
         )}`,
       )
@@ -81,6 +82,8 @@ export class ReviewsCommand implements SlashCommand {
 
     return embed;
   };
+
+  public autocomplete = async (interaction: AutocompleteInteraction) => {};
 
   private calculateTotalReviews = (reviews: Review[]) => {
     return reviews.length;

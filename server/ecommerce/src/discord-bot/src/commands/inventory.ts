@@ -1,4 +1,6 @@
 import {
+  AutocompleteInteraction,
+  CacheType,
   ChatInputCommandInteraction,
   EmbedBuilder,
   SlashCommandBuilder,
@@ -40,6 +42,8 @@ export class InventoryCommand implements SlashCommand {
     const embed = await this.createEmbeds(userProducts);
     await interaction.editReply({ embeds: embed });
   };
+
+  public autocomplete = async (interaction: AutocompleteInteraction) => {};
 
   private createEmbeds = async (userProducts: Product[]) => {
     const headerEmbed = new EmbedBuilder()

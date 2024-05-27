@@ -1,5 +1,6 @@
 import { Logger } from '@nestjs/common';
 import {
+  AutocompleteInteraction,
   ChatInputCommandInteraction,
   Client,
   Events,
@@ -86,9 +87,25 @@ export class DiscordBot {
 
   private listenToInteractions = () => {
     this.bot.on(Events.InteractionCreate, async (interaction) => {
-      if (!interaction.isChatInputCommand()) return;
-
-      await this.handleCommand(interaction);
+      if (interaction.isChatInputCommand()) {
+        await this.handleCommand(interaction);
+      } else if (interaction.isAutocomplete()) {
+        await this.handleAutocomplete(interaction);
+      }
     });
+  };
+
+  private handleAutocomplete = async (interaction: AutocompleteInteraction) => {
+    const command = this.commands.get(interaction.commandName);
+    if (!command) return;
+
+    try {
+      await command.autocomplete(interaction);
+    } catch (error) {
+      this.logger.error(
+        { error },
+        `Error when executing the ${interaction.commandName} autocomplete`,
+      );
+    }
   };
 }

@@ -8,6 +8,7 @@ import { UsersService } from 'src/users/users.service';
 import { InventoryCommand } from './src/commands/inventory';
 import { ProductsService } from 'src/products/products.service';
 import { ReviewsCommand } from './src/commands/reviews';
+import { RemoveProduct } from './src/commands/remove-product';
 
 @Injectable()
 export class DiscordBotService implements OnModuleInit {
@@ -44,6 +45,10 @@ export class DiscordBotService implements OnModuleInit {
           usersService: this.userService,
         }),
         new ReviewsCommand({ usersService: this.userService }),
+        new RemoveProduct({
+          productService: productsService,
+          usersService: userService,
+        }),
       ],
     });
   }

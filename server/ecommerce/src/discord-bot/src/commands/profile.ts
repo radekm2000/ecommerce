@@ -1,4 +1,5 @@
 import {
+  AutocompleteInteraction,
   ChatInputCommandInteraction,
   EmbedBuilder,
   SlashCommandBuilder,
@@ -42,6 +43,8 @@ export class ProfileCommand implements SlashCommand {
 
     await interaction.editReply({ embeds: [embed] });
   };
+
+  public autocomplete = async (interaction: AutocompleteInteraction) => {};
 
   private createEmbed = async (
     userAvatar: string | null,

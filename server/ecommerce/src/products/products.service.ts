@@ -19,6 +19,7 @@ import { randomUUID } from 'crypto';
 import { UsersService } from 'src/users/users.service';
 import 'dotenv/config';
 import { ItemNotifier } from 'src/discord-bot/src/commands/notifiers/item-notifier';
+import { ItemNotifierService } from 'src/discord-bot/src/commands/notifiers/item-notifier.service';
 
 const s3 = new S3Client({
   region: process.env.BUCKET_REGION,
@@ -37,6 +38,7 @@ export class ProductsService {
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
     private usersService: UsersService,
+    private itemNotifierService: ItemNotifierService,
   ) {
     this.logger = new Logger(ProductsService.name);
   }
@@ -324,7 +326,8 @@ export class ProductsService {
       newProduct,
     );
     const command = new PutObjectCommand(paramsToS3);
-
+    const foundProduct = await this.findProduct(newProduct.id);
+    await this.itemNotifierService.notifyUsers(userId, foundProduct);
     try {
       await s3.send(command);
     } catch (error) {

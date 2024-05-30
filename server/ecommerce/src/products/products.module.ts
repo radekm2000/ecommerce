@@ -15,6 +15,8 @@ import { ProductNotification } from 'src/utils/entities/product-notification.ent
 import { StripeService } from 'src/stripe/stripe.service';
 import { NodemailerService } from 'src/nodemailer/nodemailer.service';
 import { ItemNotifier } from 'src/discord-bot/src/commands/notifiers/item-notifier';
+import { DiscordNotificationsService } from 'src/discord-notifications/discord-notifications.service';
+import { ItemNotifierService } from 'src/discord-bot/src/commands/notifiers/item-notifier.service';
 
 @Module({
   controllers: [ProductsController],
@@ -24,6 +26,8 @@ import { ItemNotifier } from 'src/discord-bot/src/commands/notifiers/item-notifi
     ProductNotificationService,
     StripeService,
     NodemailerService,
+    ItemNotifierService,
+    DiscordNotificationsService,
   ],
   imports: [
     TypeOrmModule.forFeature([

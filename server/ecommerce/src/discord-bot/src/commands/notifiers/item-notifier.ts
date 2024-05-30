@@ -1,5 +1,4 @@
 import { Product } from 'src/utils/entities/product.entity';
-import { DiscordBot } from '../../discordbot';
 import { UsersService } from 'src/users/users.service';
 import { Follow } from 'src/utils/entities/followers.entity';
 import { Profile } from 'src/utils/entities/profile.entity';
@@ -8,8 +7,8 @@ import { Avatar } from 'src/utils/entities/avatar.entity';
 import { Message } from 'src/utils/entities/message.entity';
 import { Review } from 'src/utils/entities/review.entity';
 import { EmbedBuilder } from 'discord.js';
-import { DiscordBotService } from 'src/discord-bot/discord-bot.service';
 import { Injectable } from '@nestjs/common';
+import { DiscordNotificationsBot } from 'src/discord-notifications/discord-notifications-bot';
 
 type User = {
   followings: Follow[];
@@ -30,17 +29,17 @@ type User = {
 };
 
 type Config = {
-  discordBotService: DiscordBotService;
+  bot: DiscordNotificationsBot;
   usersService: UsersService;
 };
 
 @Injectable()
 export class ItemNotifier {
-  private readonly discordBotService: DiscordBotService;
   private readonly usersService: UsersService;
+  private readonly bot: DiscordNotificationsBot;
 
   constructor(config: Config) {
-    this.discordBotService = config.discordBotService;
+    this.bot = config.bot;
     this.usersService = config.usersService;
   }
 
@@ -63,16 +62,16 @@ export class ItemNotifier {
     const productAuthor = product.user.username;
     await Promise.all(
       usersToNotify.map((user) =>
-        this.discordBotService.discordBot.sendDM(user.discordId, {
+        this.bot.sendDM(user.discordId, {
           embeds: [
             new EmbedBuilder()
               .setTitle(`**${productAuthor}** has listed a new item`)
+              .setDescription(product.description)
               .addFields([
                 { name: 'Price', value: `$${product.price}`, inline: true },
                 { name: 'Brand', value: product.brand, inline: true },
                 { name: 'Category', value: product.category, inline: true },
               ])
-              .setAuthor({ name: productAuthor })
               .setColor('#58b9ff')
               .setImage(productImage),
           ],

@@ -19,6 +19,7 @@ import { AdminNotificationsModule } from './admin-notifications/admin-notificati
 import { FeedbacksModule } from './feedbacks/feedbacks.module';
 import { DiscordBotModule } from './discord-bot/discord-bot.module';
 import { DiscordNotificationsModule } from './discord-notifications/discord-notifications.module';
+import { ItemNotifierModule } from './discord-bot/src/commands/notifiers/item-notifier.module';
 
 @Module({
   imports: [
@@ -39,6 +40,7 @@ import { DiscordNotificationsModule } from './discord-notifications/discord-noti
     FeedbacksModule,
     DiscordBotModule,
     DiscordNotificationsModule,
+    ItemNotifierModule,
   ],
   controllers: [AppController],
   providers: [AppService],

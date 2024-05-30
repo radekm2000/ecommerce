@@ -11,6 +11,9 @@ import { Avatar } from 'src/utils/entities/avatar.entity';
 import { ProductsService } from 'src/products/products.service';
 import { Product } from 'src/utils/entities/product.entity';
 import { Image } from 'src/utils/entities/image.entity';
+import { ItemNotifier } from 'src/discord-bot/src/commands/notifiers/item-notifier';
+import { ItemNotifierService } from 'src/discord-bot/src/commands/notifiers/item-notifier.service';
+import { DiscordNotificationsService } from 'src/discord-notifications/discord-notifications.service';
 
 @Module({
   imports: [
@@ -25,7 +28,13 @@ import { Image } from 'src/utils/entities/image.entity';
     ]),
   ],
   controllers: [ProductNotificationController],
-  providers: [ProductNotificationService, UsersService, ProductsService],
+  providers: [
+    ProductNotificationService,
+    UsersService,
+    ProductsService,
+    ItemNotifierService,
+    DiscordNotificationsService,
+  ],
   exports: [ProductNotificationService],
 })
 export class ProductNotificationModule {}

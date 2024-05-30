@@ -51,17 +51,18 @@ This app is a simplified version of **Vinted**, following a similar layout. Belo
 - **Frontend:**
   - React using Vite.
 
-## Integration with discord 
- **Discord commands**
-  ![DiscordCommands](/readmeImages/Discord%20commands%20(2).png)
+## Integration with discord
 
-  - Profile
-   ![Profile Command](/readmeImages/Profile%20command.png)
-  - Inventory + removing product ![Inventory  command](/readmeImages/Inventory%20command.png)
-  - Reviews ![Review command](/readmeImages/Reviews%20command.png)
+**Discord commands**
+
+- Profile
+  ![Profile Command](/readmeImages/Profile%20command.png)
+- Inventory + removing product ![Inventory  command](/readmeImages/Inventory%20command.png)
+- Reviews ![Review command](/readmeImages/Reviews%20command.png)
+
 ## Images
 
-
+- Discord DM notifications received when tracked user lists a new item ![DM notifications](/readmeImages/TrackedUsersNotifications.png)
 
 Add feedback
 ![Add feedback](/readmeImages/addFeedback.png)
@@ -95,5 +96,3 @@ Notifications + main page
 
 Editing roles
 ![Editing roles](/readmeImages/EditRole.png)
-
-

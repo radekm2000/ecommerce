@@ -13,6 +13,8 @@ import { Product } from 'src/utils/entities/product.entity';
 import { ProductNotificationService } from 'src/product-notification/product-notification.service';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
 import { FollowersService } from 'src/followers/followers.service';
+import { ItemNotifierService } from './src/commands/notifiers/item-notifier.service';
+import { DiscordNotificationsService } from 'src/discord-notifications/discord-notifications.service';
 
 @Module({
   controllers: [DiscordBotController],
@@ -22,6 +24,8 @@ import { FollowersService } from 'src/followers/followers.service';
     ProductsService,
     ProductNotificationService,
     FollowersService,
+    ItemNotifierService,
+    DiscordNotificationsService,
   ],
   imports: [
     TypeOrmModule.forFeature([

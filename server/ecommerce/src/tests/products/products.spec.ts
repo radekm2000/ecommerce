@@ -7,16 +7,19 @@ describe('ProductsService getMenFilteredProducts method', () => {
   let productNotificationService: any;
   let imageRepository: any;
   let usersService: any;
+  let itemNotifierService: any;
   beforeEach(() => {
     productRepository = {} as any;
     productNotificationService = {} as any;
     imageRepository = {} as any;
     usersService = {} as any;
+    itemNotifierService = {} as any;
     productsService = new ProductsService(
       productRepository,
       productNotificationService,
       imageRepository,
       usersService,
+      itemNotifierService,
     );
   });
   it('should return all products if no filters are applied', async () => {

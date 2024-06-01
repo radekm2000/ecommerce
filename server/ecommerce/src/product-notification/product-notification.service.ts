@@ -6,7 +6,7 @@ import {
   forwardRef,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ProductsService } from 'src/products/products.service';
+import { IProductsService } from 'src/spi/products';
 import { UsersService } from 'src/users/users.service';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
 import { Product } from 'src/utils/entities/product.entity';
@@ -18,8 +18,8 @@ export class ProductNotificationService {
     @InjectRepository(ProductNotification)
     private productNotificationRepository: Repository<ProductNotification>,
     private usersService: UsersService,
-    @Inject(forwardRef(() => ProductsService))
-    private productsService: ProductsService,
+    @Inject(forwardRef(() => IProductsService))
+    private productsService: IProductsService,
   ) {}
   async notifyFollowersAboutNewProduct(product: Product) {
     const existingProductWithImage = await this.productsService.findProduct(

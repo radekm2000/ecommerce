@@ -1,4 +1,9 @@
-import { Injectable, OnModuleDestroy, OnModuleInit } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  OnModuleDestroy,
+  OnModuleInit,
+} from '@nestjs/common';
 import { Client, IntentsBitField } from 'discord.js';
 import { DiscordBot } from './src/discordbot';
 import 'dotenv/config';
@@ -13,17 +18,18 @@ import { TrackedUsersCommand } from './src/commands/trackers/tracked-users';
 import { FollowersService } from 'src/followers/followers.service';
 import { StartTrackingCommand } from './src/commands/trackers/start-tracking';
 import { StopTrackingCommand } from './src/commands/trackers/stop-tracking';
+import { IProductsService } from 'src/spi/products';
 
 @Injectable()
 export class DiscordBotService implements OnModuleInit {
   public discordBot: DiscordBot;
-  private readonly bot: Client;
-  private readonly botToken: string;
+  public readonly bot: Client;
+  public readonly botToken: string;
   private readonly botApplicationId: string;
 
   constructor(
     private userService: UsersService,
-    private productsService: ProductsService,
+    @Inject(IProductsService) private productsService: IProductsService,
     private followersService: FollowersService,
   ) {
     this.botToken = process.env.DISCORD_BOT_TOKEN;

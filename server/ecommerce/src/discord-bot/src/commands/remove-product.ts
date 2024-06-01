@@ -6,12 +6,13 @@ import {
 import { SlashCommand } from './slash-command';
 import { UsersService } from 'src/users/users.service';
 import { ProductsService } from 'src/products/products.service';
+import { IProductsService } from 'src/spi/products';
 
 const PRODUCT_OPTION_NAME = 'product';
 
 type Config = {
   usersService: UsersService;
-  productService: ProductsService;
+  productService: IProductsService;
 };
 
 export class RemoveProduct implements SlashCommand {
@@ -27,7 +28,7 @@ export class RemoveProduct implements SlashCommand {
     );
 
   private readonly usersService: UsersService;
-  private readonly productService: ProductsService;
+  private readonly productService: IProductsService;
 
   constructor(config: Config) {
     this.usersService = config.usersService;

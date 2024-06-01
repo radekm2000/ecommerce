@@ -20,6 +20,8 @@ import { UsersService } from 'src/users/users.service';
 import 'dotenv/config';
 import { ItemNotifierService } from 'src/discord-bot/src/commands/notifiers/item-notifier.service';
 import { User } from 'src/utils/entities/user.entity';
+import { IProductsService } from 'src/spi/products';
+import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
 
 const s3 = new S3Client({
   region: process.env.BUCKET_REGION,
@@ -29,7 +31,7 @@ const s3 = new S3Client({
   },
 });
 @Injectable()
-export class ProductsService {
+export class ProductsService implements IProductsService {
   logger: Logger;
 
   constructor(

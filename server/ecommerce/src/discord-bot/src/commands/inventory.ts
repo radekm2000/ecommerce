@@ -10,15 +10,16 @@ import { UsersService } from 'src/users/users.service';
 import { ProductsService } from 'src/products/products.service';
 import { Product } from 'src/utils/entities/product.entity';
 import { DiscordEmbedColors } from '../discord-embeds/colors';
+import { IProductsService } from 'src/spi/products';
 
 type Config = {
   usersService: UsersService;
-  productsService: ProductsService;
+  productsService: IProductsService;
 };
 
 export class InventoryCommand implements SlashCommand {
   private readonly usersService: UsersService;
-  private readonly productsService: ProductsService;
+  private readonly productsService: IProductsService;
 
   constructor(config: Config) {
     this.usersService = config.usersService;

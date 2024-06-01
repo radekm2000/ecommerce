@@ -14,6 +14,9 @@ import { Image } from 'src/utils/entities/image.entity';
 import { ItemNotifier } from 'src/discord-bot/src/commands/notifiers/item-notifier';
 import { ItemNotifierService } from 'src/discord-bot/src/commands/notifiers/item-notifier.service';
 import { DiscordNotificationsService } from 'src/discord-notifications/discord-notifications.service';
+import { IProductsService } from 'src/spi/products';
+import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
+import { DiscordGuildModule } from 'src/discord-guild/discord-guild.module';
 
 @Module({
   imports: [
@@ -31,7 +34,7 @@ import { DiscordNotificationsService } from 'src/discord-notifications/discord-n
   providers: [
     ProductNotificationService,
     UsersService,
-    ProductsService,
+    { provide: IProductsService, useClass: ProductsService },
     ItemNotifierService,
     DiscordNotificationsService,
   ],

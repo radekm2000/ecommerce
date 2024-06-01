@@ -3,6 +3,7 @@ import {
   Controller,
   Delete,
   Get,
+  Inject,
   Param,
   ParseIntPipe,
   Post,
@@ -29,11 +30,12 @@ import { ZodValidationPipe } from 'src/utils/pipes/ZodValidationPipe';
 import { Response } from 'express';
 import { StripeService } from 'src/stripe/stripe.service';
 import { ParseAndValidateProductPipe } from 'src/utils/pipes/ParseAndValidateProductPipe';
+import { IProductsService } from 'src/spi/products';
 
 @Controller('products')
 export class ProductsController {
   constructor(
-    private productsService: ProductsService,
+    @Inject(IProductsService) private productsService: IProductsService,
     private stripeService: StripeService,
   ) {}
 

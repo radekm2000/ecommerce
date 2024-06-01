@@ -15,13 +15,16 @@ import { ProductNotification } from 'src/utils/entities/product-notification.ent
 import { FollowersService } from 'src/followers/followers.service';
 import { ItemNotifierService } from './src/commands/notifiers/item-notifier.service';
 import { DiscordNotificationsService } from 'src/discord-notifications/discord-notifications.service';
+import { IProductsService } from 'src/spi/products';
+import { DiscordGuildModule } from 'src/discord-guild/discord-guild.module';
+import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
 
 @Module({
   controllers: [DiscordBotController],
   providers: [
     DiscordBotService,
     UsersService,
-    ProductsService,
+    { provide: IProductsService, useClass: ProductsService },
     ProductNotificationService,
     FollowersService,
     ItemNotifierService,

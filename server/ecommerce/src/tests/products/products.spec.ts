@@ -1,8 +1,7 @@
 import { ProductsService } from 'src/products/products.service';
-import { Product } from 'src/utils/entities/product.entity';
 
 describe('ProductsService getMenFilteredProducts method', () => {
-  let productsService: ProductsService;
+  let productsService: any;
   let productRepository: any;
   let productNotificationService: any;
   let imageRepository: any;

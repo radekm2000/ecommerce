@@ -61,7 +61,6 @@ export class DiscordBot {
   private handleCommand = async (interaction: ChatInputCommandInteraction) => {
     const command = this.commands.get(interaction.commandName);
     if (!command) return;
-
     try {
       await command.execute(interaction);
     } catch (error) {

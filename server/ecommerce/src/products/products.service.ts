@@ -18,8 +18,8 @@ import * as sharp from 'sharp';
 import { randomUUID } from 'crypto';
 import { UsersService } from 'src/users/users.service';
 import 'dotenv/config';
-import { ItemNotifier } from 'src/discord-bot/src/commands/notifiers/item-notifier';
 import { ItemNotifierService } from 'src/discord-bot/src/commands/notifiers/item-notifier.service';
+import { User } from 'src/utils/entities/user.entity';
 
 const s3 = new S3Client({
   region: process.env.BUCKET_REGION,
@@ -51,30 +51,7 @@ export class ProductsService {
       relations: ['images', 'user'],
     });
 
-    for (const image of product.images) {
-      const getObjectParams = {
-        Bucket: process.env.BUCKET_NAME,
-        Key: image.imageName,
-      };
-      const command = new GetObjectCommand(getObjectParams);
-      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-
-      image.imageUrl = url;
-    }
-
-    return product;
-  }
-  async signImageToProduct(product: Product) {
-    for (const image of product.images) {
-      const getObjectParams = {
-        Bucket: process.env.BUCKET_NAME,
-        Key: image.imageName,
-      };
-      const command = new GetObjectCommand(getObjectParams);
-      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-
-      image.imageUrl = url;
-    }
+    await this.processProduct(product);
 
     return product;
   }
@@ -89,18 +66,7 @@ export class ProductsService {
       relations: ['images', 'user'],
     });
 
-    for (const product of products) {
-      for (const image of product.images) {
-        const getObjectParams = {
-          Bucket: process.env.BUCKET_NAME,
-          Key: image.imageName,
-        };
-        const command = new GetObjectCommand(getObjectParams);
-        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-
-        image.imageUrl = url;
-      }
-    }
+    await this.processProducts(products);
     return products;
   }
 
@@ -108,32 +74,11 @@ export class ProductsService {
     const products = await this.productRepository.find({
       relations: ['images', 'user'],
     });
-
-    for (const product of products) {
-      for (const image of product.images) {
-        const getObjectParams = {
-          Bucket: process.env.BUCKET_NAME,
-          Key: image.imageName,
-        };
-        const command = new GetObjectCommand(getObjectParams);
-        const url = await getSignedUrl(s3, command, { expiresIn: 36000 });
-
-        image.imageUrl = url;
-      }
-      if (product.user.avatarEntity) {
-        const getObjectParams = {
-          Bucket: process.env.BUCKET_NAME,
-          Key: product.user.avatarEntity.avatarName,
-        };
-        const command = new GetObjectCommand(getObjectParams);
-        const url = await getSignedUrl(s3, command, { expiresIn: 36000 });
-
-        product.user.avatar = url;
-      }
-    }
+    await this.processProducts(products);
     return products;
   }
-  async getFilteredSearchTextProducts(searchText: string) {
+
+  public async getFilteredSearchTextProducts(searchText: string) {
     const products = await this.productRepository.find({
       where: [
         {
@@ -143,49 +88,34 @@ export class ProductsService {
       ],
       relations: ['images', 'user'],
     });
-    for (const product of products) {
-      for (const image of product.images) {
-        const getObjectParams = {
-          Bucket: process.env.BUCKET_NAME,
-          Key: image.imageName,
-        };
-        const command = new GetObjectCommand(getObjectParams);
-        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-
-        image.imageUrl = url;
-      }
-    }
+    await this.processProducts(products);
     return products;
   }
 
-  async getWomenFilteredProducts(queryParams: QueryParams) {
-    const products = await this.productRepository.find({
+  public getProductsByCategory = async (
+    category: string,
+    queryParams: QueryParams,
+  ) => {
+    let products = await this.productRepository.find({
       where: {
-        category: 'Women',
+        category: category,
       },
       relations: ['images', 'user'],
     });
-    for (const product of products) {
-      for (const image of product.images) {
-        const getObjectParams = {
-          Bucket: process.env.BUCKET_NAME,
-          Key: image.imageName,
-        };
-        const command = new GetObjectCommand(getObjectParams);
-        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
 
-        image.imageUrl = url;
-      }
+    await this.processProducts(products);
+
+    if (queryParams.brand || queryParams.order) {
+      products = await this.filterProducts(products, queryParams);
     }
-    if (!queryParams.brand && !queryParams.order) {
-      return products;
-    }
-    if (
-      (queryParams.brand && !this.isValidBrand(queryParams.brand)) ||
-      (queryParams.order && !this.isValidOrder(queryParams.order))
-    ) {
-      return products;
-    }
+
+    return products;
+  };
+
+  private filterProducts = async (
+    products: Product[],
+    queryParams: QueryParams,
+  ) => {
     if (queryParams.brand && queryParams.order) {
       const sortedByPrice = await this.sortByPrice(queryParams.order, products);
       return await this.sortByBrand(sortedByPrice, queryParams.brand);
@@ -198,7 +128,10 @@ export class ProductsService {
       );
       return productsSorted;
     }
-    return products;
+  };
+
+  async getWomenFilteredProducts(queryParams: QueryParams) {
+    return await this.getProductsByCategory('Women', queryParams);
   }
 
   async getMenProducts() {
@@ -208,45 +141,12 @@ export class ProductsService {
       },
       relations: ['images', 'user'],
     });
-    for (const product of products) {
-      for (const image of product.images) {
-        const getObjectParams = {
-          Bucket: process.env.BUCKET_NAME,
-          Key: image.imageName,
-        };
-        const command = new GetObjectCommand(getObjectParams);
-        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-
-        image.imageUrl = url;
-      }
-    }
+    await this.processProducts(products);
     return products;
   }
 
   async getMenFilteredProducts(queryParams: QueryParams) {
-    const products = await this.getMenProducts();
-    if (!queryParams.brand && !queryParams.order) {
-      return products;
-    }
-    if (
-      (queryParams.brand && !this.isValidBrand(queryParams.brand)) ||
-      (queryParams.order && !this.isValidOrder(queryParams.order))
-    ) {
-      return products;
-    }
-    if (queryParams.brand && queryParams.order) {
-      const sortedByPrice = await this.sortByPrice(queryParams.order, products);
-      return await this.sortByBrand(sortedByPrice, queryParams.brand);
-    } else if (queryParams.brand) {
-      return await this.sortByBrand(products, queryParams.brand);
-    } else if (queryParams.order) {
-      const productsSorted = await this.sortByPrice(
-        queryParams.order,
-        products,
-      );
-      return productsSorted;
-    }
-    return products;
+    return this.getProductsByCategory('Men', queryParams);
   }
 
   async sortByPrice(order: Order, products: Product[]) {
@@ -345,18 +245,44 @@ export class ProductsService {
       take: limit,
       skip: offset,
     });
-    for (const product of products) {
-      for (const image of product.images) {
-        const getObjectParams = {
-          Bucket: process.env.BUCKET_NAME,
-          Key: image.imageName,
-        };
-        const command = new GetObjectCommand(getObjectParams);
-        const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
-
-        image.imageUrl = url;
-      }
-    }
+    await this.processProducts(products);
     return products;
   }
+
+  private signImageToProduct = async (product: Product) => {
+    for (const image of product.images) {
+      const getObjectParams = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: image.imageName,
+      };
+      const command = new GetObjectCommand(getObjectParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 3600 });
+
+      image.imageUrl = url;
+    }
+  };
+
+  private signAvatarToUserOfProduct = async (product: Product) => {
+    if (product.user.avatarEntity) {
+      const getObjectParams = {
+        Bucket: process.env.BUCKET_NAME,
+        Key: product.user.avatarEntity.avatarName,
+      };
+      const command = new GetObjectCommand(getObjectParams);
+      const url = await getSignedUrl(s3, command, { expiresIn: 36000 });
+
+      product.user.avatar = url;
+    }
+  };
+
+  private processProduct = async (product: Product) => {
+    await this.signImageToProduct(product);
+    await this.signAvatarToUserOfProduct(product);
+  };
+
+  private processProducts = async (products: Product[]) => {
+    for (const product of products) {
+      await this.processProduct(product);
+    }
+  };
 }

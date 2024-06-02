@@ -14,18 +14,16 @@ import { ProductNotificationService } from 'src/product-notification/product-not
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
 import { StripeService } from 'src/stripe/stripe.service';
 import { NodemailerService } from 'src/nodemailer/nodemailer.service';
-import { ItemNotifier } from 'src/discord-bot/src/commands/notifiers/item-notifier';
 import { DiscordNotificationsService } from 'src/discord-notifications/discord-notifications.service';
 import { ItemNotifierService } from 'src/discord-bot/src/commands/notifiers/item-notifier.service';
 import { IProductsService } from 'src/spi/products';
-import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
-import { DiscordGuildModule } from 'src/discord-guild/discord-guild.module';
 
 @Module({
   controllers: [ProductsController],
   providers: [
     { provide: IProductsService, useClass: ProductsService },
     UsersService,
+
     ProductNotificationService,
     StripeService,
     NodemailerService,

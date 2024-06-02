@@ -40,6 +40,7 @@ export class ProductsService implements IProductsService {
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
     private usersService: UsersService,
+
     private itemNotifierService: ItemNotifierService,
   ) {
     this.logger = new Logger(ProductsService.name);
@@ -238,6 +239,7 @@ export class ProductsService implements IProductsService {
     this.logger.log(
       `User ${existingUser.username} added product with id ${newProduct.id}`,
     );
+
     return;
   }
 

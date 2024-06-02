@@ -142,6 +142,7 @@ export class UsersService {
       where: {
         id: userId,
       },
+      relations: ['products'],
     });
 
     return user;

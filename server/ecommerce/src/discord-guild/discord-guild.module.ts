@@ -30,7 +30,6 @@ import { DiscordNotificationsService } from 'src/discord-notifications/discord-n
     ]),
   ],
   providers: [
-    DiscordBotService,
     UsersService,
     ProductNotificationService,
     ItemNotifierService,
@@ -39,15 +38,18 @@ import { DiscordNotificationsService } from 'src/discord-notifications/discord-n
       provide: IProductsService,
       useClass: ProductsService,
     },
-    FollowersService,
     {
       provide: DiscordGuildService,
-      useFactory: (botService: DiscordBotService) =>
+      useFactory: (botService: DiscordBotService, usersService: UsersService) =>
         new DiscordGuildService({
           botClient: botService.bot,
+          usersService: usersService,
         }),
-      inject: [DiscordBotService],
+      inject: [DiscordBotService, UsersService],
     },
+    DiscordBotService,
+
+    FollowersService,
   ],
   exports: [DiscordGuildService],
 })

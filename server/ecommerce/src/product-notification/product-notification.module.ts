@@ -17,6 +17,9 @@ import { DiscordNotificationsService } from 'src/discord-notifications/discord-n
 import { IProductsService } from 'src/spi/products';
 import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
 import { DiscordGuildModule } from 'src/discord-guild/discord-guild.module';
+import { IDiscordGuildService } from 'src/spi/discord-guild';
+import { DiscordBotService } from 'src/discord-bot/discord-bot.service';
+import { FollowersService } from 'src/followers/followers.service';
 
 @Module({
   imports: [
@@ -37,6 +40,17 @@ import { DiscordGuildModule } from 'src/discord-guild/discord-guild.module';
     { provide: IProductsService, useClass: ProductsService },
     ItemNotifierService,
     DiscordNotificationsService,
+    {
+      provide: DiscordGuildService,
+      useFactory: (botService: DiscordBotService, usersService: UsersService) =>
+        new DiscordGuildService({
+          botClient: botService.bot,
+          usersService: usersService,
+        }),
+      inject: [DiscordBotService, UsersService],
+    },
+    DiscordBotService,
+    FollowersService,
   ],
   exports: [ProductNotificationService],
 })

@@ -31,11 +31,19 @@ import { Response } from 'express';
 import { StripeService } from 'src/stripe/stripe.service';
 import { ParseAndValidateProductPipe } from 'src/utils/pipes/ParseAndValidateProductPipe';
 import { IProductsService } from 'src/spi/products';
+import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
+import { IDiscordGuildService } from 'src/spi/discord-guild';
+import 'dotenv/config';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+
+const VENDOR_ROLE_ID = process.env.VENDOR_ROLE_ID ?? '';
 
 @Controller('products')
 export class ProductsController {
   constructor(
     @Inject(IProductsService) private productsService: IProductsService,
+    private eventEmitter: EventEmitter2,
+
     private stripeService: StripeService,
   ) {}
 
@@ -117,6 +125,11 @@ export class ProductsController {
     @UploadedFile() file: Express.Multer.File,
     @AuthUser() authUser: AuthUser,
   ) {
-    return await this.productsService.uploadProduct(body, file, authUser.sub);
+    const userId = authUser.sub;
+    await this.productsService.uploadProduct(body, file, authUser.sub);
+    return this.eventEmitter.emit('assignDiscordRole', {
+      userId,
+      VENDOR_ROLE_ID,
+    });
   }
 }

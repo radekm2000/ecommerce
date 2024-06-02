@@ -1,9 +1,17 @@
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { Client, MessageCreateOptions } from 'discord.js';
 import 'dotenv/config';
+import { UsersService } from 'src/users/users.service';
+
+type AssignDiscordRoleEvent = {
+  userId: number;
+  VENDOR_ROLE_ID: string;
+};
 
 type Config = {
   botClient: Client;
+  usersService: UsersService;
 };
 
 @Injectable()
@@ -11,28 +19,58 @@ export class DiscordGuildService {
   private readonly botClient: Client;
   private readonly guildId: string;
   private readonly logger: Logger;
+  private readonly usersService: UsersService;
 
   constructor(config: Config) {
+    this.usersService = config.usersService;
     this.botClient = config.botClient;
     this.logger = new Logger(DiscordGuildService.name);
     this.guildId = process.env.GUILD_ID ?? '';
   }
 
-  public assignRoles = async (userId: string, roleIds: string[]) => {
-    if (roleIds.length === 0) {
+  @OnEvent('assignDiscordRole', { async: true })
+  public async handleAssignDiscordRoleEvent(payload: AssignDiscordRoleEvent) {
+    const user = await this.getUser(payload.userId);
+    if (!user.discordId) {
       return;
     }
 
-    roleIds = roleIds.filter((roleId) => !this.hasRole(userId, roleId));
+    if (user.products.length < 1) {
+      return;
+    }
+    return this.assignRoles(user.discordId, payload.VENDOR_ROLE_ID);
+  }
+
+  public assignRoles = async (userId: string, roleId: string) => {
+    if (!roleId) {
+      return;
+    }
 
     const member = await this.getGuildMember(userId);
     try {
-      await member.roles.add(roleIds);
+      if (member && !(await this.hasRole(userId, roleId)))
+        await member.roles.add(roleId);
+      this.logger.log(`User ${userId} has been granted a new role`);
     } catch (error) {
+      console.log(error);
       this.logger.error(
         `Error while trying to assign roles for user ${userId}`,
       );
     }
+  };
+
+  private checkUserRoles = async (userId: string, roleId: string) => {
+    const member = await this.getGuildMember(userId);
+    if (member.roles.cache.some((role) => role.id === roleId)) {
+      console.log('user has that role');
+    } else {
+      console.log('user doesnt have that role');
+    }
+  };
+
+  private getUser = async (userId: number) => {
+    const user = await this.usersService.findUserById(userId);
+    return user;
   };
 
   private hasRole = async (userId: string, roleId: string) => {

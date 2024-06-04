@@ -48,5 +48,6 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
   ],
   controllers: [AppController],
   providers: [AppService],
+  exports: [EventEmitterModule],
 })
 export class AppModule {}

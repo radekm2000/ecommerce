@@ -1,12 +1,13 @@
 import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
-import { Client, MessageCreateOptions } from 'discord.js';
+import { Client, EmbedBuilder, MessageCreateOptions } from 'discord.js';
 import 'dotenv/config';
+import { DiscordEvents } from 'src/events/constants/events';
 import { UsersService } from 'src/users/users.service';
 
-type AssignDiscordRoleEvent = {
+export type AssignDiscordRoleEvent = {
   userId: number;
-  VENDOR_ROLE_ID: string;
+  discordRoleId: string;
 };
 
 type Config = {
@@ -28,7 +29,7 @@ export class DiscordGuildService {
     this.guildId = process.env.GUILD_ID ?? '';
   }
 
-  @OnEvent('assignDiscordRole', { async: true })
+  @OnEvent(DiscordEvents.AssignDiscordRole)
   public async handleAssignDiscordRoleEvent(payload: AssignDiscordRoleEvent) {
     const user = await this.getUser(payload.userId);
     if (!user.discordId) {
@@ -38,7 +39,7 @@ export class DiscordGuildService {
     if (user.products.length < 1) {
       return;
     }
-    return this.assignRoles(user.discordId, payload.VENDOR_ROLE_ID);
+    return this.assignRoles(user.discordId, payload.discordRoleId);
   }
 
   public assignRoles = async (userId: string, roleId: string) => {
@@ -51,6 +52,13 @@ export class DiscordGuildService {
       if (member && !(await this.hasRole(userId, roleId)))
         await member.roles.add(roleId);
       this.logger.log(`User ${userId} has been granted a new role`);
+      this.sendMessageToMember(member.id, {
+        embeds: [
+          new EmbedBuilder().setDescription(
+            `You have been granted a new role !`,
+          ),
+        ],
+      });
     } catch (error) {
       console.log(error);
       this.logger.error(

@@ -8,6 +8,9 @@ import { Review } from 'src/utils/entities/review.entity';
 import { Repository } from 'typeorm';
 import 'dotenv/config';
 import { User } from 'src/utils/entities/user.entity';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { DiscordEvents } from 'src/events/constants/events';
+import { AssignDiscordRoleEvent } from 'src/discord-guild/discord-guild.service';
 const s3 = new S3Client({
   region: process.env.BUCKET_REGION,
   credentials: {
@@ -21,6 +24,8 @@ export class ReviewsService {
     @InjectRepository(Review)
     private readonly reviewRepository: Repository<Review>,
     private readonly usersService: UsersService,
+    private eventEmitter: EventEmitter2,
+
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
   ) {}
 
@@ -38,7 +43,12 @@ export class ReviewsService {
       reviewRecipient,
     });
 
-    return await this.reviewRepository.save(newReview);
+    await this.reviewRepository.save(newReview);
+    const payload: AssignDiscordRoleEvent = {
+      userId: reviewCreator.id,
+      discordRoleId: process.env.REVIEWER_ROLE_ID ?? '',
+    };
+    return this.eventEmitter.emit(DiscordEvents.AssignDiscordRole, payload);
   }
 
   async getUserReviews(userId: number) {

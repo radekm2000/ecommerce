@@ -35,8 +35,9 @@ import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
 import { IDiscordGuildService } from 'src/spi/discord-guild';
 import 'dotenv/config';
 import { EventEmitter2 } from '@nestjs/event-emitter';
+import { DiscordEvents } from 'src/events/constants/events';
 
-const VENDOR_ROLE_ID = process.env.VENDOR_ROLE_ID ?? '';
+const discordRoleId = process.env.VENDOR_ROLE_ID ?? '';
 
 @Controller('products')
 export class ProductsController {
@@ -127,9 +128,9 @@ export class ProductsController {
   ) {
     const userId = authUser.sub;
     await this.productsService.uploadProduct(body, file, authUser.sub);
-    return this.eventEmitter.emit('assignDiscordRole', {
+    return this.eventEmitter.emit(DiscordEvents.AssignDiscordRole, {
       userId,
-      VENDOR_ROLE_ID,
+      discordRoleId,
     });
   }
 }

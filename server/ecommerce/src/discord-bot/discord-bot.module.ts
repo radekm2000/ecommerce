@@ -29,15 +29,6 @@ import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
     FollowersService,
     ItemNotifierService,
     DiscordNotificationsService,
-    {
-      provide: DiscordGuildService,
-      useFactory: (botService: DiscordBotService, usersService: UsersService) =>
-        new DiscordGuildService({
-          botClient: botService.bot,
-          usersService: usersService,
-        }),
-      inject: [DiscordBotService, UsersService],
-    },
   ],
 
   imports: [

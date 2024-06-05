@@ -38,15 +38,7 @@ import { DiscordNotificationsService } from 'src/discord-notifications/discord-n
       provide: IProductsService,
       useClass: ProductsService,
     },
-    {
-      provide: DiscordGuildService,
-      useFactory: (botService: DiscordBotService, usersService: UsersService) =>
-        new DiscordGuildService({
-          botClient: botService.bot,
-          usersService: usersService,
-        }),
-      inject: [DiscordBotService, UsersService],
-    },
+    DiscordGuildService,
     DiscordBotService,
 
     FollowersService,

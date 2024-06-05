@@ -1,7 +1,13 @@
-import { Injectable, Logger, OnApplicationBootstrap } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  Logger,
+  OnApplicationBootstrap,
+} from '@nestjs/common';
 import { EventEmitter2, OnEvent } from '@nestjs/event-emitter';
 import { Client, EmbedBuilder, MessageCreateOptions } from 'discord.js';
 import 'dotenv/config';
+import { DiscordBotService } from 'src/discord-bot/discord-bot.service';
 import { DiscordEvents } from 'src/events/constants/events';
 import { UsersService } from 'src/users/users.service';
 
@@ -10,21 +16,17 @@ export type AssignDiscordRoleEvent = {
   discordRoleId: string;
 };
 
-type Config = {
-  botClient: Client;
-  usersService: UsersService;
-};
-
 @Injectable()
 export class DiscordGuildService {
   private readonly botClient: Client;
   private readonly guildId: string;
   private readonly logger: Logger;
-  private readonly usersService: UsersService;
 
-  constructor(config: Config) {
-    this.usersService = config.usersService;
-    this.botClient = config.botClient;
+  constructor(
+    @Inject(UsersService) private usersService: UsersService,
+    @Inject(DiscordBotService) private discordBotService: DiscordBotService,
+  ) {
+    this.botClient = this.discordBotService.bot;
     this.logger = new Logger(DiscordGuildService.name);
     this.guildId = process.env.GUILD_ID ?? '';
   }

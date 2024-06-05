@@ -22,6 +22,7 @@ describe('reviews service ADD REVIEW', () => {
       reviewRepositoryMock,
       usersServiceMock,
       {} as any,
+      {} as any,
     );
 
     await expect(
@@ -66,14 +67,19 @@ describe('reviews service ADD REVIEW', () => {
       save: jest.fn().mockResolvedValue(review),
     };
 
+    const eventEmitter = {
+      emit: jest.fn().mockResolvedValue(true),
+    };
+
     const reviewService = new ReviewsService(
       reviewRepositoryMock,
       usersServiceMock,
+      eventEmitter as any,
       {} as any,
     );
 
     expect(
       await reviewService.addReview(reviewDto, reviewRecipient.id),
-    ).toEqual(review);
+    ).toEqual(true);
   });
 });

@@ -18,6 +18,7 @@ import { DiscordNotificationsService } from 'src/discord-notifications/discord-n
 import { IProductsService } from 'src/spi/products';
 import { DiscordGuildModule } from 'src/discord-guild/discord-guild.module';
 import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
+import { DiscordNotificationsModule } from 'src/discord-notifications/discord-notifications.module';
 
 @Module({
   controllers: [DiscordBotController],
@@ -28,7 +29,6 @@ import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
     ProductNotificationService,
     FollowersService,
     ItemNotifierService,
-    DiscordNotificationsService,
   ],
 
   imports: [
@@ -41,6 +41,7 @@ import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
       Product,
       ProductNotification,
     ]),
+    DiscordNotificationsModule,
   ],
   exports: [DiscordBotService],
 })

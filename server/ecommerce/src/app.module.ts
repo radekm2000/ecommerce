@@ -22,6 +22,8 @@ import { DiscordNotificationsModule } from './discord-notifications/discord-noti
 import { ItemNotifierModule } from './discord-bot/src/commands/notifiers/item-notifier.module';
 import { DiscordGuildModule } from './discord-guild/discord-guild.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
+import { UserSyncModule } from './user-sync/user-sync.module';
+import { ScheduleModule } from '@nestjs/schedule';
 
 @Module({
   imports: [
@@ -45,6 +47,8 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
     ItemNotifierModule,
     DiscordGuildModule,
     EventEmitterModule.forRoot(),
+    UserSyncModule,
+    ScheduleModule.forRoot(),
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -4,5 +4,6 @@ import { ItemNotifier } from 'src/discord-bot/src/commands/notifiers/item-notifi
 
 @Module({
   providers: [DiscordNotificationsService],
+  exports: [DiscordNotificationsService],
 })
 export class DiscordNotificationsModule {}

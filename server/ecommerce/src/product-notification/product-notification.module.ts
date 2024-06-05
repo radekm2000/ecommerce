@@ -20,6 +20,8 @@ import { DiscordGuildModule } from 'src/discord-guild/discord-guild.module';
 import { IDiscordGuildService } from 'src/spi/discord-guild';
 import { DiscordBotService } from 'src/discord-bot/discord-bot.service';
 import { FollowersService } from 'src/followers/followers.service';
+import { DiscordNotificationsModule } from 'src/discord-notifications/discord-notifications.module';
+import { DiscordBotModule } from 'src/discord-bot/discord-bot.module';
 
 @Module({
   imports: [
@@ -32,6 +34,8 @@ import { FollowersService } from 'src/followers/followers.service';
       Product,
       Image,
     ]),
+    DiscordNotificationsModule,
+    DiscordBotModule,
   ],
   controllers: [ProductNotificationController],
   providers: [
@@ -39,8 +43,6 @@ import { FollowersService } from 'src/followers/followers.service';
     UsersService,
     { provide: IProductsService, useClass: ProductsService },
     ItemNotifierService,
-    DiscordNotificationsService,
-    DiscordBotService,
 
     FollowersService,
   ],

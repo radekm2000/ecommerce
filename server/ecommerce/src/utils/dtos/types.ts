@@ -1,3 +1,8 @@
+import { Follow } from '../entities/followers.entity';
+import { Product } from '../entities/product.entity';
+import { Review } from '../entities/review.entity';
+import { User } from '../entities/user.entity';
+
 export type Order = 'price_high_to_low' | 'price_low_to_high';
 
 export type Brand =
@@ -30,3 +35,14 @@ export enum UserRole {
   Admin = 'admin',
   discordUser = 'discordUser',
 }
+
+export type ExtendedUser = {
+  id: number;
+  discordId: string;
+  reviews: Review[];
+  products: Product[];
+};
+
+export type SyncUserRolesEvent = {
+  user: ExtendedUser;
+};

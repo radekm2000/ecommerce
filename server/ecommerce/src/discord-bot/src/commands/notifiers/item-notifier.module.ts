@@ -9,6 +9,7 @@ import { Profile } from 'src/utils/entities/profile.entity';
 import { Avatar } from 'src/utils/entities/avatar.entity';
 import { Product } from 'src/utils/entities/product.entity';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
+import { DiscordNotificationsModule } from 'src/discord-notifications/discord-notifications.module';
 
 @Module({
   imports: [
@@ -20,8 +21,9 @@ import { ProductNotification } from 'src/utils/entities/product-notification.ent
       Product,
       ProductNotification,
     ]),
+    DiscordNotificationsModule,
   ],
-  providers: [ItemNotifierService, UsersService, DiscordNotificationsService],
+  providers: [ItemNotifierService, UsersService],
   exports: [ItemNotifierService],
 })
 export class ItemNotifierModule {}

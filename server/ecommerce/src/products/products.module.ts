@@ -17,6 +17,7 @@ import { NodemailerService } from 'src/nodemailer/nodemailer.service';
 import { DiscordNotificationsService } from 'src/discord-notifications/discord-notifications.service';
 import { ItemNotifierService } from 'src/discord-bot/src/commands/notifiers/item-notifier.service';
 import { IProductsService } from 'src/spi/products';
+import { DiscordNotificationsModule } from 'src/discord-notifications/discord-notifications.module';
 
 @Module({
   controllers: [ProductsController],
@@ -28,7 +29,7 @@ import { IProductsService } from 'src/spi/products';
     StripeService,
     NodemailerService,
     ItemNotifierService,
-    DiscordNotificationsService,
+   
   ],
   imports: [
     TypeOrmModule.forFeature([
@@ -41,6 +42,7 @@ import { IProductsService } from 'src/spi/products';
       ProductNotification,
     ]),
     FollowersModule,
+    DiscordNotificationsModule
   ],
   exports: [IProductsService],
 })

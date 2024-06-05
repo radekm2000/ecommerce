@@ -51,21 +51,44 @@ export class DiscordGuildService {
 
     const member = await this.getGuildMember(userId);
     try {
-      if (member && !(await this.hasRole(userId, roleId)))
+      if (member && !(await this.hasRole(userId, roleId))) {
         await member.roles.add(roleId);
-      this.logger.log(`User ${userId} has been granted a new role`);
-      this.sendMessageToMember(member.id, {
-        embeds: [
-          new EmbedBuilder().setDescription(
-            `You have been granted a new role !`,
-          ),
-        ],
-      });
+
+        this.logger.log(`User ${userId} has been granted a new role`);
+        this.sendMessageToMember(member.id, {
+          embeds: [
+            new EmbedBuilder().setDescription(
+              `You have been granted a new role !`,
+            ),
+          ],
+        });
+      } else {
+        this.logger.log(`User ${userId} has this role already`);
+      }
     } catch (error) {
       console.log(error);
       this.logger.error(
         `Error while trying to assign roles for user ${userId}`,
       );
+    }
+  };
+
+  public removeRoles = async (userId: string, roleId: string) => {
+    if (!roleId) {
+      return;
+    }
+
+    const member = await this.getGuildMember(userId);
+    try {
+      if (member && (await this.hasRole(userId, roleId))) {
+        await member.roles.remove(roleId);
+        this.logger.log(`User ${userId} has lost a role ${roleId}`);
+        this.sendMessageToMember(member.id, {
+          embeds: [new EmbedBuilder().setDescription(`You have lost a role !`)],
+        });
+      }
+    } catch (error) {
+      this.logger.error(`Error while trying to remove role for user ${userId}`);
     }
   };
 

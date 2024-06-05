@@ -234,6 +234,16 @@ export class UsersService {
     return updatedUser;
   };
 
+  public findAllDiscordUsers = async () => {
+    const users = await this.usersRepository
+      .createQueryBuilder('user')
+      .leftJoinAndSelect('user.products', 'products')
+      .leftJoinAndSelect('user.reviews', 'reviews')
+      .where('user.discordId IS NOT NULL')
+      .getMany();
+
+    return users;
+  };
   public async getUserInfo(userId: number) {
     const user = await this.usersRepository.findOne({
       where: {

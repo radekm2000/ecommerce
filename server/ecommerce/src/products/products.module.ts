@@ -10,7 +10,6 @@ import { Follow } from 'src/utils/entities/followers.entity';
 import { FollowersModule } from 'src/followers/followers.module';
 import { Profile } from 'src/utils/entities/profile.entity';
 import { Avatar } from 'src/utils/entities/avatar.entity';
-import { ProductNotificationService } from 'src/product-notification/product-notification.service';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
 import { StripeService } from 'src/stripe/stripe.service';
 import { NodemailerService } from 'src/nodemailer/nodemailer.service';
@@ -18,6 +17,7 @@ import { DiscordNotificationsService } from 'src/discord-notifications/discord-n
 import { ItemNotifierService } from 'src/discord-bot/src/commands/notifiers/item-notifier.service';
 import { IProductsService } from 'src/spi/products';
 import { DiscordNotificationsModule } from 'src/discord-notifications/discord-notifications.module';
+import { ProductNotificationModule } from 'src/product-notification/product-notification.module';
 
 @Module({
   controllers: [ProductsController],
@@ -25,11 +25,8 @@ import { DiscordNotificationsModule } from 'src/discord-notifications/discord-no
     { provide: IProductsService, useClass: ProductsService },
     UsersService,
 
-    ProductNotificationService,
     StripeService,
     NodemailerService,
-    ItemNotifierService,
-   
   ],
   imports: [
     TypeOrmModule.forFeature([
@@ -41,8 +38,9 @@ import { DiscordNotificationsModule } from 'src/discord-notifications/discord-no
       Avatar,
       ProductNotification,
     ]),
+    ProductNotificationModule,
     FollowersModule,
-    DiscordNotificationsModule
+    DiscordNotificationsModule,
   ],
   exports: [IProductsService],
 })

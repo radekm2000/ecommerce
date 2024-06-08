@@ -11,17 +11,11 @@ import { Avatar } from 'src/utils/entities/avatar.entity';
 import { ProductsService } from 'src/products/products.service';
 import { Product } from 'src/utils/entities/product.entity';
 import { Image } from 'src/utils/entities/image.entity';
-import { ItemNotifier } from 'src/discord-bot/src/commands/notifiers/item-notifier';
-import { ItemNotifierService } from 'src/discord-bot/src/commands/notifiers/item-notifier.service';
-import { DiscordNotificationsService } from 'src/discord-notifications/discord-notifications.service';
 import { IProductsService } from 'src/spi/products';
-import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
-import { DiscordGuildModule } from 'src/discord-guild/discord-guild.module';
-import { IDiscordGuildService } from 'src/spi/discord-guild';
-import { DiscordBotService } from 'src/discord-bot/discord-bot.service';
 import { FollowersService } from 'src/followers/followers.service';
 import { DiscordNotificationsModule } from 'src/discord-notifications/discord-notifications.module';
 import { DiscordBotModule } from 'src/discord-bot/discord-bot.module';
+import { ItemNotifierModule } from 'src/discord-bot/src/commands/notifiers/item-notifier.module';
 
 @Module({
   imports: [
@@ -35,14 +29,13 @@ import { DiscordBotModule } from 'src/discord-bot/discord-bot.module';
       Image,
     ]),
     DiscordNotificationsModule,
-    DiscordBotModule,
+    ItemNotifierModule,
   ],
   controllers: [ProductNotificationController],
   providers: [
     ProductNotificationService,
     UsersService,
     { provide: IProductsService, useClass: ProductsService },
-    ItemNotifierService,
 
     FollowersService,
   ],

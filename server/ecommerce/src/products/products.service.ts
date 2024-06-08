@@ -18,10 +18,9 @@ import * as sharp from 'sharp';
 import { randomUUID } from 'crypto';
 import { UsersService } from 'src/users/users.service';
 import 'dotenv/config';
-import { ItemNotifierService } from 'src/discord-bot/src/commands/notifiers/item-notifier.service';
-import { User } from 'src/utils/entities/user.entity';
 import { IProductsService } from 'src/spi/products';
-import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
+import { EventEmitter2 } from '@nestjs/event-emitter';
+import { GeneralEvents } from 'src/events/constants/events';
 
 const s3 = new S3Client({
   region: process.env.BUCKET_REGION,
@@ -40,8 +39,7 @@ export class ProductsService implements IProductsService {
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
     private usersService: UsersService,
-
-    private itemNotifierService: ItemNotifierService,
+    private eventEmitter: EventEmitter2,
   ) {
     this.logger = new Logger(ProductsService.name);
   }
@@ -225,12 +223,9 @@ export class ProductsService implements IProductsService {
       Body: buffer,
       ContentType: file.mimetype,
     } as PutObjectCommandInput;
-    await this.productsNotificationService.notifyFollowersAboutNewProduct(
-      newProduct,
-    );
+
     const command = new PutObjectCommand(paramsToS3);
-    const foundProduct = await this.findProduct(newProduct.id);
-    await this.itemNotifierService.notifyUsers(userId, foundProduct);
+    this.eventEmitter.emit(GeneralEvents.ProductCreated, newProduct);
     try {
       await s3.send(command);
     } catch (error) {

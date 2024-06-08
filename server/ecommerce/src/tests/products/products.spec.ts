@@ -6,19 +6,21 @@ describe('ProductsService getMenFilteredProducts method', () => {
   let productNotificationService: any;
   let imageRepository: any;
   let usersService: any;
-  let itemNotifierService: any;
   beforeEach(() => {
     productRepository = {} as any;
     productNotificationService = {} as any;
     imageRepository = {} as any;
     usersService = {} as any;
-    itemNotifierService = {} as any;
+    const eventEmitter = {
+      emit: jest.fn().mockResolvedValue(true),
+    };
+
     productsService = new ProductsService(
       productRepository,
       productNotificationService,
       imageRepository,
       usersService,
-      itemNotifierService,
+      eventEmitter as any,
     );
   });
   it('should return all products if no filters are applied', async () => {

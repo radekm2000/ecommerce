@@ -18,6 +18,8 @@ import { ItemNotifierService } from 'src/discord-bot/src/commands/notifiers/item
 import { DiscordNotificationsService } from 'src/discord-notifications/discord-notifications.service';
 import { DiscordNotificationsModule } from 'src/discord-notifications/discord-notifications.module';
 import { DiscordBotModule } from 'src/discord-bot/discord-bot.module';
+import { ProductNotificationModule } from 'src/product-notification/product-notification.module';
+import { ItemNotifierModule } from 'src/discord-bot/src/commands/notifiers/item-notifier.module';
 
 @Module({
   imports: [
@@ -32,11 +34,11 @@ import { DiscordBotModule } from 'src/discord-bot/discord-bot.module';
     ]),
     DiscordNotificationsModule,
     DiscordBotModule,
+    ProductNotificationModule,
+    ItemNotifierModule,
   ],
   providers: [
     UsersService,
-    ProductNotificationService,
-    ItemNotifierService,
     {
       provide: IProductsService,
       useClass: ProductsService,

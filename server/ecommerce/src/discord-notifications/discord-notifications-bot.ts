@@ -1,4 +1,4 @@
-import { Logger } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import {
   AutocompleteInteraction,
   ChatInputCommandInteraction,
@@ -18,6 +18,7 @@ type Config = {
   botApplicationId: string;
 };
 
+@Injectable()
 export class DiscordNotificationsBot {
   private readonly logger: Logger;
   private readonly bot: Client;

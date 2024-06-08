@@ -1,6 +1,6 @@
 import { Injectable, OnModuleInit } from '@nestjs/common';
 import { DiscordNotificationsBot } from './discord-notifications-bot';
-import { Client, IntentsBitField } from 'discord.js';
+import { Client, IntentsBitField, MessageCreateOptions } from 'discord.js';
 
 @Injectable()
 export class DiscordNotificationsService implements OnModuleInit {
@@ -33,4 +33,11 @@ export class DiscordNotificationsService implements OnModuleInit {
   async onModuleInit() {
     await this.discordNotificationsBot.start();
   }
+
+  public sendDM = async (
+    userDiscordId: string,
+    message: MessageCreateOptions,
+  ) => {
+    return await this.discordNotificationsBot.sendDM(userDiscordId, message);
+  };
 }

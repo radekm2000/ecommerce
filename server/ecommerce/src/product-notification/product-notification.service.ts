@@ -3,9 +3,12 @@ import {
   HttpStatus,
   Inject,
   Injectable,
+  Logger,
   forwardRef,
 } from '@nestjs/common';
+import { OnEvent } from '@nestjs/event-emitter';
 import { InjectRepository } from '@nestjs/typeorm';
+import { GeneralEvents } from 'src/events/constants/events';
 import { IProductsService } from 'src/spi/products';
 import { UsersService } from 'src/users/users.service';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
@@ -14,14 +17,20 @@ import { Repository } from 'typeorm';
 
 @Injectable()
 export class ProductNotificationService {
+  private logger: Logger;
   constructor(
     @InjectRepository(ProductNotification)
     private productNotificationRepository: Repository<ProductNotification>,
     private usersService: UsersService,
     @Inject(forwardRef(() => IProductsService))
     private productsService: IProductsService,
-  ) {}
-  async notifyFollowersAboutNewProduct(product: Product) {
+  ) {
+    this.logger = new Logger(ProductNotificationService.name);
+  }
+
+  @OnEvent(GeneralEvents.ProductCreated)
+  public async notifyFollowersAboutNewProduct(product: Product) {
+    this.logger.log(`${ProductNotificationService.name} received an event`);
     const existingProductWithImage = await this.productsService.findProduct(
       product.id,
     );
@@ -38,7 +47,6 @@ export class ProductNotificationService {
       message: `${user.username} has listed a new item ${existingProductWithImage.title} with price ${existingProductWithImage.price} USD`,
       receiverId: follow.follower.id,
     }));
-
     await this.createProductNotificationsAndInsertThemToDb(
       productNotifications,
     );

@@ -7,8 +7,11 @@ import { Avatar } from 'src/utils/entities/avatar.entity';
 import { Message } from 'src/utils/entities/message.entity';
 import { Review } from 'src/utils/entities/review.entity';
 import { EmbedBuilder } from 'discord.js';
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { DiscordNotificationsBot } from 'src/discord-notifications/discord-notifications-bot';
+import { IProductsService } from 'src/spi/products';
+import { ProductsService } from 'src/products/products.service';
+import { DiscordNotificationsService } from 'src/discord-notifications/discord-notifications.service';
 
 type User = {
   followings: Follow[];
@@ -30,24 +33,27 @@ type User = {
 
 type Config = {
   bot: DiscordNotificationsBot;
+  productsService: IProductsService;
   usersService: UsersService;
 };
 
 @Injectable()
 export class ItemNotifier {
-  private readonly usersService: UsersService;
-  private readonly bot: DiscordNotificationsBot;
+  constructor(
+    @Inject(UsersService) private usersService: UsersService,
+    @Inject(IProductsService) private productsService: IProductsService,
+    @Inject(DiscordNotificationsService)
+    private discordNotificationService: DiscordNotificationsService,
+  ) {}
 
-  constructor(config: Config) {
-    this.bot = config.bot;
-    this.usersService = config.usersService;
-  }
-
-  public notifyUsers = async (userId: number, product: Product) => {
-    const user = await this.usersService.getUserInfo(userId);
+  public notifyUsers = async (product: Product) => {
+    const existingProductWithImage = await this.productsService.findProduct(
+      product.id,
+    );
+    const user = await this.usersService.getUserInfo(product.user.id);
     const usersToNotify = await this.getUsersToNotify(user);
 
-    await this.notify(usersToNotify, product);
+    await this.notify(usersToNotify, existingProductWithImage);
   };
 
   private getUsersToNotify = async (user: User) => {
@@ -62,7 +68,7 @@ export class ItemNotifier {
     const productAuthor = product.user.username;
     await Promise.all(
       usersToNotify.map((user) =>
-        this.bot.sendDM(user.discordId, {
+        this.discordNotificationService.sendDM(user.discordId, {
           embeds: [
             new EmbedBuilder()
               .setTitle(`**${productAuthor}** has listed a new item`)

@@ -13,10 +13,11 @@ import { useDeleteProduct } from "../../hooks/useDeleteProduct";
 import { useAddAdminNotification } from "../../hooks/useAddAdminNotification";
 import { ProductSkeleton } from "../skeletons/ProductSkeleton";
 import { ProductSidebar } from "../SpecificProduct/ProductSidebar";
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { ProductMainContent } from "../SpecificProduct/ProductMainContent";
 
 const Container = ({ children }: { children: ReactNode }) => {
+  
   return (
     <Box
       sx={{
@@ -41,6 +42,8 @@ export const Product = () => {
   const below960 = useMediaQuery(960);
   const params = useParams();
   const productId = params?.productId;
+
+
   const {
     data: product,
     isLoading,

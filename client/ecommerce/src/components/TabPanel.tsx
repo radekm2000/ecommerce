@@ -18,6 +18,7 @@ import StarBorderOutlinedIcon from "@mui/icons-material/StarBorderOutlined";
 import { BasicRating } from "./ratingSystem/BasicRating";
 import { AccountCircle } from "@mui/icons-material";
 import { Link } from "wouter";
+import { RenderAvatar } from "./RenderAvatar";
 interface TabPanelProps {
   children?: React.ReactNode;
   index: number;
@@ -135,17 +136,12 @@ function CustomTabPanel(props: TabPanelProps) {
                 marginTop: "10px",
               }}
             >
-              <Box sx={{ display: "flex" }}>
-                {review.reviewCreator.avatar ? (
-                  <Avatar
-                    src={review.reviewCreator.avatar}
-                    sx={{ width: "48px", height: "48px" }}
-                  />
-                ) : (
-                  <AccountCircle
-                    sx={{ width: "48px", height: "48px", color: "grey" }}
-                  />
-                )}
+              <Box sx={{ display: "flex", gap: "10px" }}>
+                <RenderAvatar
+                  height="48px"
+                  width="48px"
+                  user={review.reviewCreator}
+                />
                 <Box sx={{ display: "flex", flexDirection: "column" }}>
                   <Link href={`/members/${review.reviewCreator.id}`}>
                     <Typography

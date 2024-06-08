@@ -3,9 +3,9 @@ import { useEffect } from "react";
 import { useProfileInfo } from "../../hooks/useProfileInfo";
 import { Box, Typography } from "@mui/material";
 import { useAllProducts } from "../../hooks/useAllProducts";
-import { NotAuthed } from "../Navbar";
 import { PaginatedProducts } from "../PaginatedProducts";
 import { MainPageSkeleton } from "../skeletons/MainPageSkeleton";
+import { NotAuthed } from "../NotAuthed";
 
 export const MainPage = () => {
   const { user, setUser } = useUserContext();

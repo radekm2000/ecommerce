@@ -6,6 +6,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { ChatNotificationsProvider } from "./contexts/ChatNotificationsContext";
 import { ProductNotificationProvider } from "./contexts/ProductNotificationContext";
 import { Routes } from "./routes/Routes";
+import { ScrollToTop } from "./components/ScrollToTop";
 
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
@@ -17,6 +18,7 @@ function App() {
           <ChatNotificationsProvider>
             <ProductNotificationProvider>
               <Elements stripe={stripePromise}>
+                <ScrollToTop />
                 <Routes />
                 <Toaster />
               </Elements>

@@ -38,22 +38,8 @@ import { NavbarSkeleton } from "./skeletons/NavbarSkeleton";
 import { FeedbackDialog } from "./FeedbackDialog";
 import { RenderAvatar } from "./RenderAvatar";
 import { logout } from "../api/axios";
+import { NotAuthed } from "./NotAuthed";
 
-export const NotAuthed = () => {
-  return (
-    <Container>
-      <Box
-        sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-      >
-        <Link to="/login">
-          <Button sx={{ textTransform: "none" }}>
-            Sign in or log in to access the content
-          </Button>
-        </Link>
-      </Box>
-    </Container>
-  );
-};
 const Search = styled("div")(({ theme }) => ({
   position: "relative",
   borderRadius: theme.shape.borderRadius,

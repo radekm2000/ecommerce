@@ -2,10 +2,11 @@ import { Box, BoxProps, Link, Typography } from "@mui/material";
 import { DiscordIcon } from "./DiscordIcon";
 
 export const DiscordSignInButton = (props: BoxProps) => {
+  const baseURL = import.meta.env.VITE_BASE_URL;
   return (
     <Box {...props}>
       <Link
-        href={`http://localhost:3000/auth/discord/login`}
+        href={`${baseURL}/auth/discord/login`}
         sx={{
           display: "flex",
           alignItems: "center",
@@ -20,7 +21,9 @@ export const DiscordSignInButton = (props: BoxProps) => {
           },
         }}
       >
-        <DiscordIcon sx={{ color: "#fff", marginRight: "10px", height: '40px' }} />
+        <DiscordIcon
+          sx={{ color: "#fff", marginRight: "10px", height: "40px" }}
+        />
         <Typography sx={{ fontSize: "14px", fontWeight: 400, color: "#fff" }}>
           SIGN IN
         </Typography>

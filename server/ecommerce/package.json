@@ -39,6 +39,7 @@
     "@types/jsonwebtoken": "^9.0.5",
     "@types/passport-oauth2": "^1.4.15",
     "bcrypt": "^5.1.1",
+    "binance-api-node": "^0.12.7",
     "cookie-parser": "^1.4.6",
     "discord-api-types": "^0.37.84",
     "discord.js": "^14.15.2",

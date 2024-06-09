@@ -29,7 +29,10 @@ export class DiscordStrategy extends PassportStrategy(Strategy, 'discord') {
       tokenURL: TOKEN_URL,
       clientID: process.env.DISCORD_CLIENT_ID ?? '',
       clientSecret: process.env.DISCORD_CLIENT_SECRET ?? '',
-      callbackURL: process.env.DISCORD_REDIRECT_URL ?? '',
+      callbackURL:
+        process.env.IS_DEV == 'true'
+          ? process.env.DISCORD_REDIRECT_URL_DEV
+          : process.env.DISCORD_REDIRECT_URL_PRO,
       scope: ['identify', 'guilds'],
     } as StrategyOptions);
     this.logger = new Logger(DiscordStrategy.name);

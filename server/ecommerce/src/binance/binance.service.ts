@@ -69,9 +69,7 @@ export class BinanceService {
       balancesWithTotalValueCalculated,
     );
 
-    const revertedBalances = this.revertBalances(sortedBalances);
-
-    const topBalances = revertedBalances.slice(0, numberOfTopBalances);
+    const topBalances = sortedBalances.slice(0, numberOfTopBalances);
 
     return topBalances;
   };
@@ -82,18 +80,6 @@ export class BinanceService {
     return balances.sort(
       (a, b) => parseFloat(b.totalValue) - parseFloat(a.totalValue),
     );
-  };
-
-  private revertBalances = (
-    balances: BinanceBalanceWithTotalValueAndSymbol[],
-  ) => {
-    return balances.map((balance) => ({
-      asset: balance.asset,
-      free: balance.free,
-      locked: balance.locked,
-      symbol: balance.symbol,
-      totalValue: balance.totalValue,
-    }));
   };
 
   private addTotalValueAndCurrencySymbolToBalances = async (

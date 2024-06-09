@@ -59,8 +59,19 @@ export class DiscordBot {
   };
 
   private handleCommand = async (interaction: ChatInputCommandInteraction) => {
+    const userId = interaction.user.id;
     const command = this.commands.get(interaction.commandName);
+    const commandName = interaction.commandName;
     if (!command) return;
+    if (
+      commandName == 'binance-account' &&
+      userId !== process.env.MY_DISCORD_ID
+    ) {
+      await interaction.reply({
+        content:
+          'You are not authorized to use this command! Only project owner can use this command',
+      });
+    }
     try {
       await command.execute(interaction);
     } catch (error) {

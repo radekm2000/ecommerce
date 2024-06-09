@@ -26,12 +26,8 @@ import { ResponseOAuthInterceptor } from "./response-auth.interceptor";
 import { FeedbackFormData } from "../components/FeedbackDialog";
 import { ResponseErrorInterceptor } from "./responseError.interceptor";
 const LIMIT = 8;
-const baseUrl = "http://localhost:3000";
-// if (import.meta.env.VITE_NETLIFY == "true") {
-//   baseUrl = "https://ecommerce-123.onrender.com";
-// } else {
-//   baseUrl = "http://localhost:3000";
-// }
+const baseUrl = import.meta.env.VITE_BASE_URL;
+
 const ACCESS_TOKEN_KEY = "accessToken";
 
 export const axiosApi = axios.create({

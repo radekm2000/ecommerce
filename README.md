@@ -51,9 +51,14 @@ This app is a simplified version of **Vinted**, following a similar layout. Belo
 - **Frontend:**
   - React using Vite.
 
+
+
 ## Integration with discord
 
 **Discord commands**
+
+- You can check your top tokens in binance wallet, however **BINANCE_API_KEY** and **BINANCE_SECRET_KEY** is required in **ENV** file
+  ![BinanceTokens](/readmeImages/BinanceAccountCommand.png) 
 
 - Profile
   ![Profile Command](/readmeImages/Profile%20command.png)

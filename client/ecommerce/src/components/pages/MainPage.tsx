@@ -6,8 +6,11 @@ import { useAllProducts } from "../../hooks/useAllProducts";
 import { PaginatedProducts } from "../PaginatedProducts";
 import { MainPageSkeleton } from "../skeletons/MainPageSkeleton";
 import { NotAuthed } from "../NotAuthed";
+import { useLocation } from "wouter";
 
 export const MainPage = () => {
+  const location = useLocation();
+  console.log(location);
   const { user, setUser } = useUserContext();
   const { data: products, isLoading: isProductsDataLoading } = useAllProducts();
   const {

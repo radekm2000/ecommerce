@@ -95,11 +95,14 @@ export class AuthController {
     response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 1000,
+      secure: true,
+      sameSite: 'none',
     });
+
     if (process.env.IS_DEV == 'true') {
-      response.redirect('http://localhost:5173');
+      return response.redirect('http://localhost:5173');
     } else {
-      response.redirect('https://exquisite-pasca-338883.netlify.app');
+      return response.redirect('https://exquisite-pasca-338883.netlify.app');
     }
   }
 }

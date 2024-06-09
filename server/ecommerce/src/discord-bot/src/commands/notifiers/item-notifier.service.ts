@@ -1,12 +1,8 @@
 import { Inject, Injectable, Logger } from '@nestjs/common';
 import { ItemNotifier } from './item-notifier';
-import { UsersService } from 'src/users/users.service';
-import { DiscordNotificationsService } from 'src/discord-notifications/discord-notifications.service';
 import { Product } from 'src/utils/entities/product.entity';
 import { OnEvent } from '@nestjs/event-emitter';
 import { GeneralEvents } from 'src/events/constants/events';
-import { ProductsService } from 'src/products/products.service';
-import { IProductsService } from 'src/spi/products';
 
 @Injectable()
 export class ItemNotifierService {

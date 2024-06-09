@@ -24,6 +24,7 @@ import { DiscordGuildModule } from './discord-guild/discord-guild.module';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UserSyncModule } from './user-sync/user-sync.module';
 import { ScheduleModule } from '@nestjs/schedule';
+import { BinanceModule } from './binance/binance.module';
 
 @Module({
   imports: [
@@ -49,6 +50,7 @@ import { ScheduleModule } from '@nestjs/schedule';
     EventEmitterModule.forRoot(),
     UserSyncModule,
     ScheduleModule.forRoot(),
+    BinanceModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -92,15 +92,6 @@ export class DiscordGuildService {
     }
   };
 
-  private checkUserRoles = async (userId: string, roleId: string) => {
-    const member = await this.getGuildMember(userId);
-    if (member.roles.cache.some((role) => role.id === roleId)) {
-      console.log('user has that role');
-    } else {
-      console.log('user doesnt have that role');
-    }
-  };
-
   private getUser = async (userId: number) => {
     const user = await this.usersService.findUserById(userId);
     return user;

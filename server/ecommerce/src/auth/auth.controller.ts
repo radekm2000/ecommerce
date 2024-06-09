@@ -89,7 +89,6 @@ export class AuthController {
   @Get('discord/redirect')
   async disordAuthRedirect(@Req() request: Request, @Res() response: Response) {
     const user = request.user as DiscordProfile;
-    console.log(user);
     const refreshToken = await this.authService.generateRefreshTokenFor(
       Number(user.id),
     );

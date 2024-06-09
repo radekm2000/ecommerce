@@ -86,7 +86,7 @@ export class StartTrackingCommand implements SlashCommand {
         `You will get notified about all products listed from now on from this user.`,
         `Remember to enable DMs in the server privacy settings so the bot can DM you.`,
       ].join('\n'),
-      ephemeral: true
+      ephemeral: true,
     });
   };
 

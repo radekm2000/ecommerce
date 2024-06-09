@@ -10,17 +10,14 @@ import { Avatar } from 'src/utils/entities/avatar.entity';
 import { ProductsService } from 'src/products/products.service';
 import { Image } from 'src/utils/entities/image.entity';
 import { Product } from 'src/utils/entities/product.entity';
-import { ProductNotificationService } from 'src/product-notification/product-notification.service';
 import { ProductNotification } from 'src/utils/entities/product-notification.entity';
 import { FollowersService } from 'src/followers/followers.service';
-import { DiscordNotificationsService } from 'src/discord-notifications/discord-notifications.service';
 import { IProductsService } from 'src/spi/products';
-import { DiscordGuildModule } from 'src/discord-guild/discord-guild.module';
-import { DiscordGuildService } from 'src/discord-guild/discord-guild.service';
 import { DiscordNotificationsModule } from 'src/discord-notifications/discord-notifications.module';
 import { ProductsModule } from 'src/products/products.module';
 import { ItemNotifierModule } from './src/commands/notifiers/item-notifier.module';
 import { ProductNotificationModule } from 'src/product-notification/product-notification.module';
+import { BinanceModule } from 'src/binance/binance.module';
 
 @Module({
   controllers: [DiscordBotController],
@@ -45,6 +42,7 @@ import { ProductNotificationModule } from 'src/product-notification/product-noti
     ItemNotifierModule,
     DiscordNotificationsModule,
     ProductNotificationModule,
+    BinanceModule,
   ],
   exports: [DiscordBotService],
 })

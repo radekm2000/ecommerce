@@ -19,6 +19,8 @@ import { FollowersService } from 'src/followers/followers.service';
 import { StartTrackingCommand } from './src/commands/trackers/start-tracking';
 import { StopTrackingCommand } from './src/commands/trackers/stop-tracking';
 import { IProductsService } from 'src/spi/products';
+import { BinanceAccountTokenInfo } from './src/commands/binance-account-token-info';
+import { BinanceService } from 'src/binance/binance.service';
 
 @Injectable()
 export class DiscordBotService implements OnModuleInit {
@@ -31,6 +33,7 @@ export class DiscordBotService implements OnModuleInit {
     private userService: UsersService,
     @Inject(IProductsService) private productsService: IProductsService,
     private followersService: FollowersService,
+    private binanceService: BinanceService,
   ) {
     this.botToken = process.env.DISCORD_BOT_TOKEN;
     this.botApplicationId = process.env.DISCORD_CLIENT_ID;
@@ -70,6 +73,7 @@ export class DiscordBotService implements OnModuleInit {
           followersService: this.followersService,
           usersService: this.userService,
         }),
+        new BinanceAccountTokenInfo({ binanceService: this.binanceService }),
       ],
     });
   }

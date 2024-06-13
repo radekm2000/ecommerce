@@ -81,6 +81,8 @@ export class AuthController {
     response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 1000,
+      secure: true,
+      sameSite: 'none',
     });
     response.redirect('https://exquisite-pasca-338883.netlify.app');
   }

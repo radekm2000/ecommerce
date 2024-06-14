@@ -62,7 +62,7 @@ export class StartTrackingCommand implements SlashCommand {
 
     if (!userToTrackArg) {
       await interaction.reply({
-        content: `Missing "${userToTrackArg} option"`,
+        content: `Missing "${TRACKED_USER_OPTION_NAME} option"`,
         ephemeral: true,
       });
     }
